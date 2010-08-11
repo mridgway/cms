@@ -1,0 +1,274 @@
+/* Modo CMS
+----------------------------------------------------------------- */
+
+#cms * {
+
+}
+
+
+/* actionbar */
+
+#cms #actionbar h6 {
+    display: none;
+    float: left;
+    background: url("../img/modo.gif") 50% 50% no-repeat;
+    text-indent: -9999px;
+    width: 35px;
+    margin-bottom: 0;
+    height: 30px;
+    border-right: 1px dotted #ccc;
+}
+
+#cms #actionbar {
+    z-index: 15;
+    background: #333 url("../img/highlight.png") bottom left repeat-x;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.6);
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,.6);
+}
+
+#cms #actionbar #page_mode {
+    float: right;
+    margin: 12px;
+    color: #999;
+    text-shadow: -1px -1px 0 #000;
+    font-size: 11px;
+}
+
+#cms #actionbar #page_mode .edit_switch {
+    float: right;
+    margin-left: .5em;
+}
+
+#cms #actionbar #cmsmenu {
+    float: left;
+}
+
+/* actionbar dropdowns
+--------------------------------------------- */
+
+#cms #actionbar ul {
+    margin-bottom: 0;
+    padding: 8px 8px 9px 8px;
+    overflow: hidden;
+}
+
+#cms #actionbar ul li {
+    list-style: none;
+    margin: 0;
+}
+
+#cms #actionbar ul li.toplevel { 
+	position: relative;
+}
+
+#cms #actionbar ul li.toplevel a {
+    display: block;
+    float: left;
+    padding: 4px 10px;
+    background: #222;
+    border-bottom: 1px solid #000;
+    margin: 0 8px 0 0;
+}
+
+#cms #actionbar ul li.toplevel ul {
+    position: absolute;
+    left: 0px;
+    top: 10px;
+    border: 1px solid red;
+    padding-left: 0;
+    display: none;
+    width: 100px;
+}
+
+#cms #actionbar ul li a {
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #fff;
+}
+
+#cms #actionbar ul li ul a { 
+	text-transform: none; 
+}
+
+
+#cms #actionbar ul li a:hover {
+    color: #ccc;
+}
+
+
+#cms #actionbar ul li a span {
+    padding-right: 12px;
+    background: #222 url("../img/sm_arrow_d.gif") right center no-repeat;
+}
+
+
+
+
+
+/* modal windows */
+
+#cms #overlay {
+    background: rgba(0,0,0,.6);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 5;
+}
+
+#cms #window {
+    border: 0;
+    position: absolute;
+    z-index: 10;
+    width: 550px;
+    left: 50%;
+    margin: 70px 0 0 -275px;
+    padding: 0px;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    
+    -webkit-box-shadow: 0px 3px 10px rgba(0,0,0,.6);
+    -moz-box-shadow: 0px 3px 10px rgba(0,0,0,.6);
+}
+
+#cms #window .close_window {
+    width: 35px;
+    height: 37px;
+    background: url("../img/modal_close.png");
+    display: block;
+    position: absolute;
+    top: -17px;
+    right: -17px;
+    text-indent: -9999px;
+    display: none;
+}
+
+#cms #window .window-inner {
+    background: white;
+}
+
+#cms #window .title {
+    background: #333 url("../img/highlight.png") bottom left repeat-x;
+    margin-bottom: 0;
+    color: #eee;
+    padding: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: -1px -1px 0px black;
+    border-top: 2px solid #223;
+}
+
+#cms #window .content { 
+	height: 500px;
+	overflow: auto; 
+	padding: 1.2em 1.2em 1.2em 1.2em;
+}
+
+#cms #window .element {
+    border-top: 1px solid #eee;
+    padding-top: .8em;
+    margin-top: .8em;
+    margin-bottom: 0;
+}
+
+#cms #window .element:first-child {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+}
+
+#cms #window .element label {
+    font-size: 1.1em;
+    font-weight: normal;
+    color: #333;
+}
+
+#cms #window .element .field {
+    font-size: 1.1em;
+    background: #f3f3f3 url("../img/white.gif") bottom left repeat-x;
+    border: 1px solid #ddd;
+    text-shadow: 0px 1px 0 white;
+    padding: .5em;
+    width: 97%; /* test */
+}
+
+#cms #window .element .field:focus {
+    border-color: #999;
+}
+
+#cms #window .options {
+    background: #f9f9f9 url("../img/white.gif") 0 0 repeat-x;
+    border-top: 1px solid #ddd;
+    padding: 1.2em;
+}
+
+
+
+.iphone_switch_container { 
+	float: right;
+}
+.switch .slide { 
+	background: url("../img/switch.gif");
+	height: 20px;
+	width: 101px;
+	margin-right: 100px;
+	position: relative;
+	left: 0;
+}
+
+
+
+/* layout options */
+
+.layout.selected {
+    border: 1px solid #999;
+}
+
+.layout {
+    background: #f3f3f3 url("../img/white.gif") bottom left repeat-x;
+    padding: .6em;
+    float: left;
+    margin-right: 1em;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border: 1px solid #ddd;
+}
+
+.layout input {
+    float: left;
+    margin-right: .5em;
+}
+
+.layout img {
+    vertical-align: bottom;
+}
+
+
+
+
+
+
+/* gotham */
+/*
+#cms .title,
+#cms #actionbar ul li a,
+#cms #actionbar ul li a span,
+#cms .button,
+#cms button
+{
+font-family: "Gotham", arial;
+font-weight: 500;
+text-transform: uppercase;
+}*/
+
+
+

@@ -1,0 +1,65 @@
+<?php
+/**
+ * Modo CMS
+ */
+
+namespace Asset\Model\Frontend;
+
+/**
+ * Returns information for asset manager
+ *
+ * @category   Model
+ * @package    Asset
+ * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
+ * @version    $Id: AssetList.php 297 2010-05-12 13:34:56Z mike $
+ */
+class AssetList extends \Core\Model\Frontend
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data = new \stdClass();
+        $this->data->rowCount = 0;
+        $this->data->perPage = 0;
+        $this->data->currentPage = 1;
+        $this->data->assets = array();
+        $template = new \Core\Model\View('asset', 'manager', 'templates/asset');
+        $this->templates['asset'] = $template->getInstance()->render($template->getFile());
+        $template = new \Core\Model\View('asset', 'manager', 'templates/insert');
+        $this->templates['Insert'] = $template->getInstance()->render($template->getFile());
+        $editForm = new \Asset\Form\Asset();
+        $editForm->getElement('id')->setValue('{id}');
+        $editForm->getElement('name')->setValue('{name}');
+        $editForm->getElement('caption')->setValue('{caption}');
+        $this->templates['Edit'] = $editForm->render();
+        $template = new \Core\Model\View('asset', 'manager', 'templates/delete');
+        $this->templates['Delete'] = $template->getInstance()->render($template->getFile());
+    }
+
+    public function success()
+    {
+        return $this;
+    }
+
+    public function addAsset(\Asset\Model\Asset $asset)
+    {
+        $frontendAsset = new Asset($asset);
+        $this->data->assets[] = $frontendAsset;
+    }
+
+    public function setRowCount($count)
+    {
+        $this->data->rowCount = $count;
+    }
+
+    public function setPerPage($num)
+    {
+        $this->data->perPage = $num;
+    }
+
+    public function setCurrentPage($page)
+    {
+        $this->data->currentPage = $page;
+    }
+}

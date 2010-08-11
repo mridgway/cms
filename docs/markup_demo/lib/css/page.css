@@ -1,0 +1,48 @@
+
+/* overall container */
+#wrapper {
+    width: 900px;
+}
+
+#nav-col {
+    float: left;
+    width: 180px;
+    padding: 0;
+}
+
+#main-col {
+    float: left;
+    width: 420px;
+    padding: 0 0 0 40px;
+}
+
+#sub-col {
+    float: left;
+    width: 220px;
+    padding: 0 0 0 40px;
+}
+
+
+
+/* one column layout (main-col on left, sub-col on right) */
+.one-column #nav-col  { display: none; }
+.one-column #main-col { width: inherit; float: none; padding: 0; }
+.one-column #sub-col  { display: none; }
+
+
+/* two column layout (main-col on left, sub-col on right) */
+.two-column #nav-col  { display: none; }
+.two-column #main-col { width: 590px; float: left; padding: 0; }
+.two-column #sub-col  { width: 270px; float: left; }
+
+
+/* two column layout (nav-col on left, main-col on right) */
+.two-column-alt #nav-col  { width: 220px; float: left; }
+.two-column-alt #main-col { width: 640px; float: left; }
+.two-column-alt #sub-col  { display: none; }
+
+
+/* three column layout */
+.three-column #nav-col  { width: 180px; float: left; }
+.three-column #main-col { width: 420px; float: left; }
+.three-column #sub-col  { width: 220px; float: left; }

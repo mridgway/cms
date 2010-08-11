@@ -1,0 +1,16 @@
+<h2>Blog Articles</h2>
+<?php if (count($this->articles)) : ?>
+<?php foreach($this->articles as $article) : ?>
+    <div>
+        <h3><a href="<?php echo $article->getURL(); ?>"><?php echo ($article->id == $this->id?'<b>'.$article->title.'</b>':$article->title) ?></a></h3>
+        <p><?php echo $article->content ?></p>
+    </div>
+<?php endforeach; ?>
+<?php if (null !== $this->paginator) : ?>
+<div class="right">
+<?php echo $this->paginationControl($this->paginator, 'Sliding', array('Paginator/default.phtml', 'Core')); ?>
+</div>
+<?php endif; ?>
+<?php else: ?>
+    <p>There are no articles to display.</p>
+<?php endif; ?>

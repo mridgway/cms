@@ -1,0 +1,158 @@
+<?php
+/**
+ * Modo CMS
+ */
+
+namespace Asset\Model;
+
+/**
+ * Description of Size
+ *
+ * @category   Model
+ * @package    Core
+ * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
+ * @version    $Id: Size.php 297 2010-05-12 13:34:56Z mike $
+ *
+ * @Entity
+ * @Table(name="Asset_Size")
+ * @property int $id
+ * @property Asset\Model\Group $group
+ * @property string $sysname
+ * @property int $height
+ * @property int $width
+ */
+class Size extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+{
+    /**
+     * @var integer
+     * @Id @Column(name="id", type="integer")
+     * @GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var Asset\Model\Group
+     * @ManyToOne(targetEntity="Asset\Model\Group")
+     * @JoinColumn(name="grp", referencedColumnName="sysname")
+     */
+    protected $group;
+
+    /**
+     * @var string
+     * @Column(name="sysname", type="string", length="50", nullable="false")
+     */
+    protected $sysname;
+
+    /**
+     * @var string
+     * @Column(name="title", type="string", length="100", nullable="true")
+     */
+    protected $title;
+
+    /**
+     * @var int
+     * @Column(name="height", type="integer", nullable="false")
+     */
+    protected $height;
+
+    /**
+     * @var int
+     * @Column(name="width", type="integer", nullable="false")
+     */
+    protected $width;
+
+    /**
+     * @var int
+     * @Column(name="crop", type="boolean", nullable="false")
+     */
+    protected $crop;
+
+    /**
+     * @param int $height
+     * @param int $width
+     * @param bool $crop
+     */
+    public function __construct($height, $width, $crop = false)
+    {
+        $this->setHeight($height);
+        $this->setWidth($width);
+        $this->setCrop($crop);
+    }
+
+    /**
+     * @param Group $group
+     * @return Size
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+        return $this;
+    }
+
+    /**
+     * @param string $sysname
+     * @return Size
+     */
+    public function setSysname($sysname)
+    {
+        $validator = new \Zend_Validate_StringLength(0, 50);
+        if (!$validator->isValid($sysname)) {
+            throw new \Modo\Model\Exception('Sysname must be between 0 and 50 characters.');
+        }
+        $this->sysname = $sysname;
+        return $this;
+    }
+
+    /**
+     * @param int $height
+     * @return Size
+     */
+    public function setHeight($height)
+    {
+        if (!is_int($height) || $height < 0){
+            throw new \Modo\Model\Exception('Height must be a positive integer.');
+        }
+        $this->height = $height;
+        return $this;
+    }
+
+    /**
+     * @param int $width
+     * @return Size
+     */
+    public function setWidth($width)
+    {
+        if (!is_int($width) || $width < 0){
+            throw new \Modo\Model\Exception('Width must be a positive integer.');
+        }
+        $this->width = $width;
+        return $this;
+    }
+
+    /**
+     * @param bool $crop
+     * @return Size
+     */
+    public function setCrop($crop = false)
+    {
+        if (!is_bool($crop)) {
+            throw new \Exception('Crop must be a boolean value.');
+        }
+        $this->crop = $crop;
+        return $this;
+    }
+
+    /**
+     * Gets the title, or the sysname if title is null
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        if (null === $this->title) {
+            return $this->sysname;
+        } else {
+            return $this->title;
+        }
+    }
+}

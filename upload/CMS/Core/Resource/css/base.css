@@ -1,0 +1,612 @@
+* { 
+	margin: 0;
+	padding: 0;
+	outline: none;
+	border: 0;
+	font-family: helvetica, arial, san-serif;
+	list-style: none;
+}
+
+/* clearing alternative to overflow:hidden for when overflow is needed */
+clearfix,
+.element:after,.buttons:after,
+.section:after,
+.column-list:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    zoom: 1;
+}
+
+body {
+    font: 13px/21px arial;
+    color: #333;
+}
+
+pre, code { 
+	font-family: "espresso mono", monaco, monospace;
+	font-size: .9em;
+	display: inline;
+	position: static;
+}
+
+code {
+    background: rgba(255,255,100,.3);
+}
+
+pre code {
+    background: none;
+}
+
+blockquote {
+    padding: 0 2em 0 1.8em;
+    margin-bottom: 1.5em;
+    border-left: 2px solid #eee;
+}
+
+blockquote span {
+    display: block;
+    color: #999;
+    font-size: .85em;
+    font-style: italic;
+}
+
+hr {
+    border-bottom: 1px dashed #666;
+    margin-bottom: 1.4em;
+}
+
+/* link coloring */
+a { color:#069; }
+a:hover { color: #09C; }
+
+p, ul, ol, h1, h2, h3, h4, h5, h6 { 
+	margin-bottom: 1.4em;
+	line-height: 1.6em; }
+
+
+/* Column Grid 
+-----------------------------------------------------------------
+combine the .column class with one of the width classes
+to make a column grid in a full width container. The number
+in the class name represents the percentage(approximately) 
+of the 960px full width.
+
+ex: 
+pair up .c80 and .c20 to make a 2 column 20/80 grid
+or .c15 .c65 .c20 to create a 3 column grid */
+
+.column { float: left; }
+
+.c80 { width: 690px; }
+.c70 { width: 630px; }
+.c65 { width: 515px; }
+.c30 { width: 330px; }
+.c20 { width: 270px; }
+.c15 { width: 175px; }
+
+
+/* Headings
+-------------------------------------------------------------- */
+h1,h2,h3,h4,h5,h6 { font-weight: normal; color: #111; }
+
+h1 { font-size: 2.5em; line-height: 1; margin-bottom: 0.5em; }
+h2 { font-size: 2em; margin-bottom: 0.75em; }
+h3 { font-size: 1.5em; line-height: 1; margin-bottom: 1em; }
+h4 { font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; }
+h5 { font-size: 1em; font-weight: bold; margin-bottom: 1.5em; }
+h6 { font-size: 1em; font-weight: bold; }
+
+
+/* Lists
+-------------------------------------------------------------- */
+ul, ol { font-size: .95em; }
+
+ol li { 
+	 list-style: decimal;
+	 margin-left: 1.6em;
+}
+
+ul li { 
+	margin: 0 0 0 1.4em;
+	list-style-type: square; }
+
+ul li li { list-style-type: disc; }
+ul li li li { list-style-type: circle; }
+
+/* list radio buttons or checkboxes */
+.inputlist li {
+	list-style: none;
+	margin-left: 0;
+}
+
+.inputlist li label {
+	font-weight: normal;
+}
+
+.inputlist li input.radio,
+.inputlist li input.checkbox {
+	float: left;
+	margin: .4em .4em 0 0;
+}
+
+.inputlist li input.checkbox {
+	margin: .25em .4em 0 0;
+}
+
+/* for floating radio/checkbox
+lists into multiple columns */
+.columnlist li {
+	float: left;
+	width: 150px; /* adjust as necessary */
+}
+
+/* list with no bullets, separated
+by horizontal lines */
+.linelist li { 
+	border-bottom: 1px dashed #eee;
+	padding: .45em .4em;
+	list-style: none; 
+	margin-left: 0;
+}
+
+.linelist li:first-child { 
+	border-top: 1px dashed #eee; 
+}
+
+.styledlist li { 
+	list-style: none; 
+    background: url("../img/bullet.gif") left .5em no-repeat;
+    margin-left: .3em;
+    padding-left: 1.1em;
+}
+
+
+/* pagination */
+.pagination {
+    
+}
+
+.pagination li {
+    padding-left: 0;
+    list-style: none;
+    margin: 0 .5em 0 0;
+    /* float: left;*/
+    display: inline;
+}
+
+.pagination li a {
+    color: #999;
+    text-decoration: none;
+}
+
+.pagination li a.selected {
+    font-weight: bold;
+    color: #666;
+}
+
+/* link list */
+.linklist li {
+    list-style: none;
+    margin: 0 0 0 1em;
+    padding: 0 0 0 1em;
+    display: inline;
+    border-left: 1px solid #ccc;
+}
+
+.linklist li:first-child {
+    margin-left: 0;
+    padding-left: 0;
+    border: 0;
+}
+
+/* subnav */
+
+.subnav {
+    
+}
+
+.subnav li {
+    list-style: none;
+    margin: 0;
+}
+
+.subnav li a {
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding: .4em;
+}
+
+/* tabbed list */
+
+.tablist {
+    background: #eee;
+    overflow: hidden;
+    padding: 1em;
+    padding-bottom: 0;
+    margin: 0;
+}
+
+.tablist li {
+    list-style: none;
+    margin: 0;
+}
+
+.tablist li.selected a {
+    background: #fff;
+    -webkit-box-shadow: 0 0 5px #666;
+    color: #333;    
+}
+
+.tablist li a {
+    background: #f9f9f9;
+    display: block;
+    float: left;
+    margin-right: 1em;
+    padding: .5em 1em;
+    font-size: 1.05em;
+    text-decoration: none;
+    font-weight: bold;
+    
+    -webkit-border-radius: 2px;
+    -webkit-border-bottom-right-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+    
+    -moz-border-radius: 2px;
+    -moz-border-radius-bottomleft: 0;
+    -moz-border-radius-bottomright: 0;
+    
+    -webkit-box-shadow: 0 0 3px #999;
+    -moz-box-shadow: 0 0 3px #999;
+    
+}
+
+
+
+/* Tables
+-------------------------------------------------------------- */
+table       { margin-bottom: 1.4em; width:100%; }
+th          { font-weight: bold; }
+thead th 		{ background: #c3d9ff; }
+th,td,caption { padding: 4px 10px 4px 5px; }
+tr.even td  { background: #e5ecf9; }
+tfoot       { font-style: italic; }
+caption     { background: #eee; }
+
+
+/* Forms
+----------------------------------------------------------------- */
+fieldset {
+	border: 1px solid #eee;
+	padding: 1.5em;
+}
+
+legend {
+	font-size: 1.2em;
+	padding: 0 .5em;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type=text], input[type=password],
+input.text, input.title, 
+textarea, select { 
+  background-color:#fff; 
+  border:1px solid #bbb;
+  font-size: .9em;
+  padding: .45em;
+  color: #666;
+}
+
+input[type=text]:focus, 
+input.text:focus, input.title:focus, 
+textarea:focus, select:focus { 
+  border-color:#666; 
+  color: #000;
+}
+
+/* field sizes */
+input[type=text], input[type=password],
+input.text,
+textarea { 
+    width: 300px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+textarea.sm  { height: 55px;  }
+textarea.md  { height: 90px;  }
+textarea.lg  { height: 125px; }
+textarea.xlg { height: 200px; }
+
+
+/* Errors & Notifications
+----------------------------------------------------------------- */
+.notification {
+	padding: .5em .7em;
+	color: #666;
+	background: #eee url("../img/gradient_7-0-black-40px.png") bottom left repeat-x;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	/*border: 1px solid #ccc;*/
+}
+
+.positive { color: #92C33A; }
+.neutral  { color: #FC0; }
+.negative { color: #9B3A28; }
+
+div.positive,
+p.positive,
+li.positive {
+	background-color: #92c33a;
+	color: #3e5318;
+}
+
+div.neutral,
+p.neutral,
+li.neutral {
+	background-color: #FFCC33;
+	/*border: 1px solid #a88d38;*/
+	color: #960;
+}
+
+div.negative,
+p.negative,
+li.negative {
+	background-color: #9b3a28;
+	/*border: 1px solid #7d2f20;*/
+	color: #f6d9de;
+}
+
+.flag { 
+	background-image: url("../img/corners_lightgray.gif");
+	background-repeat: no-repeat; 
+}
+
+.flag-right { 
+	padding-right: 5px;
+	background-position: right 0px;
+}
+
+.flag-left { 
+	padding-left: 5px;
+	background-position: left top; 
+}
+
+.flag-up { 
+	padding-top: 5px;
+	background-position: 0 0;
+}
+
+.flag-down { 
+	padding-bottom: 5px;
+	background-position: bottom left;
+	
+}
+
+.flag span { 
+	display: block;
+	background: #eee; 
+	padding: .5em .6em;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+/* these styles won't work in IE, need solution */
+.flag.positive,
+.flag.negative,
+.flag.neutral { 
+	background-color: inherit;
+}
+
+.flag.positive span { background-color: #92c33a; }
+.flag.negative span { background-color: #9b3a28; }
+.flag.neutral span  { background-color: #FFCC33; }
+
+.flag.positive { background-image: url("../img/corners_green.gif"); }
+.flag.negative { background-image: url("../img/corners_red.gif"); }
+.flag.neutral  { background-image: url("../img/corners_yellow.gif"); }
+
+
+/* growl notifications */
+
+#growl {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	z-index: 20;
+}
+
+#growl li {
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	border: 1px solid #999;
+	width: 200px;
+	opacity: .8;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.5);
+	-moz-box-shadow: 0 0 10px rgba(0,0,0,.5);
+	list-style: none;
+}
+
+#growl .positive { border: 1px solid #729336; }
+#growl .neutral { border: 1px solid #a88d38; }
+#growl .negative { border: 1px solid #7d2f20; }
+
+
+
+/* Buttons
+----------------------------------------------------------------- */
+.buttons button, .button{
+    display: block;
+/*    float: left; */
+    margin: 1px 10px 1px 0;
+    background: #666 url("../img/gradient_30-0-black-40px.png") bottom left repeat-x;
+    border: 1px solid #333;
+    border-top: 1px solid #666;
+    border-left: 1px solid #666;
+    text-shadow: -1px -1px 0 #000;
+    font-size: 1em;
+    line-height: 1.3em;
+    text-decoration: none;
+    font-weight: bold;
+    color: #eee;
+    cursor: pointer;
+    padding: 6px 8px; /* Links */
+    vertical-align: baseline;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+.buttons button:focus, 
+.buttons .button:focus,
+.buttons button:hover, 
+.buttons .button:hover {
+	background: #333;
+	border: 1px solid #000;
+	border-top: 1px solid #333;
+	border-left: 1px solid #333;
+	
+}
+
+.buttons button:active, 
+.buttons .button:active {
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+/* can be used to provide a disclaimer or another
+short line of text next to buttons */
+.buttons span {
+    display: block;
+    padding-top: 6px;
+}
+
+
+.highlight { text-shadow: 0 1px 0 rgba(255,255,255,.5); }
+.shadow { text-shadow: 0 1px 0 rgba(0,0,0,.5); }
+
+.insethighlight { text-shadow: 0 -1px 0 rgba(255,255,255,.35); }
+.insetshadow { text-shadow: 0 -1px 0 rgba(0,0,0,.5); }
+
+
+/* Resusable Styles 
+----------------------------------------------------------------- */
+.content {
+	padding: 30px;
+}
+
+.section {
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 1.2em;
+	padding-bottom: 1.2em;
+}
+
+.element {
+	margin-bottom: 1.2em;
+}
+
+.last { 
+	border: 0 !important;
+	margin-bottom: 0 !important; 
+}
+	
+.padded { margin-bottom: 1.7em; }
+.note { display: block; font-size: .9em; color: #666; }
+label .note {
+    display: inline;
+    font-weight: normal;
+    font-size: .85em
+}
+.compact { margin-bottom: .5em; }
+.sub-compact { margin-bottom: 0; }
+.tight { line-height: 1em; }
+.small { font-size: .85em; }
+.divider {
+	border-bottom: 1px solid #eee;
+	margin-bottom: .5em;
+	padding-bottom: .5em;
+}
+
+.aside-block { 
+	background: #F9F9F9;
+	padding: 1.5em 1.5em 0;
+	margin-bottom: 1.5em;
+	border: 1px solid #EEE;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px; 
+	border-radius: 3px;
+}
+
+/* Contextual Images
+----------------------------------------------------------------- */
+.pic { 
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+	padding: .5em;
+	border: 1px solid #ddd;
+ 
+}
+
+div.pic { 
+	width: 200px;
+}
+
+img.pic {
+	border: 1px solid #ddd;
+	padding: .5em;
+}
+
+.pic .caption { 
+	 font-size: .85em;
+	 margin-bottom: 0;
+}
+
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+
+
+/* Modal Window
+----------------------------------------------------------------- */
+
+#overlay {
+    background: rgba(255,255,255,.8);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#window {
+    position: absolute;
+    z-index: 10;
+    width: 600px;
+    left: 50%;
+    margin: 100px 0 0 -300px;
+    background: white;
+    padding: 0;
+    border-top: 1px solid #ccc;
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+
+#window .options {
+    background: #f9f9f9;
+    padding: 1em 2em;
+}
+

@@ -1,0 +1,37 @@
+.yui3-widget-hd {
+    float: right;
+}
+
+.yui3-block-actionbar
+{
+    height: 15px;
+}
+
+.yui3-block-actionbar li
+{
+    width: 15px;
+    height: 15px;
+    float: left;
+    list-style-type: none;
+    margin: 0 .3em 0 0;
+}
+
+.yui3-block-edit
+{
+    background-color: #0865c1;
+}
+
+.yui3-block-delete
+{
+    background-color: #cc1e4b;
+}
+
+.yui3-block-move
+{
+    background-color: #878787;
+}
+
+.yui3-block-configure
+{
+    background-color: #59c866;
+}

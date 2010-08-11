@@ -1,0 +1,26 @@
+<?php echo $this->render('partials/header.phtml'); ?>
+
+    <div id="wrapper" class="two-column-alt">
+
+
+        <div id="header">
+            <h1><a href="/">ModoCMS</a></h1>
+
+            <ul id="menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/blog/add">Blog Admin</a></li>
+            </ul><!-- menu -->
+        </div>
+
+        <div id="left">
+            <?php echo $this->layout()->left ?>
+        </div><!-- sidebar -->
+
+
+        <div id="main">
+            <?php echo $this->layout()->main ?>
+        </div><!-- page -->
+
+    </div><!-- wrapper -->
+
+<?php echo $this->render('partials/footer.phtml'); ?>

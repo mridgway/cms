@@ -1,0 +1,9 @@
+nbproject/private
+upload/library/Doctrine
+upload/library/Zend
+upload/library/ZendX/Application53
+upload/data/assets/*
+upload/data/cache/*
+upload/data/logs/*
+upload/data/proxies/*
+tests/log

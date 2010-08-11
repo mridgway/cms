@@ -1,0 +1,1 @@
+block-delete.js

@@ -1,0 +1,5 @@
+<ul>
+<?php foreach($this->types as $type) : ?>
+    <li><?php echo ($this->route_type == $type?'<strong>'.$type.'</strong>':$type); ?></li>
+<?php endforeach; ?>
+</ul>

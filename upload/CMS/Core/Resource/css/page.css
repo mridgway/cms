@@ -1,0 +1,49 @@
+
+/* overall container */
+#wrapper {
+    width: 900px;
+}
+
+#left {
+    float: left;
+    width: 180px;
+    padding: 0;
+    margin-right: 40px;
+}
+
+#main {
+    float: left;
+    width: 420px;
+}
+
+#right {
+    float: left;
+    width: 220px;
+    padding: 0;
+    margin-left: 40px;
+}
+
+
+
+/* one column layout (main on left, right on right) */
+.one-column #left  { display: none; }
+.one-column #main { width: inherit; float: none; padding: 0; }
+.one-column #right  { display: none; }
+
+
+/* two column layout (main on left, right on right) */
+.two-column #left  { display: none; }
+.two-column #main { width: 590px; float: left; padding: 0; }
+.two-column #right  { width: 270px; float: left; }
+
+
+/* two column layout (left on left, main on right) */
+.two-column-alt #left  { width: 220px; float: left; }
+.two-column-alt #main { width: 640px; float: left; }
+.two-column-alt #right  { display: none; }
+
+
+/* three column layout */
+.three-column #left  { width: 180px; float: left; }
+.three-column #main { width: 420px; float: left; }
+.three-column #right  { width: 220px; float: left; }

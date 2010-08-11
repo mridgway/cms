@@ -1,0 +1,38 @@
+.yui3-modal-overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.yui3-modal {
+    position: absolute;
+    width: 100%
+}
+
+.yui3-modal-content {
+    position: relative;
+    top: 75px;
+    margin: 0 auto;
+    padding: 6px;
+    width: 600px;
+    background-color: white;
+    
+    -moz-box-shadow: 0px 6px 6px #333;
+    -webkit-box-shadow: 0px 6px 6px #333;
+    box-shadow: 0px 6px 6px #333;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.yui3-modal .yui3-widget-bd {
+
+}
+
+#modalWrapper {
+    overflow:  hidden;
+    position: fixed;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}

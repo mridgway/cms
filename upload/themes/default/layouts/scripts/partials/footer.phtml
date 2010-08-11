@@ -1,0 +1,17 @@
+
+
+
+    <div id="debug" style="padding: 1em; clear: both; text-align: center; border: 1px solid #aaa; background-color:#ccc;">
+        <h3>Debug</h3>
+        <p>Managed Entities: <?php
+        /* @var $em \Doctrine\ORM\EntityManager */
+        $em = Zend_Registry::get('doctrine');
+        echo $em->getUnitOfWork()->size(); ?></p>
+</div>
+<?php if (\Modo\Auth::getInstance()->getIdentity()->isAllowed($this->layout()->page, 'edit')) : ?>
+<script type="text/javascript">
+    var PAGE_INFO = <?php $frontendPage = new \Core\Model\Frontend\PageInfo(); echo \Zend_Json::encode($frontendPage->success($this->layout()->page)->data[0]) ?>;
+</script>
+<?php endif; ?>
+</body>
+</html>
