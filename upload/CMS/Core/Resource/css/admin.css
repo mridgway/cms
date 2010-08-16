@@ -42,6 +42,7 @@
 .page-block-new {
     display: block;
     float: right;
+    clear: both;
 }
 
     .page-block-new a {
