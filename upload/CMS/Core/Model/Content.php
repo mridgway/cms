@@ -17,7 +17,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Table(name="Content")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
- * @DiscriminatorMap({"Core\Model\Content\Text"="Core\Model\Content\Text"})
  *
  * @property integer $id
  * @property \Core\Model\Block[] $blocks
