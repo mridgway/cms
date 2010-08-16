@@ -2,5 +2,7 @@
 
 namespace Blog;
 
-class Bootstrap extends \Zend_Application_Module_Bootstrap
-{}
+class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
+{
+    
+}

@@ -19,6 +19,10 @@ class AllTests
     {
         $suite = new \CMSTestSuite('Core Tests');
 
+        $suite->addTestSuite('Core\Controller\Request\HttpTest');
+        $suite->addTestSuite('Core\Controller\Router\RewriteTest');
+
+        $suite->addTestSuite('Core\Model\AbstractModelTest');
         $suite->addTestSuite('Core\Model\AbstractPageTest');
         $suite->addTestSuite('Core\Model\BlockTest');
         $suite->addTestSuite('Core\Model\ContentTest');

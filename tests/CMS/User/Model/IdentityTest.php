@@ -30,12 +30,12 @@ class IdentityTest extends \User\UserModuleTestCase {
     }
 
     public function testSetIdentity() {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->identity->setIdentity('');
     }
 
     public function testSetType() {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->identity->setType('');
     }
 
@@ -45,7 +45,7 @@ class IdentityTest extends \User\UserModuleTestCase {
     }
 
     public function testSetPassHashFailsOnEmpty() {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->identity->setPassHash('');
     }
 

@@ -23,7 +23,7 @@ namespace User\Model;
  * @property string $ipAddress
  * @property string $userAgent
  */
-class Session extends \Modo\Orm\Model\AbstractModel
+class Session extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -122,7 +122,7 @@ class Session extends \Modo\Orm\Model\AbstractModel
         if (null !== $ipAddress) {
             $validator = new \Zend_Validate_StringLength(0, 128);
             if (!$validator->isValid($ipAddress)) {
-                throw new \Modo\Model\Exception('Email must be between 0 and 128 charactrs');
+                throw new \Core\Model\Exception('Email must be between 0 and 128 charactrs');
             }
         }
         $this->ipAddress = $ipAddress;
@@ -138,7 +138,7 @@ class Session extends \Modo\Orm\Model\AbstractModel
         if (null !== $userAgent) {
             $validator = new \Zend_Validate_StringLength(0, 255);
             if (!$validator->isValid($userAgent)) {
-                throw new \Modo\Model\Exception('Email must be between 0 and 255 charactrs');
+                throw new \Core\Model\Exception('Email must be between 0 and 255 charactrs');
             }
         }
         $this->userAgent = $userAgent;

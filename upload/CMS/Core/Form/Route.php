@@ -13,14 +13,14 @@ namespace Core\Form;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Route.php 297 2010-05-12 13:34:56Z mike $
  */
-class Route extends \Modo\Form\AbstractForm
+class Route extends \Core\Form\AbstractForm
 {
     public function init()
     {
 
         $id = new \Zend_Form_Element_Hidden('id');
 
-        $template = new \Modo\Form\Element('template');
+        $template = new \Core\Form\Element('template');
         $template->setLabel('Route:');
         $template->setAllowEmpty(false);
         $template->addValidator(new \Core\Validator\UniqueRoute($id->getName()));

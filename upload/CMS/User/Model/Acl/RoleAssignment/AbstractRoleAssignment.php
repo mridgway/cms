@@ -22,7 +22,7 @@ namespace User\Model\Acl\RoleAssignment;
  * @property int $id
  * @property Role $role
  */
-class AbstractRoleAssignment extends \Modo\Orm\Model\AbstractModel
+class AbstractRoleAssignment extends \Core\Model\AbstractModel
 {
     /**
      * @var integer

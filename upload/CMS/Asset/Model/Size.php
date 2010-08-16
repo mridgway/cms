@@ -21,7 +21,7 @@ namespace Asset\Model;
  * @property int $height
  * @property int $width
  */
-class Size extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Size extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -97,7 +97,7 @@ class Size extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Vers
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 0 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 0 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -110,7 +110,7 @@ class Size extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Vers
     public function setHeight($height)
     {
         if (!is_int($height) || $height < 0){
-            throw new \Modo\Model\Exception('Height must be a positive integer.');
+            throw new \Core\Model\Exception('Height must be a positive integer.');
         }
         $this->height = $height;
         return $this;
@@ -123,7 +123,7 @@ class Size extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Vers
     public function setWidth($width)
     {
         if (!is_int($width) || $width < 0){
-            throw new \Modo\Model\Exception('Width must be a positive integer.');
+            throw new \Core\Model\Exception('Width must be a positive integer.');
         }
         $this->width = $width;
         return $this;

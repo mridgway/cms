@@ -18,9 +18,8 @@ namespace Core\Model\Module;
  * @property int $id
  */
 class Content
-    extends \Modo\Orm\Model\AbstractModel
-    implements \Modo\Orm\Model\VersionableInterface,
-               \Zend_Acl_Resource_Interface
+    extends \Core\Model\AbstractModel
+    implements \Zend_Acl_Resource_Interface
 {
     /**
      * @var int
@@ -78,7 +77,7 @@ class Content
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($title)) {
-            throw new \Modo\Model\Exception('Title must be between 0 and 50 characters long.');
+            throw new \Core\Model\Exception('Title must be between 0 and 50 characters long.');
         }
         $this->title = $title;
         return $this;
@@ -88,7 +87,7 @@ class Content
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($discriminator)) {
-            throw new \Modo\Model\Exception('Discriminator must be between 0 and 50 characters.');
+            throw new \Core\Model\Exception('Discriminator must be between 0 and 50 characters.');
         }
         $this->discriminator = $discriminator;
         return $this;
@@ -98,7 +97,7 @@ class Content
     {
         if (null !== $class) {
             if (!class_exists($class)) {
-                throw new \Modo\Model\Exception('Class does not exist.');
+                throw new \Core\Model\Exception('Class does not exist.');
             }
         }
         $this->class = $class;
@@ -109,7 +108,7 @@ class Content
     {
         if(null !== $controller) {
             if (!class_exists($controller)) {
-                throw new \Modo\Model\Exception('Class does not exist.');
+                throw new \Core\Model\Exception('Class does not exist.');
             }
         }
         $this->controller = $controller;

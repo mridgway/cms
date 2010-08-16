@@ -5,7 +5,7 @@
 
 namespace Core\Model;
 
-use \Modo\Orm\Model;
+use \Core\Model;
 
 /**
  * A position on a page that contains content
@@ -33,8 +33,7 @@ use \Modo\Orm\Model;
  */
 abstract class Block
     extends Model\AbstractModel
-    implements Model\VersionableInterface,
-               \Zend_Acl_Resource_Interface
+    implements \Zend_Acl_Resource_Interface
 {
     /**
      * @var int
@@ -151,9 +150,6 @@ abstract class Block
         return $this->view;
     }
     
-    /**
-     * @PostLoad
-     */
     public function getViewInstance()
     {
         if (null == $this->_viewInstance) {
@@ -327,25 +323,25 @@ abstract class Block
     public function setLocation(\Core\Model\Layout\Location $location = null)
     {
         if (null === $location && null !== $this->page) {
-            throw new \Modo\Model\Exception('Cannot null location on a page block.');
+            throw new \Core\Model\Exception('Cannot null location on a page block.');
         }
         $this->location = $location;
         return $this;
     }
 
     /**
-     * @param <type> $weight
+     * @param integer $weight
      * @return Block
      */
     public function setWeight($weight = null)
     {
         if (null !== $weight) {
             if (!is_numeric($weight)) {
-                throw new \Modo\Model\Exception('Weight must be a number.');
+                throw new \Core\Model\Exception('Weight must be a number.');
             }
         } else {
             if (null !== $this->page) {
-                throw new \Modo\Model\Exception('Cannot null weight on page block.');
+                throw new \Core\Model\Exception('Cannot null weight on page block.');
             }
         }
         $this->weight = $weight;
@@ -372,7 +368,7 @@ abstract class Block
         if (null !== $properties) {
             foreach ($properties AS $property) {
                 if (!($property instanceof \Core\Model\Block\Config\Property)) {
-                    throw new \Modo\Model\Exception('Property array contains invalid properties.');
+                    throw new \Core\Model\Exception('Property array contains invalid properties.');
                 }
             }
             $this->configProperties = new \Doctrine\Common\Collections\ArrayCollection();
@@ -395,7 +391,7 @@ abstract class Block
         if (null !== $values) {
             foreach ($values AS $value) {
                 if (!($value instanceof \Core\Model\Block\Config\Value)) {
-                    throw new \Modo\Model\Exception('Value array contains invalid values.');
+                    throw new \Core\Model\Exception('Value array contains invalid values.');
                 }
             }
             $this->configValues = new \Doctrine\Common\Collections\ArrayCollection();
@@ -445,7 +441,7 @@ abstract class Block
     public function setInheritedFrom(Block $block = null)
     {
         if ($block === $this) {
-            throw new \Modo\Model\Exception('Block cannot inherit itself.');
+            throw new \Core\Model\Exception('Block cannot inherit itself.');
         }
         $this->inheritedFrom = $block;
         return $this;

@@ -2,18 +2,18 @@
 
 namespace User;
 
-class Bootstrap extends \Zend_Application_Module_Bootstrap
+class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
 {
 
     public function _initAuth()
     {
-        \Modo\Auth::getInstance()->setStorage(new \Modo\Auth\Storage\Doctrine(\Zend_Registry::get('doctrine')));
+        \Core\Auth\Auth::getInstance()->setStorage(new \Core\Auth\Storage\Doctrine(\Zend_Registry::get('doctrine')));
     }
 
     public function _initAcl()
     {
         $this->bootstrap('auth');
-        $acl = new \Modo\Acl;
+        $acl = new \Core\Acl\Acl;
         /* @var $em EntityManager */
         $em = \Zend_Registry::get('doctrine');
 
@@ -25,12 +25,12 @@ class Bootstrap extends \Zend_Application_Module_Bootstrap
                 $acl->addRole($role);
             }
             // Create a role that inherits from the user's roles (allows multiple roles per user)
-            $acl->addRole(\Modo\Auth::getInstance()->getIdentity(), \Modo\Auth::getInstance()->getIdentity()->getRoles());
+            $acl->addRole(\Core\Auth\Auth::getInstance()->getIdentity(), \Core\Auth\Auth::getInstance()->getIdentity()->getRoles());
 
             // Set resources
             $acl->addResource('AllModules');
             $acl->addResource('AllPages');
-            $modules = $em->getRepository('Core\Model\Module')->findAll();
+            $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
             foreach ($modules AS $module) {
                 $acl->addResource($module, 'AllModules');
                 foreach ($module->getBlockTypes() AS $blockType) {
@@ -61,7 +61,7 @@ class Bootstrap extends \Zend_Application_Module_Bootstrap
                     }
                 }
             }
-            \Modo\Auth::getInstance()->getIdentity()->setAcl($acl);
+            \Core\Auth\Auth::getInstance()->getIdentity()->setAcl($acl);
         } catch (\PDOException $e) {
             //throw $e;
         }

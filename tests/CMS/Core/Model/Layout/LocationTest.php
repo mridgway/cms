@@ -39,7 +39,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSynameNull()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->location->setSysname(null);
     }
 

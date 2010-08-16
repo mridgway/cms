@@ -15,7 +15,7 @@ namespace Core\Model;
  *
  * @Entity
  */
-class Template extends AbstractPage implements \Modo\Orm\Model\VersionableInterface
+class Template extends AbstractPage
 {
     /**
      * Allows a module to uniquely grab its template to create new pages.
@@ -34,16 +34,16 @@ class Template extends AbstractPage implements \Modo\Orm\Model\VersionableInterf
     public function setSysname($sysname)
     {
         if (null == $sysname) {
-            throw new \Modo\Model\Exception('Sysname cannot be null.');
+            throw new \Core\Model\Exception('Sysname cannot be null.');
         }
         $sysnameLength = new \Zend_Validate_StringLength(3, 50);
         if (!$sysnameLength->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 3 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 3 and 50 characters.');
         }
         /* UNTESTABLE... SHOULD BE IN WHATEVER CALLS THIS
         $uniqueSysname = new \Core\Validator\UniqueTemplateSysname();
         if (!$uniqueSysname->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname is taken.');
+            throw new \Core\Model\Exception('Sysname is taken.');
         }
         */
         $this->sysname = $sysname;

@@ -55,7 +55,7 @@ class PermissionTest extends \PHPUnit_Framework_TestCase {
         $this->object->setAllow(false);
         $this->assertFalse($this->object->getAllow());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->object->setAllow(null);
     }
     

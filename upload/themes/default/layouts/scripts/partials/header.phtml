@@ -12,14 +12,14 @@
 	<link href="/resources/core/css/base.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/theme.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/page.css" rel="stylesheet" type="text/css" media="screen" />
-<?php if (\Modo\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
 	<link href="/resources/core/css/admin.css" rel="stylesheet" type="text/css" media="screen" />
 <?php endif; ?>
     <!--[if lt IE 8]>
 	<link href="/resources/core/css/ie.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
 
-	<script type="text/javascript" charset="utf-8" src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="http://yui.yahooapis.com/3.1.1/build/yui/yui.js"></script>
 
 	<script type="text/javascript" charset="utf-8">
     YUI({
@@ -81,7 +81,7 @@
     }).use('event', function(Y) {
         Y.on('domready', function () {
 
-<?php if (\Modo\Auth::getInstance()->getIdentity()->isAllowed($this->layout()->page, 'edit')) : ?>
+<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->layout()->page, 'edit')) : ?>
             Y.use('page', function (Y) {
                 var page = new Y.Page();
             });
@@ -96,7 +96,7 @@
                 }, Y);
             });
 
-<?php if (\Modo\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
             Y.use('modal', 'modal-io', function (Y) {
                 Y.all('#adminMenu .editPage').on('click', function () {
                     var modal = new Y.Modal({
@@ -130,7 +130,7 @@
 
 <?php if (isset($this->layout()->page)) : ?>
 <body id="page-<?php echo $this->layout()->page->id; ?>">
-<?php if (\Modo\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <ul id="adminMenu">
         <li><a href="#" class="editPage">Edit Page</a></li>
         <li><a href="#" class="assetManager">Asset Manager</a></li>

@@ -20,7 +20,7 @@ class Page extends \Core\Form\AbstractPage
         parent::init();
         $this->setName('pageForm');
 
-        $pageRoute = new \Modo\Form\Element\Text('pageRoute');
+        $pageRoute = new \Core\Form\Element\Text('pageRoute');
         $pageRoute->setLabel('Url:');
         $pageRoute->setAllowEmpty(true);
         $pageRoute->addValidator(new \Zend_Validate_StringLength(0, 255));

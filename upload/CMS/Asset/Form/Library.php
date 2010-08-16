@@ -13,7 +13,7 @@ namespace Asset\Form;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Library.php 297 2010-05-12 13:34:56Z mike $
  */
-class Library extends \Modo\Form\AbstractForm
+class Library extends \Core\Form\AbstractForm
 {
     public static $sorts = array (
             0 => array(
@@ -43,25 +43,25 @@ class Library extends \Modo\Form\AbstractForm
         $this->setAction('/direct/asset/manager/list/');
         $this->setName('filter');
 
-        $search = new \Modo\Form\Element\Text('search');
+        $search = new \Core\Form\Element\Text('search');
         $search->setLabel('Search');
 
-        $type = new \Modo\Form\Element\Select('type');
+        $type = new \Core\Form\Element\Select('type');
         $type->setLabel('Type');
         $type->addMultiOption('all', 'All Types');
         $type->setValue('all');
 
-        $sort = new \Modo\Form\Element\Select('sort');
+        $sort = new \Core\Form\Element\Select('sort');
         $sort->setLabel('Sort');
         foreach(self::$sorts AS $key => $sortType) {
             $sort->addMultiOption($key, $sortType['text']);
         }
         $sort->setValue(2);
 
-        $submit = new \Modo\Form\Element\Submit('submit');
+        $submit = new \Core\Form\Element\Submit('submit');
         $submit->setLabel('Search');
         
-        $page = new \Modo\Form\Element\Hidden('page');
+        $page = new \Core\Form\Element\Hidden('page');
         $page->setValue(1);
 
         $this->addElements(array($search, $type, $sort, $submit, $page));

@@ -22,7 +22,7 @@ namespace User\Model\Acl;
  * @var Core\Model\Module\Privilege $privilege
  * @var boolean $allow
  */
-class Permission extends \Modo\Orm\Model\AbstractModel
+class Permission extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -88,7 +88,7 @@ class Permission extends \Modo\Orm\Model\AbstractModel
         if ($role != null) {
             $validator = new \Zend_Validate_StringLength(0, 50);
             if (!$validator->isValid($role)) {
-                throw new \Modo\Model\Exception('Role name must be between 0 and 50 characters.');
+                throw new \Core\Model\Exception('Role name must be between 0 and 50 characters.');
             }
         }
         $this->role = $role;
@@ -107,7 +107,7 @@ class Permission extends \Modo\Orm\Model\AbstractModel
         if ($resource != null) {
             $validator = new \Zend_Validate_StringLength(0, 50);
             if (!$validator->isValid($resource)) {
-                throw new \Modo\Model\Exception('Resource name must be between 0 and 50 characters.');
+                throw new \Core\Model\Exception('Resource name must be between 0 and 50 characters.');
             }
         }
         $this->resource = $resource;
@@ -125,7 +125,7 @@ class Permission extends \Modo\Orm\Model\AbstractModel
         if ($privilege != null) {
             $validator = new \Zend_Validate_StringLength(0, 50);
             if (!$validator->isValid($privilege)) {
-                throw new \Modo\Model\Exception('Privilege name must be between 0 and 50 characters.');
+                throw new \Core\Model\Exception('Privilege name must be between 0 and 50 characters.');
             }
         }
         $this->privilege = $privilege;
@@ -139,7 +139,7 @@ class Permission extends \Modo\Orm\Model\AbstractModel
     public function setAllow($allow)
     {
         if (!is_bool($allow)) {
-            throw new \Modo\Model\Exception('Allow must be a boolean.');
+            throw new \Core\Model\Exception('Allow must be a boolean.');
         }
         $this->allow = $allow;
         return $this;
@@ -155,7 +155,7 @@ class Permission extends \Modo\Orm\Model\AbstractModel
         if ($assertion != null) {
             $validator = new \Zend_Validate_StringLength(0, 50);
             if (!$validator->isValid($assertion)) {
-                throw new \Modo\Model\Exception('Assertion name must be between 0 and 200 characters.');
+                throw new \Core\Model\Exception('Assertion name must be between 0 and 200 characters.');
             }
         }
         $this->assertion = $assertion;

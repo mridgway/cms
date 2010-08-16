@@ -13,7 +13,7 @@ namespace Blog\Controller\Content;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Article.php 297 2010-05-12 13:34:56Z mike $
  */
-class Article extends \Modo\Controller\AbstractController
+class Article extends \Core\Controller\Content\AbstractController
 {
     public function addAction()
     {

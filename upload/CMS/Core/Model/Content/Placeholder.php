@@ -18,7 +18,7 @@ namespace Core\Model\Content;
  * @property string $sysname
  * @property string $description
  */
-class Placeholder extends \Core\Model\Content implements \Modo\Orm\Model\VersionableInterface
+class Placeholder extends \Core\Model\Content
 {
 
     /**
@@ -68,7 +68,7 @@ class Placeholder extends \Core\Model\Content implements \Modo\Orm\Model\Version
     {
         $validator = new \Zend_Validate_StringLength(1, 100);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 1 and 100 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 1 and 100 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -83,10 +83,10 @@ class Placeholder extends \Core\Model\Content implements \Modo\Orm\Model\Version
     {
         $validator = new \Zend_Validate_StringLength(1, 150);
         if (!$validator->isValid($contentType)) {
-            throw new \Modo\Model\Exception('ContentType must be between 1 and 100 characters.');
+            throw new \Core\Model\Exception('ContentType must be between 1 and 100 characters.');
         }
         if (!class_exists($contentType)) {
-            throw new \Modo\Model\Exception('Class does not exist.');
+            throw new \Core\Model\Exception('Class does not exist.');
         }
         $this->contentType = $contentType;
         return $this;
@@ -101,7 +101,7 @@ class Placeholder extends \Core\Model\Content implements \Modo\Orm\Model\Version
     {
         $validator = new \Zend_Validate_StringLength(0, 150);
         if (!$validator->isValid($description)) {
-            throw new \Modo\Model\Exception('Description must be less than 500 characters.');
+            throw new \Core\Model\Exception('Description must be less than 500 characters.');
         }
         $this->description = $description;
         return $this;

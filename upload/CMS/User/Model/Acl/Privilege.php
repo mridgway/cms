@@ -18,7 +18,7 @@ namespace User\Model\Acl;
  *
  * @property int $id
  */
-class Privilege extends \Modo\Orm\Model\AbstractModel
+class Privilege extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -65,7 +65,7 @@ class Privilege extends \Modo\Orm\Model\AbstractModel
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 0 and 50 characters long.');
+            throw new \Core\Model\Exception('Sysname must be between 0 and 50 characters long.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -89,7 +89,7 @@ class Privilege extends \Modo\Orm\Model\AbstractModel
     {
         $validator = new \Zend_Validate_StringLength(0, 500);
         if (!$validator->isValid($description)) {
-            throw new \Modo\Model\Exception('Description must be between 0 and 500 characters long.');
+            throw new \Core\Model\Exception('Description must be between 0 and 500 characters long.');
         }
         $this->description = $description;
         return $this;

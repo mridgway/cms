@@ -21,7 +21,7 @@ namespace User\Model;
  * @property array $roleAssignments
  * @property array $roles
  */
-class Group extends \Modo\Orm\Model\AbstractModel
+class Group extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -65,7 +65,7 @@ class Group extends \Modo\Orm\Model\AbstractModel
     {
         $validator = new \Zend_Validate_StringLength(1,50);
         if (!$validator->isValid($name)) {
-            throw new \Modo\Model\Exception('Group name must be between 1 and 50 characters.');
+            throw new \Core\Model\Exception('Group name must be between 1 and 50 characters.');
         }
         $this->name = $name;
         return $this;

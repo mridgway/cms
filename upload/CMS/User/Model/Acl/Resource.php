@@ -18,7 +18,7 @@ namespace User\Model\Acl;
  *
  * @property int $id
  */
-class Resource extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Resource_Interface
+class Resource extends \Core\Model\AbstractModel implements \Zend_Acl_Resource_Interface
 {
     /**
      * @var string
@@ -42,7 +42,7 @@ class Resource extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Resour
     {
         $validator = new \Zend_Validate_StringLength(1, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 1 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 1 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -53,7 +53,7 @@ class Resource extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Resour
         if (null !== $parent) {
             $validator = new \Zend_Validate_StringLength(1, 50);
             if (!$validator->isValid($parent)) {
-                throw new \Modo\Model\Exception('Sysname must be between 1 and 50 characters.');
+                throw new \Core\Model\Exception('Sysname must be between 1 and 50 characters.');
             }
         }
         $this->parent = $parent;

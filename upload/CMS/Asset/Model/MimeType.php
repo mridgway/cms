@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property string $sysname
  * @property Asset\Model\Type $type
  */
-class MimeType extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class MimeType extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -60,7 +60,7 @@ class MimeType extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 0 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 0 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;

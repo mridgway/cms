@@ -23,7 +23,7 @@ namespace User\Model;
  * @property array $roleAssignments
  * @property array $roles
  */
-class User extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Interface
+class User extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
 {
     /**
      * @var integer
@@ -95,7 +95,7 @@ class User extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Inter
     {
         $validator = new \Zend_Validate_EmailAddress();
         if (!$validator->isValid($email)) {
-            throw new \Modo\Model\Exception('Email address invalid.');
+            throw new \Core\Model\Exception('Email address invalid.');
         }
         $this->email = $email;
         return $this;
@@ -109,7 +109,7 @@ class User extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Inter
     {
         $validator = new \Zend_Validate_StringLength(1, 100);
         if (!$validator->isValid($firstName)) {
-            throw new \Modo\Model\Exception('FirstName must be between 1 and 100 characters');
+            throw new \Core\Model\Exception('FirstName must be between 1 and 100 characters');
         }
         $this->firstName = $firstName;
         return $this;
@@ -123,7 +123,7 @@ class User extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Inter
     {
         $validator = new \Zend_Validate_StringLength(1, 100);
         if (!$validator->isValid($lastName)) {
-            throw new \Modo\Model\Exception('LastName must be between 1 and 100 characters');
+            throw new \Core\Model\Exception('LastName must be between 1 and 100 characters');
         }
         $this->lastName = $lastName;
         return $this;

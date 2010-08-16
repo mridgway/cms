@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: AbstractPage.php 302 2010-05-19 19:22:02Z mike $
  *
- * @Entity
+ * @Entity(repositoryClass="Core\Repository\AbstractPage")
  * @Table(name="AbstractPage")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
@@ -30,9 +30,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property \Core\Model\Content $dependentContent
  */
 abstract class AbstractPage
-    extends \Modo\Orm\Model\AbstractModel
-    implements \Modo\Orm\Model\VersionableInterface,
-               \Zend_Acl_Resource_Interface
+    extends \Core\Model\AbstractModel
+    implements \Zend_Acl_Resource_Interface
 {
     /**
      * @var integer
@@ -94,14 +93,14 @@ abstract class AbstractPage
             $block->location = $location;
         } else {
             if (null === $block->location) {
-                throw new \Modo\Model\Exception('Block cannot be added because it does not have a location.');
+                throw new \Core\Model\Exception('Block cannot be added because it does not have a location.');
             }
         }
         if (null !== $weight) {
             $block->weight = $weight;
         } else {
             if (null === $block->weight) {
-                throw new \Modo\Model\Exception('Block cannot be added because it does not have a weight.');
+                throw new \Core\Model\Exception('Block cannot be added because it does not have a weight.');
             }
         }
         $this->blocks[] = $block;
@@ -131,7 +130,7 @@ abstract class AbstractPage
         if (null !== $title) {
             $lengthValidator = new \Zend_Validate_StringLength(0, 255);
             if (!$lengthValidator->isValid($title)) {
-                throw new \Modo\Model\Exception('Title is too long');
+                throw new \Core\Model\Exception('Title is too long');
             }
         }
         $this->title = $title;
@@ -147,7 +146,7 @@ abstract class AbstractPage
         if (null !== $description) {
             $lengthValidator = new \Zend_Validate_StringLength(0, 500);
             if (!$lengthValidator->isValid($description)) {
-                throw new \Modo\Model\Exception('Description is too long');
+                throw new \Core\Model\Exception('Description is too long');
             }
         }
         $this->description = $description;
@@ -163,7 +162,7 @@ abstract class AbstractPage
         if (null !== $blocks) {
             foreach ($blocks AS $block) {
                 if (!($block instanceof \Core\Model\Block)) {
-                    throw new \Modo\Model\Exception('Block array contains invalid blocks');
+                    throw new \Core\Model\Exception('Block array contains invalid blocks');
                 }
             }
             $this->blocks = null;

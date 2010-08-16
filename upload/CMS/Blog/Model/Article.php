@@ -17,7 +17,7 @@ namespace Blog\Model;
  * @HasLifecycleCallbacks
  * @Table(name="Blog_Article")
  */
-class Article extends \Core\Model\Content implements \Modo\Orm\Model\VersionableInterface
+class Article extends \Core\Model\Content
 {
 
     /**

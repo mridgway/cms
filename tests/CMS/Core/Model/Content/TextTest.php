@@ -57,7 +57,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
         $this->text->setShared(true);
         $this->assertTrue($this->text->getShared());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->text->setShared('test');
     }
 }

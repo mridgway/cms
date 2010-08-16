@@ -34,7 +34,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSetSysnameNull() {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->role->setSysname(null);
     }
 

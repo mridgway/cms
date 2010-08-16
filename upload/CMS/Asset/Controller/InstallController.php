@@ -54,7 +54,7 @@ class InstallController extends \Zend_Controller_Action
     public function _registerModule()
     {
         $moduleName = 'Asset';
-        $module = \Core\Model\Module\Registry::getInstance()->getConfigModule($moduleName);
+        $module = \Core\Module\Registry::getInstance()->getConfigModule($moduleName);
 
         $this->_em->persist($module);
         $this->_em->flush();

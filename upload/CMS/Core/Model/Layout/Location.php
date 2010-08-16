@@ -16,7 +16,7 @@ namespace Core\Model\Layout;
  * @Entity
  * @property string $sysname
  */
-class Location extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Location extends \Core\Model\AbstractModel
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ class Location extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 0 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 0 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;

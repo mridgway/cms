@@ -19,7 +19,6 @@ class AllTests
 
         require_once(TESTS_PATH . '/CMSAllTests.php');
         $suite->addTest(CMSAllTests::suite());
-        $suite->addTest(Modo\AllTests::suite());
 
         return $suite;
     }

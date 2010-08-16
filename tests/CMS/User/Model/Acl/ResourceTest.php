@@ -34,7 +34,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSetSysnameEmpty() {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->resource->setSysname('');
     }
 
@@ -44,7 +44,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSetParentEmpty() {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->resource->setParent('');
     }
 

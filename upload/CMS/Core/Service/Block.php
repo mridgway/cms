@@ -13,7 +13,7 @@ namespace Core\Service;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Block.php 297 2010-05-12 13:34:56Z mike $
  */
-class Block extends \Modo\Service\AbstractService
+class Block extends \Core\Service\AbstractService
 {
 
     /**
@@ -82,7 +82,7 @@ class Block extends \Modo\Service\AbstractService
      */
     public function getBlockController(\Core\Model\Block $block)
     {
-        $modules = \Core\Model\Module\Registry::getInstance()->getModules();
+        $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
                 if ($type->class == get_class($block->content)) {

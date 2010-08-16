@@ -58,14 +58,14 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBlockFailLocation()
     {
-    $this->setExpectedException('Modo\Model\Exception');
+    $this->setExpectedException('Core\Model\Exception');
         $this->block1->setLocation(null);
         $this->page->addBlock($this->block1);
     }
 
     public function testAddBlockFailWeight()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->block1->setWeight(null);
         $this->page->addBlock($this->block1, $this->left);
     }
@@ -84,7 +84,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
         $this->page->setTitle(null);
         $this->assertEquals(null, $this->page->getTitle());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->page->setTitle('This is a really long title that shouldn\'t fit and should
             therefore throw an exception. This is a really long title that shouldn\'t fit and should
             therefore throw an exception. This is a really long title that shouldn\'t fit and should
@@ -108,7 +108,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
         $this->page->setDescription();
         $this->assertEquals(null, $this->page->getDescription());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->page->setDescription('This is a really long title that shouldn\'t fit and should
             therefore throw an exception. This is a really long title that shouldn\'t fit and should
             therefore throw an exception. This is a really long title that shouldn\'t fit and should
@@ -131,7 +131,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
     public function testSetAndGetBlocksFailedLocation()
     {
         $blocks = array($this->block1, $this->block2, $this->block3);
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->block3->setLocation();
         $this->page->setBlocks($blocks);
     }
@@ -139,7 +139,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
     public function testSetAndGetBlocksFailedType()
     {
         $blocks = array($this->block1, $this->block2, new \stdClass());
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->page->setBlocks($blocks);
     }
 

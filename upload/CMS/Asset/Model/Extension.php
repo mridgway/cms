@@ -17,7 +17,7 @@ namespace Asset\Model;
  * @Table(name="Asset_Extension")
  * @property string $sysname
  */
-class Extension extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Extension extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -49,7 +49,7 @@ class Extension extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model
     {
         $validator = new \Zend_Validate_StringLength(0, 5);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname (' . $sysname . ') must be between 0 and 5 characters.');
+            throw new \Core\Model\Exception('Sysname (' . $sysname . ') must be between 0 and 5 characters.');
         }
         $this->sysname = $sysname;
         return $this;

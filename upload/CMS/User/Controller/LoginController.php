@@ -38,5 +38,6 @@ class LoginController extends \Zend_Controller_Action
     {
         \Zend_Auth::getInstance()->clearIdentity();
         header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
     }
 }

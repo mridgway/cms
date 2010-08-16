@@ -42,19 +42,19 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
 
     public function testSetName()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->property->setName('');
     }
 
     public function testSetRequired()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->property->setRequired('test');
     }
 
     public function testSetInheritable()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->property->setInheritable('test');
     }
 
@@ -63,7 +63,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
         $this->property->setInheritableFrom('Core\Model\Content');
         $this->assertEquals('Core\Model\Content', $this->property->getInheritableFrom());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->property->setInheritableFrom('test');
     }
 }

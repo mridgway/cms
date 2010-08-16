@@ -10,7 +10,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 {
     public function _initCoreAutoloader()
     {
-        \Zend_Loader_Autoloader::getInstance()->registerNamespace('Core\\');
+        \Zend_Loader_Autoloader::getInstance()->registerNamespace('Core');
     }
 
     public function _initDoctrine()
@@ -37,7 +37,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 
     public function _initMetadataLoader()
     {
-        $metadataLoader = new \Modo\Orm\Model\MetadataLoader;
+        $metadataLoader = new \Core\Model\MetadataLoader;
 
         $evm = \Zend_Registry::get('doctrine')->getEventManager();
         $evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $metadataLoader);
@@ -45,12 +45,12 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
     
     public function _initServiceManager()
     {
-        \Core\Service\Manager::setEntityManager(Zend_Registry::get('doctrine'));
+        \Core\Service\Manager::setEntityManager(\Zend_Registry::get('doctrine'));
     }
 
     public function _initDispatcher()
     {
-        $dispatcher = new \Modo\Controller\Dispatcher\Standard();
+        $dispatcher = new \Core\Controller\Dispatcher\Standard();
         $dispatcher->setControllerNamespace('Controller');
         \Zend_Controller_Front::getInstance()->setDispatcher($dispatcher);
         \Zend_Controller_Front::getInstance()->setModuleControllerDirectoryName('Controller');
@@ -60,7 +60,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 
     public function _initRequest()
     {
-        $request = new \Modo\Controller\Request\Http;
+        $request = new \Core\Controller\Request\Http;
         Zend_Controller_Front::getInstance()->setRequest($request);
     }
     
@@ -68,7 +68,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
     {
         $front = \Zend_Controller_Front::getInstance();
 
-        $router = new \Modo\Controller\Router\Rewrite();
+        $router = new \Core\Controller\Router\Rewrite();
         $front->setRouter($router);
 
         $router->removeDefaultRoutes();
@@ -81,30 +81,6 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         } catch (\Exception $e) {
             $this->_setupDefaultRoutes($router);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Due to the way in which prefix paths must be specified in a config file,
-     * php 5.3 namespaces cannot be added via an ini file.  Plus, you cannot
-     * configure the class to be used for the default plugin loader
-     * instantiation, so this kills two birds with one stone.
-     *
-     * @return Zend_Loader_PluginLoader_Interface
-     */
-    public function getPluginLoader()
-    {
-        if ($this->_pluginLoader === null) {
-            $options = array(
-                'Zend_Application_Resource' => 'Zend/Application/Resource',
-                'Modo\Application\Resource\\' => 'Modo/Application/Resource'
-            );
-
-            $this->_pluginLoader = new \Modo\Loader\PluginLoader($options);
-        }
-
-        return $this->_pluginLoader;
     }
 
     /**

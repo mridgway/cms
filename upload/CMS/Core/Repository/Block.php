@@ -15,6 +15,18 @@ namespace Core\Repository;
  */
 class Block extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getBlocksForPage(\Core\Model\AbstractPage $page)
+    {
+        $qb = $this->_em->getRepository('Core\Model\Block')->createQueryBuilder('b');
+        $qb->select('b, cv');
+        $qb->leftJoin('b.configValues', 'cv');
+        $qb->where('b.page = :page');
+        $qb->setParameter('page', $page);
+
+        return $qb->getQuery()->getResult();
+    }
+    
     public function getDependentValues(\Core\Model\Block $block)
     {
         $qb = $this->_em->getRepository('Core\Model\Block\Config\Value')->createQueryBuilder('v');

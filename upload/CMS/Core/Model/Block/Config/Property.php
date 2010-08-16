@@ -14,7 +14,7 @@ namespace Core\Model\Block\Config;
  * @version    $Id: Property.php 297 2010-05-12 13:34:56Z mike $
  *
  */
-class Property extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Property extends \Core\Model\AbstractModel
 {
 
     /**
@@ -68,7 +68,7 @@ class Property extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\
     {
         $validator = new \Zend_Validate_StringLength(1, 150);
         if (!$validator->isValid($name)) {
-            throw new \Modo\Model\Exception('Property name must be between 1 and 150 characters.');
+            throw new \Core\Model\Exception('Property name must be between 1 and 150 characters.');
         }
         $this->name = $name;
         return $this;
@@ -93,7 +93,7 @@ class Property extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\
     public function setRequired($required)
     {
         if (!is_bool($required)) {
-            throw new \Modo\Model\Exception('Property->required must be a boolean value.');
+            throw new \Core\Model\Exception('Property->required must be a boolean value.');
         }
         $this->required = $required;
         return $this;
@@ -107,7 +107,7 @@ class Property extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\
     public function setInheritable($inheritable)
     {
         if (!is_bool($inheritable)) {
-            throw new \Modo\Model\Exception('Property->inheritable must be a boolean value.');
+            throw new \Core\Model\Exception('Property->inheritable must be a boolean value.');
         }
         $this->inheritable = $inheritable;
         return $this;
@@ -121,7 +121,7 @@ class Property extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\
     public function setInheritableFrom($inheritableFrom)
     {
         if (!class_exists($inheritableFrom)) {
-            throw new \Modo\Model\Exception('Inheritable class does not exist.');
+            throw new \Core\Model\Exception('Inheritable class does not exist.');
         }
         $this->inheritableFrom = $inheritableFrom;
         return $this;

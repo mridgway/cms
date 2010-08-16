@@ -44,7 +44,7 @@ class BlockController extends \Zend_Controller_Action
      */
     public function viewAction()
     {
-        if (!$this->_block->canView(\Modo\Auth::getInstance()->getIdentity())) {
+        if (!$this->_block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
             die(new \Core\Model\Frontend\Simple(1, 'Permission denied.'));
         }
         throw new \Exception('Viewing individual blocks not implemented yet.');
@@ -52,7 +52,7 @@ class BlockController extends \Zend_Controller_Action
 
     public function editAction()
     {
-        if (!$this->_block->canEdit(\Modo\Auth::getInstance()->getIdentity())) {
+        if (!$this->_block->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
             die(new \Core\Model\Frontend\Simple(1, 'Permission denied.'));
         }
         
@@ -69,7 +69,7 @@ class BlockController extends \Zend_Controller_Action
      */
     public function deleteAction()
     {
-        if (!$this->_block->canDelete(\Modo\Auth::getInstance()->getIdentity())) {
+        if (!$this->_block->canDelete(\Core\Auth\Auth::getInstance()->getIdentity())) {
             die(new \Core\Model\Frontend\Simple(1, 'Permission denied.'));
         }
 
@@ -97,11 +97,11 @@ class BlockController extends \Zend_Controller_Action
      */
     public function configureAction()
     {
-        if (!$this->_block->canConfigure(\Modo\Auth::getInstance()->getIdentity())) {
+        if (!$this->_block->canConfigure(\Core\Auth\Auth::getInstance()->getIdentity())) {
             die(new \Core\Model\Frontend\Simple(1, 'Permission denied.'));
         }
 
-        $form = new \Modo\Form\AbstractForm();
+        $form = new \Core\Form\AbstractForm();
         $form->setAction('/direct/block/configure?id=' . $this->_block->getId());
         $form->setMethod('post');
         foreach($this->_block->getConfigProperties() AS $property) {

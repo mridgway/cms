@@ -13,7 +13,7 @@ namespace Blog\Service;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Blog.php 297 2010-05-12 13:34:56Z mike $
  */
-class Blog extends \Modo\Service\AbstractService
+class Blog extends \Core\Service\AbstractService
 {
 
     const ARTICLE_SYSNAME = 'blogArticle';

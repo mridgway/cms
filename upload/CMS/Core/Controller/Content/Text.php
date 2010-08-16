@@ -13,7 +13,7 @@ namespace Core\Controller\Content;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Text.php 297 2010-05-12 13:34:56Z mike $
  */
-class Text extends \Modo\Controller\AbstractController
+class Text extends \Core\Controller\Content\AbstractController
 {
     public function addAction()
     {

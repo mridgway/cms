@@ -5,7 +5,7 @@
 
 namespace Core\Model\Content;
 
-use \Modo\Orm\Model;
+use \Core\Model;
 
 /**
  * Textual content that has been created via a WYSIWYG editor
@@ -21,7 +21,7 @@ use \Modo\Orm\Model;
  * @property string $content
  * @property bool $shared
  */
-class Text extends \Core\Model\Content implements Model\VersionableInterface
+class Text extends \Core\Model\Content
 {
     /**
      * @var string
@@ -52,7 +52,7 @@ class Text extends \Core\Model\Content implements Model\VersionableInterface
     {
         $validator = new \Zend_Validate_StringLength(0, 100);
         if (!$validator->isValid($title)) {
-            throw new \Modo\Model\Exception('Title must be less than 100 characters.');
+            throw new \Core\Model\Exception('Title must be less than 100 characters.');
         }
         $this->title = $title;
         return $this;
@@ -62,7 +62,7 @@ class Text extends \Core\Model\Content implements Model\VersionableInterface
     {
         $validator = new \Zend_Validate_StringLength(0, 65000);
         if (!$validator->isValid($content)) {
-            throw new \Modo\Model\Exception('Content must be less than 65000 characters.');
+            throw new \Core\Model\Exception('Content must be less than 65000 characters.');
         }
         $this->content = $content;
         return $this;
@@ -71,7 +71,7 @@ class Text extends \Core\Model\Content implements Model\VersionableInterface
     public function setShared($shared = false)
     {
         if (!is_bool($shared)) {
-            throw new \Modo\Model\Exception('Shared must be boolean.');
+            throw new \Core\Model\Exception('Shared must be boolean.');
         }
         $this->shared = $shared;
         return $this;

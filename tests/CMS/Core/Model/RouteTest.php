@@ -76,14 +76,14 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $this->route->setSysname(null);
         $this->assertNull($this->route->getSysname());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         // 101 characters
         $this->route->setSysname('27226405402722640540272264054027226405402722640540272264054027226405402722640540272264054027226405401');
     }
 
     public function testSetPageRoutes()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->route->setPageRoutes(1);
     }
 
@@ -95,7 +95,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $this->route->setIsDirect(false);
         $this->assertFalse($this->route->getIsDirect());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->route->setIsDirect('bananas');
     }
 }

@@ -27,14 +27,14 @@ class PageController extends \Zend_Controller_Action
         if (!$pageId = $this->getRequest()->getParam('id', false)) {
             throw new \Exception('Page not set.');
         }
-        if (!$this->_page = $this->_em->getRepository('Core\Model\AbstractPage')->find($pageId)) {
+        if (!$this->_page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($pageId)) {
             throw new \Exception('Page does not exist.');
         }
     }
 
     public function viewAction()
     {
-        if (!\Modo\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'view')) {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'view')) {
             throw new \Exception('Not allowed to view page.');
         }
 
@@ -51,7 +51,7 @@ class PageController extends \Zend_Controller_Action
         // Render blocks into block wrapper
         $blockActions = array();
         foreach ($this->_page->getBlocks() as $block) {
-            if ($block->canView(\Modo\Auth::getInstance()->getIdentity())) {
+            if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
                 $view = new \Zend_View();
                 $view->assign('content', $block->render());
                 $view->assign('block', $block);

@@ -18,7 +18,7 @@ namespace User\Model\Acl;
  *
  * @property int $id
  */
-class Role extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Interface
+class Role extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
 {
     /**
      * @var integer
@@ -57,7 +57,7 @@ class Role extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Inter
     {
         $validator = new \Zend_Validate_StringLength(1,50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 1 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 1 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -71,7 +71,7 @@ class Role extends \Modo\Orm\Model\AbstractModel implements \Zend_Acl_Role_Inter
     {
         $validator = new \Zend_Validate_StringLength(0,500);
         if (!$validator->isValid($description)) {
-            throw new \Modo\Model\Exception('Description must be between 0 and 500 characters.');
+            throw new \Core\Model\Exception('Description must be between 0 and 500 characters.');
         }
         $this->description = $description;
         return $this;

@@ -21,7 +21,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property string $sysname
  * @property array $locations
  */
-class Layout extends \Zend_Layout implements \Modo\Orm\Model\VersionableInterface
+class Layout extends \Zend_Layout
 {
     /**
      * @var string
@@ -124,7 +124,7 @@ class Layout extends \Zend_Layout implements \Modo\Orm\Model\VersionableInterfac
         if (null !== $locations) {
             foreach ($locations AS $location) {
                 if (!($location instanceof \Core\Model\Layout\Location)) {
-                    throw new \Modo\Model\Exception('Location array contains invalid locations.');
+                    throw new \Core\Model\Exception('Location array contains invalid locations.');
                 }
             }
             $this->locations = null;
@@ -145,7 +145,7 @@ class Layout extends \Zend_Layout implements \Modo\Orm\Model\VersionableInterfac
     {
         $validator = new \Zend_Validate_StringLength(1, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 1 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 1 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -160,7 +160,7 @@ class Layout extends \Zend_Layout implements \Modo\Orm\Model\VersionableInterfac
         if (null !== $title) {
             $validator = new \Zend_Validate_StringLength(1, 100);
             if (!$validator->isValid($title)) {
-                throw new \Modo\Model\Exception('Sysname must be between 1 and 100 characters.');
+                throw new \Core\Model\Exception('Sysname must be between 1 and 100 characters.');
             }
         }
         $this->title = $title;
@@ -239,7 +239,6 @@ class Layout extends \Zend_Layout implements \Modo\Orm\Model\VersionableInterfac
         if (method_exists($this, $method)) {
             return $this->{$method}($value);
         } else if (property_exists($this, $name)) {
-            $this->_onPropertyChanged($name, $this->{$name}, $value);
             $this->{$name} = $value;
         }
 
@@ -294,23 +293,6 @@ class Layout extends \Zend_Layout implements \Modo\Orm\Model\VersionableInterfac
         foreach ($array as $key => $value) {
             if (property_exists($this, $key))
                 $this->__set($key, $value);
-        }
-    }
-
-
-    /**
-     * Notifies doctrine of changes to a property. Must be called on all set methods.
-     *
-     * @param string $propName
-     * @param mixed $oldValue
-     * @param mixed $newValue
-     */
-    protected function _onPropertyChanged($propName, $oldValue, $newValue)
-    {
-        if ($this->_listeners) {
-            foreach ($this->_listeners as $listener) {
-                $listener->propertyChanged($this, $propName, $oldValue, $newValue);
-            }
         }
     }
 }

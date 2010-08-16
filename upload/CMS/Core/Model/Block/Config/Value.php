@@ -17,7 +17,7 @@ namespace Core\Model\Block\Config;
  * @Table(name="Block_Config_Value")
  * @property int $id
  */
-class Value extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Value extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -101,7 +101,7 @@ class Value extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Ver
     {
         $validator = new \Zend_Validate_StringLength(0, 150);
         if (!$validator->isValid((string)$name)) {
-            throw new \Modo\Model\Exception('Name must be between 0 and 150 characters. ');
+            throw new \Core\Model\Exception('Name must be between 0 and 150 characters. ');
         }
         $this->name = $name;
         return $this;
@@ -117,7 +117,7 @@ class Value extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Ver
         if (null !== $value) {
             $validator = new \Zend_Validate_StringLength(0, 500);
             if (!$validator->isValid((string)$value)) {
-                throw new \Modo\Model\Exception('Value must be less than 500 characters.');
+                throw new \Core\Model\Exception('Value must be less than 500 characters.');
             }
         }
         $this->value = $value;

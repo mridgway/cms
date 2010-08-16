@@ -5,7 +5,7 @@
 
 namespace Core\Model;
 
-use \Modo\Orm\Model;
+use \Core\Model;
 
 /**
  * Description of View
@@ -22,7 +22,7 @@ use \Modo\Orm\Model;
  * @property string $sysname
  * @property string $label
  */
-class View extends Model\AbstractModel implements Model\VersionableInterface
+class View extends Model\AbstractModel
 {
     /**
      * @var integer
@@ -101,15 +101,21 @@ class View extends Model\AbstractModel implements Model\VersionableInterface
 
     public function getInstance()
     {
-        $view = new \Zend_View();
-        $view->setBasePath($this->getBasePath());
+        /* @var $view Zend_View */
+        $view;
+        if (\Zend_Controller_Front::getInstance()->getParam('bootstrap')) {
+            $view =  clone \Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');
+        } else {
+            $view = new \Zend_View();
+        }
+        $view->clearVars();
+        $view->addBasePath($this->getBasePath());
         if ($helperLoader = self::getPluginLoader('helper')) {
             $view->setPluginLoader($helperLoader, 'helper');
         }
         if ($filterLoader = self::getPluginLoader('filter')) {
             $view->setPluginLoader(self::getPluginLoader('filter'), 'filter');
         }
-        $view->assign('test', 'testerson');
         return $view;
     }
 

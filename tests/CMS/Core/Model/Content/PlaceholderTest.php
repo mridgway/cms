@@ -46,7 +46,7 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSynameNull()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->placeholder->setSysname(null);
     }
 
@@ -58,13 +58,13 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
 
     public function testSetContentTypeInvalid()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->placeholder->setContentType('test');
     }
 
     public function testSetContentTypeEmpty()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->placeholder->setContentType('');
     }
 
@@ -73,7 +73,7 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
         $this->placeholder->setDescription('test');
         $this->assertEquals('test', $this->placeholder->getDescription());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->placeholder->setDescription(null);
     }
 }

@@ -13,16 +13,15 @@ namespace Core\Model;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Module.php 297 2010-05-12 13:34:56Z mike $
  *
- * @Entity
+ * @Entity(repositoryClass="Core\Repository\Module")
  *
  * @property string $name;
  * @property Core\Model\Module\Block[] $blockTypes
  * @property Core\Model\Module\Content[] $contentTypes
  */
 class Module
-    extends \Modo\Orm\Model\AbstractModel
-    implements \Modo\Orm\Model\VersionableInterface,
-               \Zend_Acl_Resource_Interface
+    extends \Core\Model\AbstractModel
+    implements \Zend_Acl_Resource_Interface
 {
     /**
      * @var string
@@ -63,7 +62,7 @@ class Module
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Name must be between 0 and 50 characters.');
+            throw new \Core\Model\Exception('Name must be between 0 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -73,7 +72,7 @@ class Module
     {
         $validator = new \Zend_Validate_StringLength(0, 100);
         if (!$validator->isValid($title)) {
-            throw new \Modo\Model\Exception('Name must be between 0 and 100 characters.');
+            throw new \Core\Model\Exception('Name must be between 0 and 100 characters.');
         }
         $this->title = $title;
         return $this;

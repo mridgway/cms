@@ -2,7 +2,7 @@
 
 namespace Core\Model;
 
-use \Modo\Orm\Model;
+use \Core\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Table(name="Content")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
+ * @DiscriminatorMap({"Core\Model\Content\Text"="Core\Model\Content\Text"})
  *
  * @property integer $id
  * @property \Core\Model\Block[] $blocks
@@ -24,8 +25,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 abstract class Content 
     extends Model\AbstractModel
-    implements Model\VersionableInterface,
-               \Zend_Acl_Resource_Interface
+    implements \Zend_Acl_Resource_Interface
 {
     /**
      * @var integer
@@ -40,7 +40,7 @@ abstract class Content
      * and this content relies on this page. Deletions should probably be bidirectionally cascaded.
      * 
      * @var Core\Model\AbstractPage
-     * @ManyToOne(targetEntity="Core\Model\AbstractPage", cascade={"delete"})
+     * @ManyToOne(targetEntity="Core\Model\Page", cascade={"delete"})
      * @JoinColumn(name="page_id", referencedColumnName="id", nullable="true")
      */
     protected $dependentPage;

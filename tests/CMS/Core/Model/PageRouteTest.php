@@ -54,7 +54,7 @@ class PageRouteTest extends \PHPUnit_Framework_TestCase
         $this->pageRoute->setParam('test1', 3);
         $this->assertEquals(3, $this->pageRoute->getParam('test1'));
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->pageRoute->setParam('test4', 4);
     }
 
@@ -81,7 +81,7 @@ class PageRouteTest extends \PHPUnit_Framework_TestCase
         $this->pageRoute->setRedirect(true);
         $this->assertTrue($this->pageRoute->getRedirect());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->pageRoute->setRedirect('awesome');
     }
 

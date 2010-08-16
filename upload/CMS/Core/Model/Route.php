@@ -5,7 +5,7 @@
 
 namespace Core\Model;
 
-use \Modo\Orm\Model;
+use \Core\Model;
 
 /**
  * A representation of the current URI parsed into parameters
@@ -25,9 +25,7 @@ use \Modo\Orm\Model;
  */
 class Route
     extends \Zend_Controller_Router_Route
-    implements \Doctrine\Common\NotifyPropertyChanged,
-               Model\VersionableInterface,
-               Model\IdentifiableInterface
+    implements Model\IdentifiableInterface
 {
     /**
      * @var integer
@@ -175,7 +173,7 @@ class Route
         if (null !== $sysname) {
             $validator = new \Zend_Validate_StringLength(0, 100);
             if (!$validator->isValid($sysname)) {
-                throw new \Modo\Model\Exception('Sysname must be between 0 and 100 characters.');
+                throw new \Core\Model\Exception('Sysname must be between 0 and 100 characters.');
             }
         }
         $this->sysname = $sysname;
@@ -188,7 +186,7 @@ class Route
      */
     public function setPageRoutes($pageRoutes)
     {
-        throw new \Modo\Model\Exception('Please use RouteTo() to add pageRoutes.');
+        throw new \Core\Model\Exception('Please use RouteTo() to add pageRoutes.');
     }
 
     /**
@@ -199,7 +197,7 @@ class Route
     public function setIsDirect($isDirect)
     {
         if (!is_bool($isDirect)) {
-            throw new \Modo\Model\Exception('isDirect must be boolean');
+            throw new \Core\Model\Exception('isDirect must be boolean');
         }
         $this->isDirect = $isDirect;
         return $this;
@@ -250,7 +248,6 @@ class Route
         if (method_exists($this, $method)) {
             return $this->{$method}($value);
         } else {
-            $this->_onPropertyChanged($name, $this->{$name}, $value);
             $this->{$name} = $value;
         }
 
@@ -278,16 +275,6 @@ class Route
     }
 
     /**
-     * Allows doctrine to listen for property changes
-     *
-     * @param PropertyChangedListener $listener
-     */
-    public function addPropertyChangedListener(\Doctrine\Common\PropertyChangedListener $listener)
-    {
-        $this->_listeners[] = $listener;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @return mixed
@@ -306,23 +293,6 @@ class Route
         foreach ($array as $key => $value) {
             if (property_exists($this, $key))
                 $this->__set($key, $value);
-        }
-    }
-
-
-    /**
-     * Notifies doctrine of changes to a property. Must be called on all set methods.
-     *
-     * @param string $propName
-     * @param mixed $oldValue
-     * @param mixed $newValue
-     */
-    protected function _onPropertyChanged($propName, $oldValue, $newValue)
-    {
-        if ($this->_listeners) {
-            foreach ($this->_listeners as $listener) {
-                $listener->propertyChanged($this, $propName, $oldValue, $newValue);
-            }
         }
     }
 }

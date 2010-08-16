@@ -25,7 +25,7 @@ namespace Asset\Model;
  * @property Asset\Model\MimeType $mimeType
  * @property string $caption
  */
-class Asset extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Asset extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -105,7 +105,7 @@ class Asset extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Ver
     {
         $validator = new \Zend_Validate_StringLength(0, 64);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 0 and 64 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 0 and 64 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -119,7 +119,7 @@ class Asset extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Ver
     {
         $validator = new \Zend_Validate_StringLength(0, 150);
         if (!$validator->isValid($name)) {
-            throw new \Modo\Model\Exception('Name must be between 0 and 150 characters.');
+            throw new \Core\Model\Exception('Name must be between 0 and 150 characters.');
         }
         $this->name = $name;
         return $this;
@@ -164,7 +164,7 @@ class Asset extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Ver
         if (null !== $caption) {
             $validator = new \Zend_Validate_StringLength(0, 255);
             if (!$validator->isValid($caption)) {
-                throw new \Modo\Model\Exception('Caption must be between 0 and 255 characters.');
+                throw new \Core\Model\Exception('Caption must be between 0 and 255 characters.');
             }
         }
         $this->caption = $caption;

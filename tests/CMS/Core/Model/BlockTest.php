@@ -116,7 +116,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLocationFailedLocationOnPageBlock()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->page->addBlock($this->block, $this->left, 0);
         $this->block->setLocation(null);
     }
@@ -135,13 +135,13 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testSetWeightNonNumeric()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->block->setWeight('test');
     }
 
     public function testSetWeightNullOnPageBlock()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->page->addBlock($this->block, $this->left, 0);
         $this->block->setWeight(null);
     }
@@ -178,7 +178,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $property1 = new Block\Config\Property('test1');
         $property2 = new \stdClass();
         $properties = array($property1, $property2);
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->block->setConfigProperties($properties);
     }
 
@@ -212,7 +212,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $value1 = new Block\Config\Value('test1', 'test1');
         $value2 = new \stdClass();
         $values = array($value1, $value2);
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->block->setConfigValues($values);
     }
 
@@ -239,7 +239,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->block->setInheritedFrom($block);
         $this->assertEquals($block, $this->block->getInheritedFrom());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->block->setInheritedFrom($this->block);
     }
 }

@@ -21,7 +21,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property string $title
  * @property Asset\Model\Type $type
  */
-class Type extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\VersionableInterface
+class Type extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -60,7 +60,7 @@ class Type extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Vers
     {
         $validator = new \Zend_Validate_StringLength(0, 50);
         if (!$validator->isValid($sysname)) {
-            throw new \Modo\Model\Exception('Sysname must be between 0 and 50 characters.');
+            throw new \Core\Model\Exception('Sysname must be between 0 and 50 characters.');
         }
         $this->sysname = $sysname;
         return $this;
@@ -74,7 +74,7 @@ class Type extends \Modo\Orm\Model\AbstractModel implements \Modo\Orm\Model\Vers
     {
         $validator = new \Zend_Validate_StringLength(0, 150);
         if (!$validator->isValid($title)) {
-            throw new \Modo\Model\Exception('Title must be between 0 and 150 characters.');
+            throw new \Core\Model\Exception('Title must be between 0 and 150 characters.');
         }
         $this->title = $title;
         return $this;

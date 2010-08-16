@@ -5,7 +5,7 @@
 
 namespace Core\Model;
 
-use \Modo\Orm\Model;
+use \Core\Model;
 
 /**
  * Links a Route to a specific page via parameters
@@ -82,7 +82,7 @@ class PageRoute extends Model\AbstractModel
     public function setParam($name, $value)
     {
         if (false === array_search($name, $this->route->getVariables())) {
-            throw new \Modo\Model\Exception('Variable `' . $name . '` does not exist in route.');
+            throw new \Core\Model\Exception('Variable `' . $name . '` does not exist in route.');
         }
         if (is_numeric($value)) {
             $this->params[$name] = (int) $value;
@@ -150,7 +150,7 @@ class PageRoute extends Model\AbstractModel
     public function setRedirect($redirect = false)
     {
         if (!is_bool($redirect)) {
-            throw new \Modo\Model\Exception('Redirect must be a boolean value');
+            throw new \Core\Model\Exception('Redirect must be a boolean value');
         }
         $this->redirect = $redirect;
         return $this;

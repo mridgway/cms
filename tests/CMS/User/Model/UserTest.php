@@ -16,17 +16,17 @@ class UserTest extends \User\UserModuleTestCase {
     }
 
     public function testSetEmail() {
-        $this->setExpectedException('\Modo\Model\Exception');
+        $this->setExpectedException('\Core\Model\Exception');
         $this->user->setEmail('');
     }
 
     public function testSetFirstName() {
-        $this->setExpectedException('\Modo\Model\Exception');
+        $this->setExpectedException('\Core\Model\Exception');
         $this->user->setFirstName('');
     }
 
     public function testSetLastName() {
-        $this->setExpectedException('\Modo\Model\Exception');
+        $this->setExpectedException('\Core\Model\Exception');
         $this->user->setLastName('');
     }
 
@@ -68,7 +68,7 @@ class UserTest extends \User\UserModuleTestCase {
     }
 
     public function testSetAcl() {
-        $acl = new \Modo\Acl();
+        $acl = new \Core\Acl\Acl();
         $this->user->setAcl($acl);
         $this->assertEquals($acl, $this->user->getAcl());
     }

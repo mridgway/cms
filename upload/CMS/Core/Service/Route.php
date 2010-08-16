@@ -13,7 +13,7 @@ namespace Core\Service;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Route.php 297 2010-05-12 13:34:56Z mike $
  */
-class Route extends \Modo\Service\AbstractService
+class Route extends \Core\Service\AbstractService
 {
 
     /**

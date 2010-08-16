@@ -13,7 +13,7 @@ namespace Core\Service;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Page.php 297 2010-05-12 13:34:56Z mike $
  */
-class Page extends \Modo\Service\AbstractService
+class Page extends \Core\Service\AbstractService
 {
 
     /**

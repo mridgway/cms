@@ -21,7 +21,7 @@ namespace User\Model;
  * @property string $type
  * @property \User\Model\User $user
  */
-class Identity extends \Modo\Orm\Model\AbstractModel
+class Identity extends \Core\Model\AbstractModel
 {
     /**
      * @var integer
@@ -75,7 +75,7 @@ class Identity extends \Modo\Orm\Model\AbstractModel
     {
         $validator = new \Zend_Validate_StringLength(1, 500);
         if (!$validator->isValid($identity)) {
-            throw new \Modo\Model\Exception('Identity must be between 1 and 500 charactrs');
+            throw new \Core\Model\Exception('Identity must be between 1 and 500 charactrs');
         }
         $this->identity = $identity;
         return $this;
@@ -91,7 +91,7 @@ class Identity extends \Modo\Orm\Model\AbstractModel
         if (null !== $passHash) {
             $validator = new \Zend_Validate_StringLength(1, 128);
             if (!$validator->isValid($passHash)) {
-                throw new \Modo\Model\Exception('Password must be between 1 and 128 charactrs');
+                throw new \Core\Model\Exception('Password must be between 1 and 128 charactrs');
             }
         }
         $this->passHash = $passHash;
@@ -106,7 +106,7 @@ class Identity extends \Modo\Orm\Model\AbstractModel
     {
         $validator = new \Zend_Validate_StringLength(1, 100);
         if (!$validator->isValid($type)) {
-            throw new \Modo\Model\Exception('Type must be between 1 and 100 charactrs');
+            throw new \Core\Model\Exception('Type must be between 1 and 100 charactrs');
         }
         $this->type = $type;
         return $this;

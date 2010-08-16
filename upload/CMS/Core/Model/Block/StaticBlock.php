@@ -33,12 +33,13 @@ class StaticBlock extends \Core\Model\Block
         $this->setContent($content);
     }
 
-    /**
-     * @PostLoad
-     */
-    public function assignContent()
+    public function getViewInstance()
     {
-        $this->getViewInstance()->assign('content', $this->content);
+        if (null == $this->_viewInstance) {
+            $this->_viewInstance = $this->view->getInstance();
+            $this->_viewInstance->assign('content', $this->content);
+        }
+        return $this->_viewInstance;
     }
 
     /**
@@ -74,7 +75,7 @@ class StaticBlock extends \Core\Model\Block
      */
     public function canEdit($role)
     {
-        $modules = \Core\Model\Module\Registry::getInstance()->getModules();
+        $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
                 if ($type->class == get_class($this->content)) {

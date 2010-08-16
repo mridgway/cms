@@ -13,7 +13,7 @@ namespace Asset\Form;
  * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
  * @version    $Id: Upload.php 297 2010-05-12 13:34:56Z mike $
  */
-class Upload extends \Modo\Form\AbstractForm
+class Upload extends \Core\Form\AbstractForm
 {
     public function init()
     {
@@ -21,10 +21,10 @@ class Upload extends \Modo\Form\AbstractForm
         $this->setName('upload');
         $this->setAttrib('enctype', 'multipart/form-data');
 
-        $file = new \Modo\Form\Element\File('file');
+        $file = new \Core\Form\Element\File('file');
         $file->setLabel('File');
 
-        $submit = new \Modo\Form\Element\Submit('submit');
+        $submit = new \Core\Form\Element\Submit('submit');
         $submit->setLabel('Upload');
 
         $this->addElements(array($file, $submit));

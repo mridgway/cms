@@ -68,7 +68,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testSetLocationsFailedType()
     {
         $locations = array($this->left, $this->right, new \stdClass());
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->layout->setLocations($locations);
     }
 
@@ -77,7 +77,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->layout->setSysname('newSysname');
         $this->assertEquals('newSysname', $this->layout->getSysname());
 
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->layout->setSysname('');
     }
 

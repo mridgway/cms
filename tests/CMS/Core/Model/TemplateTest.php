@@ -45,19 +45,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSysnameNull()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->template->setSysname(null);
     }
 
     public function testSetSysnameShort()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         $this->template->setSysname('12');
     }
 
     public function testSetSysnameLong()
     {
-        $this->setExpectedException('Modo\Model\Exception');
+        $this->setExpectedException('Core\Model\Exception');
         //51 chars
         $this->template->setSysname('2w953y7886j7bubqe9d809b4qoksfgn8vl57bz1coml32pr79l1');
     }
