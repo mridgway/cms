@@ -7,3 +7,6 @@
 [submodule "vendor/ZendX_Application53"]
 	path = vendor/ZendX_Application53
 	url = git://github.com/mridgway/ZendX_Application53.git
+[submodule "vendor/ZendX_Doctrine2"]
+	path = vendor/ZendX_Doctrine2
+	url = git://github.com/mridgway/ZendX_Doctrine2.git
