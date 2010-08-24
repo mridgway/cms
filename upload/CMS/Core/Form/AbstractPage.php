@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Form;
 
 /**
- * Form for Routes
+ * Form for the abstract page model
  *
- * @category   Route
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: AbstractPage.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Form
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class AbstractPage extends \Core\Form\AbstractForm
 {

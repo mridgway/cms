@@ -1,14 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!doctype html>
+<html>
 <head>
-
+	
+	<meta charset="utf-8" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="Modo Design Group" />
 	<meta name="keywords" content="" />
 	<meta name="description" content="<?php echo $this->layout()->page->getDescription(); ?>" />
 
-	<title>ModoCMS<?php if ($this->layout()->page->getTitle()) echo ' :: ' . $this->layout()->page->getTitle(); ?></title>
-
+	<title>CMS<?php if ($this->layout()->page->getTitle()) echo ' :: ' . $this->layout()->page->getTitle(); ?></title>
+	
+	<!--[if IE]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<style>
+	  article, aside, details, figcaption, figure, footer, header,
+	  hgroup, menu, nav, section { display: block; }
+	</style>
 	<link href="/resources/core/css/base.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/theme.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/page.css" rel="stylesheet" type="text/css" media="screen" />
@@ -18,113 +26,6 @@
     <!--[if lt IE 8]>
 	<link href="/resources/core/css/ie.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
-
-	<script type="text/javascript" charset="utf-8" src="http://yui.yahooapis.com/3.1.1/build/yui/yui.js"></script>
-
-	<script type="text/javascript" charset="utf-8">
-    YUI({
-        //filter: 'raw',
-        //combine: false,
-        groups : {
-            modo : {
-                base : '/resources/core/js/modo/build/',
-                modules : {
-                    'page' : {
-                        requires : ['async-queue', 'base', 'node', 'block', 'datasource-io', 'datasource-jsonschema', 'sortable', 'dd-proxy']
-                    },
-                    'block' : {
-                        skinnable : true,
-                        requires : ['page', 'node', 'base', 'widget', 'widget-stdmod', 'blockcss', 'substitute'],
-                        plugins : {
-                        	'block-edit' : {
-                        		skinnable : true
-                        	},
-                        	'block-delete' : {
-                        		skinnable : true
-                        	},
-                        	'block-move' : {
-                        		skinnable : true
-                        	},
-                        	'block-configure': {
-                        		skinnable : true
-                        	}
-                        }
-                    },
-                    'modal' : {
-                        base: '/resources/core/js/modo/build/',
-                        requires:['oop', 'base', 'overlay', 'node'],
-                        skinnable : true,
-                        plugins : {
-                            'modal-io' : {
-                                skinnable: false
-                            }
-                        }
-                    },
-                    'asset-manager' : {
-                        requires:['base', 'oop', 'datasource-io', 'datasource-jsonschema', 'uploader', 'node', 'tabview', 'gallery-paginator', 'asset', 'modal']
-                    },
-                    'asset' : {
-                        requires : ['widget', 'asset-manager']
-                    },
-                    'uploader' : {
-                        requires : ['widget', 'assetlist', 'swfupload']
-                    },
-                    'assetlist' : {
-                        requires : ['widget', 'asset', 'datasource', 'datasource-jsonschema']
-                    },
-                    'swfupload': {
-                        fullpath: '/resources/core/js/swfupload.js'
-                    }
-                }
-            }
-        }
-    }).use('event', function(Y) {
-        Y.on('domready', function () {
-
-<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->layout()->page, 'edit')) : ?>
-            Y.use('page', function (Y) {
-                var page = new Y.Page();
-            });
-<?php endif; ?>
-
-            Y.use('asset-manager', function (Y) {
-                Y.all('#adminMenu .assetManager').on('click', function () {
-                    var am = new Y.AssetManager({
-                       'modal': true
-                    });
-                    am.render();
-                }, Y);
-            });
-
-<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
-            Y.use('modal', 'modal-io', function (Y) {
-                Y.all('#adminMenu .editPage').on('click', function () {
-                    var modal = new Y.Modal({
-                        modal: false,
-                        zIndex: 80,
-                        opacity: 60,
-                        color: '#000'
-                    });
-
-                    modal.plug(Y.Plugin.ModalIO, {
-                        source: '/direct/page/edit?id=<?php echo $this->layout()->page->id; ?>',
-                        callback: function (modal, response, event) {
-                            var body = this.get('host').getStdModNode(Y.WidgetStdMod.BODY),
-                                container = Y.Node.create(response.meta.html);
-
-                            container.setStyle('display', 'none');
-                            body.append(container);
-                            container.setStyle('display', 'block');
-                            modal.fire('hideLoading');
-                        }
-                    });
-                    modal.render();
-                }, Y);
-            });
-<?php endif; ?>
-        });
-    });
-	</script>
 
 </head>
 

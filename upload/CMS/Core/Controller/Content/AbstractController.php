@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Controller\Content;
 
 /**
- * A base class for controllers
+ * Base class for content controllers
  *
- * @category   Content
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: AbstractController.php 125 2010-01-27 16:20:51Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 abstract class AbstractController implements ControllerInterface
 {

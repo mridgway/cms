@@ -1,16 +1,17 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Controller\Plugin;
 
 /**
- * @category   Modo
- * @package    Controller
- * @subpackage Predispatch
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Predispatch.php 244 2010-03-31 13:50:30Z mike $
+ * Predispatch plugin that determines whether a request should be processed as a CMS page or go
+ * directly to a controller. If processing as a CMS page, finds the current page id based off of
+ * the URL. If a block_id is specified in the request, dispatches directly to the block.
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Predispatch extends \Zend_Controller_Plugin_Abstract
 {
@@ -21,11 +22,12 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
     {
         if (!$request->isDirect()) {
             $routeRepository = \Zend_Registry::get('doctrine')->getRepository('Core\Model\PageRoute');
-            $pageRoute = $routeRepository->getPageRoute($request->getRouteId(), $request->getSerializedParams());
-            if (null === $pageRoute) {
+            $pageId = $routeRepository->getPageIdForRoute($request->getRouteId(), $request->getSerializedParams());
+            if (null === $pageId) {
                 throw new \Modo\Exception('Page does not exist.');
             }
-            $request->setParam('id', $pageRoute->page->id);
+
+            $request->setParam('id', $pageId);
 
             if ($request->isPost() && !is_null($route = $request->getParam('block_id'))) {
                 $this->_dispatchFormAction($route, $request);

@@ -1,19 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Auth\Adapter;
 
 /**
- * Description
+ * Zend_Auth_Adapter to authenticate identities using Doctrine
  *
- * @category   Model
- * @package    User
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Identity.php 226 2010-03-24 21:36:04Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Auth
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-
 class Identity implements \Zend_Auth_Adapter_Interface
 {
 

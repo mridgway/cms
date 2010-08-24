@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace User\Model;
 
 /**
- * Description of Identity
+ * Representation of a user group that can have roles assigned to it
  *
- * @category   Model
- * @package    User
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Group.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  User
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  * @Table(name="User_Group")

@@ -1,20 +1,25 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Asset\Repository;
 
 /**
- * Service for Blocks
+ * Repository for assets
  *
- * @category   Repository
- * @package    Asset
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Asset.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Repository
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Asset extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Retrieves an asset by group and hash
+     *
+     * @param string $groupName
+     * @param string $hash
+     * @return Core\Model\Asset
+     */
     public function getAssetByGroupNameAndHash($groupName, $hash)
     {
         $qb = $this->createQueryBuilder('a');
@@ -27,6 +32,19 @@ class Asset extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getSingleResult();
     }
 
+    /**
+     * Searches the asset library by term
+     *
+     * @todo Use a paginator
+     *
+     * @param string $searchTerm
+     * @param string $typeName
+     * @param string $sortField
+     * @param string $sortOrder
+     * @param integer $offset
+     * @param integer $limit
+     * @return array
+     */
     public function getLibraryAssetList($searchTerm = '',
                                         $typeName = 'all',
                                         $sortField = 'uploadDate',
@@ -51,6 +69,13 @@ class Asset extends \Doctrine\ORM\EntityRepository
         return $query->getResult();
     }
 
+    /**
+     * Gets the number of assets by term
+     *
+     * @param string $searchTerm
+     * @param string $typeName
+     * @return integer
+     */
     public function getLibraryAssetCount($searchTerm = '',
                                          $typeName = 'all')
     {

@@ -1,18 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Form\Element;
 
 /**
- * File form element (uses SWFUpload)
+ * File form element
  *
- * @category   Modo
- * @package    Form
- * @subpackage Element
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: File.php 283 2010-04-08 16:11:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Form
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class File extends \Zend_Form_Element_File
 {

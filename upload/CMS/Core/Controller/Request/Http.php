@@ -1,19 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Controller\Request;
 
 /**
  * A normal Zend HTTP Request with added routeId and isDirect properties
  *
- * @category   Controller
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Http.php 243 2010-03-30 20:52:18Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-
 class Http extends \Zend_Controller_Request_Http
 {
     /**

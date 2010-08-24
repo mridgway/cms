@@ -1,16 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
+
 namespace Blog\Block;
 
 /**
- * A test block
+ * Block for listing the latest articles
  *
- * @category   Block
- * @package    Blog
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: LatestArticles.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Service
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  */

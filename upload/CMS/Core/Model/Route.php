@@ -1,19 +1,17 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model;
 
 use \Core\Model;
 
 /**
- * A representation of the current URI parsed into parameters
+ * A zend route that is persistable
  *
- * @category   Route
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Route.php 302 2010-05-19 19:22:02Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity(repositoryClass="Core\Repository\Route")
  * @HasLifecycleCallbacks

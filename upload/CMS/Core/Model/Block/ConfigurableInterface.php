@@ -1,16 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model\Block;
 
 /**
+ * Interface for creating form fields from configuration properties
  *
- * @category   Model
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: ConfigurableInterface.php 266 2010-04-01 20:53:59Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 interface ConfigurableInterface
 {

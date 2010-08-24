@@ -1,25 +1,25 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Repository;
 
 /**
- * Service for PageRoutes
+ * Repository for the page route model
  *
- * @category   Repository
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: PageRoute.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Repository
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class PageRoute extends \Doctrine\ORM\EntityRepository
 {
-    public function getPageRoute($routeId, $params)
+    public function getPageIdForRoute($routeId, $params)
     {
         $qb = $this->_em->getRepository('Core\Model\PageRoute')
                 ->createQueryBuilder('pr');
-        $qb->innerJoin('pr.route', 'r')
+        $qb->select('p.id')
+           ->innerJoin('pr.route', 'r')
+           ->innerJoin('pr.page', 'p')
            ->where($qb->expr()->eq('r.id', $routeId));
 
         if ($params) {
@@ -27,7 +27,7 @@ class PageRoute extends \Doctrine\ORM\EntityRepository
             $qb->setParameter('params', $params);
         }
         try {
-            $pageRoute = $qb->getQuery()->getSingleResult();
+            $pageRoute = $qb->getQuery()->getSingleScalarResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             $pageRoute = null;
         }

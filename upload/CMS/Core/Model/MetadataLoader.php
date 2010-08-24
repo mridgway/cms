@@ -1,18 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model;
 
 /**
- * Loads the different content types from a config file and registers the metadata with the Content class
+ * Adds metadata to doctrine from the module registry
  *
- * @category   Modo
- * @package    Orm
- * @subpackage Model
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: MetadataLoader.php 243 2010-03-30 20:52:18Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class MetadataLoader
 {

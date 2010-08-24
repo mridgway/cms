@@ -1,19 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Controller\Router;
 
 /**
- * Parases URIs for params to be used in the dispatcher
+ * Parses URIs for params to be used in the dispatcher
  *
- * @category   Controller
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Rewrite.php 40 2009-12-28 15:01:46Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-
 class Rewrite extends \Zend_Controller_Router_Rewrite
 {
     public function route(\Zend_Controller_Request_Abstract $request)

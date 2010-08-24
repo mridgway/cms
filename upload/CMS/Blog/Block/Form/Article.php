@@ -1,16 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
+
 namespace Blog\Block\Form;
 
 /**
- * A test block
+ * Form block for creating articles
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Article.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Block
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  */

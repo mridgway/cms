@@ -3,14 +3,14 @@
 namespace Core\Acl;
 
 /**
- * Description
+ * Overrides Zend_Acl to support dynamically loading resources from the database
  *
- * @category   Auth
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Acl.php 243 2010-03-30 20:52:18Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Acl
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-
 class Acl extends \Zend_Acl
 {
     public function __construct()

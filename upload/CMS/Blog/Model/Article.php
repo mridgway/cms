@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Blog\Model;
 
 /**
- * Description of Article
+ * Represents a blog article
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Article.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  * @HasLifecycleCallbacks

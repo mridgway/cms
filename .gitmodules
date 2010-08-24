@@ -10,3 +10,9 @@
 [submodule "vendor/ZendX_Doctrine2"]
 	path = vendor/ZendX_Doctrine2
 	url = git://github.com/mridgway/ZendX_Doctrine2.git
+[submodule "vendor/jquery"]
+	path = vendor/jquery
+	url = git://github.com/jquery/jquery.git
+[submodule "vendor/jquery-ui"]
+	path = vendor/jquery-ui
+	url = git://github.com/jquery/jquery-ui.git

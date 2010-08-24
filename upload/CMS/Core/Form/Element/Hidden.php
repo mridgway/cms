@@ -1,18 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Form\Element;
 
 /**
- * Button form element
+ * Hidden form element
  *
- * @category   Modo
- * @package    Form
- * @subpackage Element
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Hidden.php 126 2010-01-27 16:24:24Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Form
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Hidden extends \Zend_Form_Element_Hidden
 {

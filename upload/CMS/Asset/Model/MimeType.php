@@ -1,19 +1,17 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Asset\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Description of MimeType
+ * Representation of a mime type
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: MimeType.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  * @Table(name="Asset_MimeType")

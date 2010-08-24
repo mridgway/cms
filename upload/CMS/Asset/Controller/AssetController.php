@@ -2,11 +2,17 @@
 
 namespace Asset\Controller;
 
+/**
+ * Performs actions on an asset
+ *
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class AssetController extends \Zend_Controller_Action
 {
-    /**
-     * @var \Modo\Orm\VersionedEntityManager
-     */
     protected $_em;
 
     protected $_asset;
@@ -126,7 +132,7 @@ class AssetController extends \Zend_Controller_Action
         $data = $this->getRequest()->getPost();
 
         /* @var $form \Asset\Form\Asset */
-        $form = Core\Service\Manager::get('Asset', 'Asset')->getEditForm($this->_asset, $data);
+        $form = Core\Service\Manager::get('Asset\Service\Asset')->getEditForm($this->_asset, $data);
 
         $frontend->html = $form->render();
 

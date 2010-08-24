@@ -2,11 +2,17 @@
 
 namespace Asset\Controller;
 
+/**
+ * Performs actions related to the administrator asset manager
+ *
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class ManagerController extends \Zend_Controller_Action
 {
-    /**
-     * @var \Modo\Orm\VersionedEntityManager
-     */
     protected $_em;
 
     public function init()

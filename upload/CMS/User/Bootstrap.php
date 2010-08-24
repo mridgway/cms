@@ -2,6 +2,15 @@
 
 namespace User;
 
+/**
+ * Bootstraps required resources for the user module
+ *
+ * @package     CMS
+ * @subpackage  User
+ * @category    Bootstrap
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
 {
 

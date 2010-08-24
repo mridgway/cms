@@ -2,6 +2,15 @@
 
 namespace Core\Module\Registry;
 
+/**
+ * Abstract storage for modules and their components
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 abstract class AbstractStorage
 {
     protected $_modules = null;

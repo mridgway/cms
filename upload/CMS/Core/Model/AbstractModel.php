@@ -1,27 +1,21 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model;
 
 use \Doctrine\Common;
 
 /**
- * Base class for Doctrine models
+ * Base class for persistable doctrine models
  *
- * @category   Modo
- * @package    Orm
- * @subpackage Model
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: AbstractModel.php 206 2010-02-25 15:35:09Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 abstract class AbstractModel
-    implements Common\NotifyPropertyChanged,
-               IdentifiableInterface
+    implements IdentifiableInterface
 {
-    protected $_listeners = array();
-
     /**
      * Provides access to class properties. Looks for function get{$name} first.
      *
@@ -88,16 +82,6 @@ abstract class AbstractModel
     }
 
     /**
-     * Allows doctrine to listen for property changes
-     *
-     * @param PropertyChangedListener $listener
-     */
-    public function addPropertyChangedListener(Common\PropertyChangedListener $listener)
-    {
-        $this->_listeners[] = $listener;
-    }
-
-    /**
      * {@inheritdoc}
      * 
      * @return mixed
@@ -121,7 +105,7 @@ abstract class AbstractModel
     }
 
     /**
-     * Disable setter
+     * Disable setter for identifier
      */
     public function setId()
     {

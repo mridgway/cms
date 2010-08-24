@@ -2,6 +2,15 @@
 
 namespace Core\Module;
 
+/**
+ * A singleton class that stores module information
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Module
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class Registry
 {
     private static $_instance = null;

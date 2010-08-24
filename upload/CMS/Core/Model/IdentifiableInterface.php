@@ -1,18 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model;
 
 /**
  * Interface for uniquely identifiable content
  *
- * @category   Modo
- * @package    Orm
- * @subpackage Model
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: IdentifiableInterface.php 70 2010-01-08 17:02:45Z court $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 interface IdentifiableInterface
 {

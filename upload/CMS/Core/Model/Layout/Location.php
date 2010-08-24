@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model\Layout;
 
 /**
- * Description of Location
+ * Represents a block container on a layout
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Location.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  * @property string $sysname

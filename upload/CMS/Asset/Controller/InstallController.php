@@ -2,12 +2,17 @@
 
 namespace Asset\Controller;
 
+/**
+ * Installs the asset module
+ *
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class InstallController extends \Zend_Controller_Action
 {
-
-    /**
-     * @var \Modo\Orm\VersionedEntityManager
-     */
     protected $_em;
 
     public function init()

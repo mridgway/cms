@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Form;
 
 /**
  * Form display group
  *
- * @category   Modo
- * @package    Form
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: DisplayGroup.php 102 2010-01-14 22:41:49Z court $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Form
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class DisplayGroup extends \Zend_Form_DisplayGroup
 {

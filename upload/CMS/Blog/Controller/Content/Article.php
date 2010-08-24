@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Blog\Controller\Content;
 
 /**
- * Description of BlogArticleController
+ * Controller for the blog article content type
  *
- * @category   Controller
- * @package    Blog
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Article.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Article extends \Core\Controller\Content\AbstractController
 {
@@ -31,7 +29,7 @@ class Article extends \Core\Controller\Content\AbstractController
     {
         $frontend = new \Core\Model\Frontend\Simple();
         
-        $blogService = \Core\Service\Manager::get('Blog', 'Blog');
+        $blogService = \Core\Service\Manager::get('Blog\Service\Blog');
         $data = $this->getRequest()->getPost();
 
         // @var $form \Zend_Form

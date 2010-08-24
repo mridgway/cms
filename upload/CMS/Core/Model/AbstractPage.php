@@ -1,19 +1,17 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Description of AbstractPage
+ * Class of shared properties between templates and pages
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: AbstractPage.php 302 2010-05-19 19:22:02Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity(repositoryClass="Core\Repository\AbstractPage")
  * @Table(name="AbstractPage")

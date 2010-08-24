@@ -1,22 +1,21 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Asset\Service;
 
 /**
- * Service for textual content
+ * Service for assets
  *
- * @category   Service
- * @package    Asset
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Asset.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Service
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Asset
 {
 
     /**
+     * @todo Use mediator instead of this in controller
      *
      * @param array $data
      * @return Asset\Form\Asset
@@ -27,6 +26,7 @@ class Asset
     }
 
     /**
+     * @todo Use mediator instead of this in controller
      *
      * @param Asset\Model\Asset $asset
      * @param array $data

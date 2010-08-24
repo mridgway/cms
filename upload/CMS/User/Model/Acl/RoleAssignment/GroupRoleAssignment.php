@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace User\Model\Acl\RoleAssignment;
 
 /**
- * Description of Identity
+ * Represenation of an acl role for a user group
  *
- * @category   Model
- * @package    User
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: GroupRoleAssignment.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  User
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  *

@@ -1,17 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Validator;
 
 /**
- * Checks database to make sure the given route does not conflict with an existing route.
+ * Checks database to make sure the given route does not conflict with an
+ * existing route.
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: UniqueTemplateSysname.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Validator
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class UniqueTemplateSysname extends \Zend_Validate_Abstract
 {

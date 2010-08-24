@@ -1,11 +1,13 @@
 <?php
-/**
- * Modo CMS
- *
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Bootstrap.php 302 2010-05-19 19:22:02Z mike $
- */
 
+/**
+ * Bootstraps required resources for the application
+ *
+ * @package     CMS
+ * @category    Bootstrap
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 {
     public function _initCoreAutoloader()
@@ -48,20 +50,10 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         \Core\Service\Manager::setEntityManager(\Zend_Registry::get('doctrine'));
     }
 
-    public function _initDispatcher()
-    {
-        $dispatcher = new \Core\Controller\Dispatcher\Standard();
-        $dispatcher->setControllerNamespace('Controller');
-        \Zend_Controller_Front::getInstance()->setDispatcher($dispatcher);
-        \Zend_Controller_Front::getInstance()->setModuleControllerDirectoryName('Controller');
-        \Zend_Controller_Front::getInstance()->setDefaultModule('Core');
-        return $dispatcher;
-    }
-
     public function _initRequest()
     {
         $request = new \Core\Controller\Request\Http;
-        Zend_Controller_Front::getInstance()->setRequest($request);
+        \Zend_Controller_Front::getInstance()->setRequest($request);
     }
     
     public function _initRouter ()

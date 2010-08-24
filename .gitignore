@@ -8,3 +8,5 @@ upload/data/cache/*
 upload/data/logs/*
 upload/data/proxies/*
 tests/log
+upload/CMS/Core/Resource/js/jquery.min.js
+upload/CMS/Core/Resource/js/jquery-ui

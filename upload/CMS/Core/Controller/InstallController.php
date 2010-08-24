@@ -2,6 +2,15 @@
 
 namespace Core\Controller;
 
+/**
+ * Installs the core module and all default modules
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class InstallController extends \ZendX\Application53\Controller\Action
 {
     /**

@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model\Frontend;
 
 /**
  * Returns information on a page
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: PageInfo.php 300 2010-05-14 14:27:37Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class PageInfo extends \Core\Model\Frontend
 {
@@ -37,7 +35,7 @@ class PageInfo extends \Core\Model\Frontend
                 if (isset($frontendPage->locations[$block->location->sysname])) {
                     $frontendBlock = new \stdClass();
                     $frontendBlock->id = $block->id;
-                    $frontendBlock->properties = \Core\Service\Manager::get('Block')->getVariables($block);
+                    $frontendBlock->properties = \Core\Service\Manager::get('Core\Service\Block')->getVariables($block);
                     $frontendPage->locations[$block->location->sysname]->blocks[] = $frontendBlock;
                     $frontendBlock->actions = $this->_getBlockActions($block);
                 }

@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Controller\Content;
 
 /**
  * Provides an interface for add, edit, and delete actions.
  *
- * @category   Content
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: ControllerInterface.php 197 2010-02-19 19:33:21Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 interface ControllerInterface
 {

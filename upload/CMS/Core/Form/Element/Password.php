@@ -1,18 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Form\Element;
 
 /**
  * Password form element
  *
- * @category   Modo
- * @package    Form
- * @subpackage Element
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Password.php 226 2010-03-24 21:36:04Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Form
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Password extends \Zend_Form_Element_Password
 {

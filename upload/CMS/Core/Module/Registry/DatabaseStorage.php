@@ -2,6 +2,15 @@
 
 namespace Core\Module\Registry;
 
+/**
+ * Loads modules and components from the database.
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Module
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class DatabaseStorage extends AbstractStorage
 {
     protected $_em = null;

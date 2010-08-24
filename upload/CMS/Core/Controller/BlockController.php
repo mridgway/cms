@@ -3,14 +3,13 @@
 namespace Core\Controller;
 
 /**
- * Modo CMS
+ * Controller for actions on blocks
  *
- * Controls the actions that can be done on blocks..
- *
- * @category   Controller
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: BlockController.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class BlockController extends \Zend_Controller_Action
 {
@@ -56,7 +55,7 @@ class BlockController extends \Zend_Controller_Action
             die(new \Core\Model\Frontend\Simple(1, 'Permission denied.'));
         }
         
-        $frontend = \Core\Service\Manager::get('Block')
+        $frontend = \Core\Service\Manager::get('Core\Service\Block')
                         ->dispatchBlockAction($this->_block, 'editAction', $this->getRequest());
 
         $frontend->data[0] = array('id' => $this->_block->id);
@@ -75,17 +74,17 @@ class BlockController extends \Zend_Controller_Action
 
         $frontend = new \Core\Model\Frontend\Simple();
 
-        $blockService = \Core\Service\Manager::get('Block');
+        $blockService = \Core\Service\Manager::get('Core\Service\Block');
 
         // dispatch to content controller
         if ($this->_block instanceof \Core\Model\Block\StaticBlock) {
             try {
                 $action = 'deleteAction';
-                $content = \Core\Service\Manager::get('Block')->getBlockController($this->_block);
+                $content = \Core\Service\Manager::get('Core\Service\Block')->getBlockController($this->_block);
             } catch (\Exception $e) {}
         }
         
-        \Core\Service\Manager::get('Block')->deleteBlock($this->_block);
+        \Core\Service\Manager::get('Core\Service\Block')->deleteBlock($this->_block);
 
         $frontend->data[0] = array('id' => $this->_block->id);
         

@@ -1,18 +1,19 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model\Block\Config\Property;
 
 /**
+ * A configuration property whose value is a string
  *
- * @category   Model
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Text.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-class Text extends \Core\Model\Block\Config\Property implements \Core\Model\Block\ConfigurableInterface
+class Text
+    extends \Core\Model\Block\Config\Property
+    implements \Core\Model\Block\ConfigurableInterface
 {
     public function getConfigurationField()
     {

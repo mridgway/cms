@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Controller\Content;
 
 /**
- * Description of BlogArticleController
+ * Content controller for text (or html) content.
  *
- * @category   Controller
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Text.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class Text extends \Core\Controller\Content\AbstractController
 {
@@ -24,7 +22,7 @@ class Text extends \Core\Controller\Content\AbstractController
     {
         $frontend = new \Core\Model\Frontend\Simple();
         
-        $textService = \Core\Service\Manager::get('Text');
+        $textService = \Core\Service\Manager::get('Core\Service\Text');
         $data = $this->getRequest()->getPost();
 
         //@var $form \Zend_Form

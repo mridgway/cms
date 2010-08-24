@@ -46,10 +46,9 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $this->block->getConfigValue('awesome'));
     }
 
-    public function testAssignContent()
+    public function testContentIsAssignedToView()
     {
-        $this->block->assignContent();
-        $this->assertEquals($this->content, $this->block->view->content);
+        $this->assertEquals($this->content, $this->block->getViewInstance()->content);
     }
 }
 ?>

@@ -3,14 +3,13 @@
 namespace Core\Controller;
 
 /**
- * Modo CMS
- * 
- * Controls the view action of normal pages.
+ * Controller for actions on pages
  *
- * @category   Controller
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: PageController.php 302 2010-05-19 19:22:02Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 class PageController extends \Zend_Controller_Action
 {
@@ -65,7 +64,7 @@ class PageController extends \Zend_Controller_Action
 
         // Set the layout
         $this->_page->getLayout()->assign('page', $this->_page);
-        echo $this->_page->getLayout()->render();
+        $this->getResponse()->setBody($this->_page->getLayout()->render());
     }
 
     /**

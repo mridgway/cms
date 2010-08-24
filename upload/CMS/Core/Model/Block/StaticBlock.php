@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model\Block;
 
 /**
- * Description of Static
+ * A block that displays a specific content item
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: StaticBlock.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  * @HasLifecycleCallbacks
@@ -32,14 +30,12 @@ class StaticBlock extends \Core\Model\Block
         parent::__construct($view);
         $this->setContent($content);
     }
-
+    
     public function getViewInstance()
     {
-        if (null == $this->_viewInstance) {
-            $this->_viewInstance = $this->view->getInstance();
-            $this->_viewInstance->assign('content', $this->content);
-        }
-        return $this->_viewInstance;
+        $instance = parent::getViewInstance();
+        $instance->assign('content', $this->content);
+        return $instance;
     }
 
     /**

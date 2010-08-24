@@ -1,19 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Auth\Storage;
 
 /**
- * Description
+ * Zend_Auth_Storage that stores session id in session and loads Doctrine session automatically
  *
- * @category   Model
- * @package    User
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Doctrine.php 239 2010-03-26 12:54:52Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Auth
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-
 class Doctrine extends \Zend_Auth_Storage_Session
 {
     /**

@@ -2,6 +2,15 @@
 
 namespace Blog\Controller;
 
+/**
+ * Controller for installing the blog module
+ *
+ * @package     CMS
+ * @subpackage  Asset
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class InstallController extends \Zend_Controller_Action
 {
 
@@ -184,7 +193,7 @@ class InstallController extends \Zend_Controller_Action
                 'title' => 'Article '.$i,
                 'content' => 'This is article number '.$i
                 );
-            $test[$i] = \Core\Service\Manager::get('Blog', 'Blog')->createArticle($data);
+            $test[$i] = \Core\Service\Manager::get('Blog\Service\Blog')->createArticle($data);
         }
         echo $i-1 . ' Articles Created';
     }

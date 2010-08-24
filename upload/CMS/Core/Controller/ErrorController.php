@@ -2,6 +2,15 @@
 
 namespace Core\Controller;
 
+/**
+ * Controller for handling errors
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class ErrorController extends \Zend_Controller_Action
 {
 

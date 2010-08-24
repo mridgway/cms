@@ -1,19 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Auth;
 
 /**
- * Description
+ * Overrides Zend_Auth to provide default Guest user
  *
- * @category   Auth
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Auth.php 248 2010-03-31 20:18:05Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Auth
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
-
 class Auth extends \Zend_Auth
 {
 

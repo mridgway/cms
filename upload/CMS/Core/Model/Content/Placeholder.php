@@ -1,17 +1,16 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Model\Content;
 
 /**
- * Description of Placeholder
+ * A content type that is used in templates to specify where new blocks will be placed when creating
+ * a new page based off of the template.
  *
- * @category   Model
- * @package    Core
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: Placeholder.php 297 2010-05-12 13:34:56Z mike $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Model
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  *
  * @Entity
  * @property string $contentType

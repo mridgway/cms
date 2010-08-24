@@ -2,6 +2,15 @@
 
 namespace User\Controller;
 
+/**
+ * Installs the user module into the CMS
+ *
+ * @package     CMS
+ * @subpackage  User
+ * @category    Controller
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
+ */
 class InstallController extends \Zend_Controller_Action
 {
 

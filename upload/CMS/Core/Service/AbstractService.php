@@ -1,17 +1,15 @@
 <?php
-/**
- * Modo CMS
- */
 
 namespace Core\Service;
 
 /**
- * Base service class
+ * Base class for services that require the entity manager
  *
- * @category   Base
- * @package    Modo
- * @copyright  Copyright (c) 2009 Modo Design Group (http://mododesigngroup.com)
- * @version    $Id: AbstractService.php 88 2010-01-13 18:15:08Z court $
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Service
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     <license>
  */
 abstract class AbstractService
 {
@@ -19,7 +17,7 @@ abstract class AbstractService
     /**
      * Entity manager
      *
-     * @var Orm\VersionedEntityManager
+     * @var Doctrine\ORM\EntityManager
      */
     protected $_em = null;
 
