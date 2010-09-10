@@ -177,7 +177,7 @@ class InstallController extends \Zend_Controller_Action
     public function _registerModule()
     {
         $moduleName = 'Blog';
-        $module = \Core\Module\Registry::getInstance()->getConfigModule($moduleName);
+        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
 
         $module->getContentType('BlogArticle')->addable = true;
         $module->getBlockType('LatestArticles')->addable = true;

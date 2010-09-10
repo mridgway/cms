@@ -176,7 +176,7 @@ class InstallController extends \ZendX\Application53\Controller\Action
     public function _registerModule()
     {
         $moduleName = 'Core';
-        $module = \Core\Module\Registry::getInstance()->getConfigModule($moduleName);
+        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
 
         $module->getContentType('Text')->addable = true;
         $module->getBlockType('StaticBlock')->addable = true;

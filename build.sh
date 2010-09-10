@@ -38,3 +38,10 @@ ant
 cp -R dist/jquery-ui-1.8.4 ../../../upload/CMS/Core/Resource/js/
 mv ../../../upload/CMS/Core/Resource/js/jquery-ui-1.8.4 ../../../upload/CMS/Core/Resource/js/jquery-ui
 cd ../../..
+
+# aloha
+rm -Rf upload/CMS/Core/Resource/js/aloha
+cd vendor/AlohaEditor/build
+ant
+cp -R out/aloha-nightly/aloha ../../../upload/CMS/Core/Resource/js
+cd ../../..

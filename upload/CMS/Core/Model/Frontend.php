@@ -14,6 +14,11 @@ namespace Core\Model;
 abstract class Frontend extends \stdClass
 {
     /**
+     * @var string
+     */
+    public $type = '';
+
+    /**
      * @var Code
      */
     public $code;
@@ -22,16 +27,6 @@ abstract class Frontend extends \stdClass
      * @var array
      */
     public $data;
-
-    /**
-     * @var array
-     */
-    public $templates;
-
-    /**
-     * @var string
-     */
-    public $html;
 
     public function __construct()
     {

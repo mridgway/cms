@@ -90,7 +90,7 @@ class InstallController extends \Zend_Controller_Action
     public function _registerModule()
     {
         $moduleName = 'User';
-        $module = \Core\Module\Registry::getInstance()->getConfigModule($moduleName);
+        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
 
         $module->getBlockType('LoginForm')->addable = true;
 

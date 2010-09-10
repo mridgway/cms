@@ -14,7 +14,7 @@ namespace Core\Model\Frontend;
 class PageInfo extends \Core\Model\Frontend
 {
 
-    protected $basePath = '/resources/core/js/modo/build/block/';
+    public $type = 'Page';
     
     public function success(\Core\Model\AbstractPage $page)
     {
@@ -51,25 +51,21 @@ class PageInfo extends \Core\Model\Frontend
         $actions = array();
         if ($block->canMove(\Core\Auth\Auth::getInstance()->getIdentity())) {
             $move = new Action('block-move');
-            $move->source = $this->basePath . 'block-move.js';
             $move->plugin = 'BlockMove';
             $actions[$move->name] = $move;
         }
         if ($block->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
             $edit = new Action('block-edit', '/direct/block/edit/?id=' . $block->id);
-            $edit->source = $this->basePath . 'block-edit.js';
             $edit->plugin = 'BlockEdit';
             $actions[$edit->name] = $edit;
         }
         if ($block->canConfigure(\Core\Auth\Auth::getInstance()->getIdentity())) {
             $configure = new Action('block-configure', '/direct/block/configure/?id=' . $block->id);
-            $configure->source = $this->basePath . 'block-configure.js';
             $configure->plugin = 'BlockConfigure';
             $actions[$configure->name] = $configure;
         }
         if ($block->canDelete(\Core\Auth\Auth::getInstance()->getIdentity())) {
             $delete = new Action('block-delete', '/direct/block/delete/?id=' . $block->id);
-            $delete->source = $this->basePath . 'block-delete.js';
             $delete->plugin = 'BlockDelete';
             $actions[$delete->name] = $delete;
         }
@@ -87,7 +83,6 @@ class PageInfo extends \Core\Model\Frontend
 
         if ($page->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
             $add = new Action('addBlock', '/direct/page/add-block?id=' . $page->id);
-            $add->source = $this->basePath . 'block-add.js';
             $add->plugin = 'BlockAdd';
             $actions[$add->name] = $add;
         }

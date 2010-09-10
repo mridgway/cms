@@ -42,11 +42,19 @@ class Registry
         self::$_instance = $instance;
     }
 
+    /**
+     *
+     * @return DatabaseStorage
+     */
     public function getDatabaseStorage()
     {
         return $this->_databaseStorage;
     }
 
+    /**
+     *
+     * @return ConfigStorage
+     */
     public function getConfigStorage()
     {
         return $this->_configStorage;

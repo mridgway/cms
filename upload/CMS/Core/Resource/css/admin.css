@@ -28,16 +28,23 @@
             background-color: #333;
         }
 
-.yui3-dd-drop {
-    min-height: 3em;
-}
-.yui3-dd-drop-active-valid {
-    background-color: #f0eea6;
-}
-
 .hidden {
     display: none;
 }
+
+ul.block-actions {
+    display: block;
+    float: right;
+}
+
+    ul.block-actions li {
+        display: block;
+        float: right;
+        height: 15px;
+        width: 15px;
+        background-color: #ccc;
+        margin: 0 0 0 5px;
+    }
 
 .page-block-new {
     display: block;

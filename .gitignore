@@ -10,3 +10,4 @@ upload/data/proxies/*
 tests/log
 upload/CMS/Core/Resource/js/jquery.min.js
 upload/CMS/Core/Resource/js/jquery-ui
+upload/CMS/Core/Resource/js/aloha

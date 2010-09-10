@@ -17,6 +17,7 @@
 	  article, aside, details, figcaption, figure, footer, header,
 	  hgroup, menu, nav, section { display: block; }
 	</style>
+	<link href="/resources/core/js/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/base.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/theme.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="/resources/core/css/page.css" rel="stylesheet" type="text/css" media="screen" />
@@ -26,12 +27,22 @@
     <!--[if lt IE 8]>
 	<link href="/resources/core/css/ie.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
+    <script type="text/javascript" src="/resources/core/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/core/js/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/resources/core/js/CMS/CMS.js"></script>
 
+<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+    <script type="text/javascript">
+    CMS.Use(['Core/CMS.Page'], function (CMS) {
+        this.Page = new CMS.Page(PAGE_INFO.data[0]);
+    });
+    </script>
+<?php endif; ?>
 </head>
 
 <?php if (isset($this->layout()->page)) : ?>
 <body id="page-<?php echo $this->layout()->page->id; ?>">
-<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+<?php if (false && \Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <ul id="adminMenu">
         <li><a href="#" class="editPage">Edit Page</a></li>
         <li><a href="#" class="assetManager">Asset Manager</a></li>

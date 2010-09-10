@@ -27,6 +27,10 @@ abstract class AbstractStorage
         return $this->_modules;
     }
 
+    /**
+     * @param string $name
+     * @return Core\Model\Module
+     */
     public function getModule($name)
     {
         return $this->_modules[$name];

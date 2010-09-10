@@ -14,7 +14,7 @@ namespace Core\Controller;
 class PageController extends \Zend_Controller_Action
 {
     /**
-     * @var \Modo\Orm\VersionedEntityManager
+     * @var \Doctrine\ORM\EntityManager
      */
     protected $_em;
 
@@ -118,22 +118,27 @@ class PageController extends \Zend_Controller_Action
      */
     public function rearrangeAction()
     {
-        $frontendObject = $this->getRequest()->getParam('page', null);
-        if (!isset($frontendObject)) {
+        $receivedfrontendObject = $this->getRequest()->getParam('page', null);
+        if (!isset($receivedfrontendObject)) {
             $frontendObject = new \Core\Model\Frontend\Simple();
             die($frontendObject->fail('Page object not sent.'));
         }
 
-        $frontendObject = \Zend_Json::decode($frontendObject, \Zend_Json::TYPE_OBJECT);
-        foreach($frontendObject->data[0]->locations AS $frontendLocation) {
-            foreach ($frontendLocation->blocks AS $frontendKey => $frontendBlock) {
-                foreach ($this->_page->blocks AS $key => $block) {
-                    if ($frontendBlock->id == $block->id) {
-                        $this->_page->blocks[$key]->location = $this->_em->getReference('Core\Model\Layout\Location', $frontendLocation->sysname);
-                        $this->_page->blocks[$key]->weight = $frontendKey;
+        try {
+            $receivedfrontendObject = \Zend_Json::decode($receivedfrontendObject, \Zend_Json::TYPE_OBJECT);
+            foreach($receivedfrontendObject->data[0]->locations AS $frontendLocation) {
+                foreach ($frontendLocation->blocks AS $frontendKey => $frontendBlock) {
+                    foreach ($this->_page->blocks AS $key => $block) {
+                        if ($frontendBlock->id == $block->id) {
+                            $this->_page->blocks[$key]->location = $this->_em->getReference('Core\Model\Layout\Location', $frontendLocation->sysname);
+                            $this->_page->blocks[$key]->weight = $frontendKey;
+                        }
                     }
                 }
             }
+        } catch (\Exception $e) {
+            $frontendObject = new \Core\Model\Frontend\Simple();
+            die($frontendObject->fail('Page object not sent.'));
         }
         
         $this->_em->flush();
@@ -145,7 +150,7 @@ class PageController extends \Zend_Controller_Action
     /**
      * Gets information on the current page
      */
-    public function getInfoAction()
+    public function infoAction()
     {
         $frontendObject = new \Core\Model\Frontend\PageInfo();
 

@@ -1,11 +1,11 @@
 <?php if (\Zend_Auth::getInstance()->hasIdentity()) : ?>
-Welcome back, <?php echo \Core\Auth\Auth::getInstance()->getIdentity()->getFirstName(); ?>! <a href="/direct/user/login/logout">Logout</a>
+<p>Welcome back, <?php echo \Core\Auth\Auth::getInstance()->getIdentity()->getFirstName(); ?>! <a href="/direct/user/login/logout">Logout</a></p>
 <?php else : ?>
     <h4>Login</h4>
     <?php if ($this->form->isErrors()) : ?>
         <p class="notification negative"><?php echo implode(',', $this->form->getErrorMessages()); ?></p>
     <?php else : ?>
-        Welcome, <?php echo \Core\Auth\Auth::getInstance()->getIdentity()->getFirstName(); ?>! Please login below:
+        <p>Welcome, <?php echo \Core\Auth\Auth::getInstance()->getIdentity()->getFirstName(); ?>! Please login below:</p>
     <?php endif; ?>
         
     <?php echo $this->form; ?>

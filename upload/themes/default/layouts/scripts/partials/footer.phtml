@@ -1,7 +1,7 @@
     <div style="clear:both;">&nbsp;</div>
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->layout()->page, 'edit')) : ?>
     <script type="text/javascript">
-        var PAGE_INFO = <?php $frontendPage = new \Core\Model\Frontend\PageInfo(); echo \Zend_Json::encode($frontendPage->success($this->layout()->page)->data[0]) ?>;
+        var PAGE_INFO = <?php $frontendPage = new \Core\Model\Frontend\PageInfo(); echo \Zend_Json::encode($frontendPage->success($this->layout()->page)) ?>;
     </script>
 <?php endif; ?>
 </body>

@@ -14,7 +14,6 @@ namespace Core\Model\Frontend;
 class Action extends \stdClass
 {
     public $name;
-    public $source;
     public $plugin;
     public $postback;
 
@@ -22,7 +21,6 @@ class Action extends \stdClass
     {
         $this->name = $name;
         $this->postback = $postback;
-        $this->source = null;
         $this->plugin = null;
     }
 }
