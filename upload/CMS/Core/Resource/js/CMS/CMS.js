@@ -599,7 +599,7 @@ CMS.Use = function (scripts, callback) {
                 return;
             }
         }
-        CMS.debug && console.log('Issuing callbacks with all dependencies loaded.');
+        CMS.log('Issuing callbacks with all dependencies loaded.');
 
         var futureCallbacks = new Array();
         while (func = CMS._callbackQueue.pop()) {
@@ -638,7 +638,7 @@ CMS.ScriptQueue = Class.extend({
     },
 
     _load: function (script) {
-        CMS.debug && console.log('Loading ' + script + '...');
+        CMS.log('Loading ' + script + '...');
         var self = this;
         $.getScript(script, function(){
             self._complete(script);
@@ -647,10 +647,16 @@ CMS.ScriptQueue = Class.extend({
 
     _complete: function (script) {
         ++this.loadedCount;
-        CMS.debug && console.log(script + ' Loaded (' + this.loadedCount + '/' + this.scriptCount + ')');
+        CMS.log(script + ' Loaded (' + this.loadedCount + '/' + this.scriptCount + ')');
         if (this.scriptCount === this.loadedCount) {
-            CMS.debug && console.log('All Scripts Loaded');
+            CMS.log('All Scripts Loaded');
             this.callback(this.scripts);
         }
     }
 });
+
+CMS.log = function () {
+    if (CMS.debug && window.console && window.console.log) {
+        console.log.apply(console, arguments);
+    }
+}

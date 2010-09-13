@@ -23,7 +23,7 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
         _setupSortable: function () {
             this.domElement.sortable({
                 items: 'div.block-wrapper',
-                containment: $('body'),
+                //containment: $('body'),
                 cursor: 'move',
                 placeholder: 'ui-state-highlight',
                 scroll: true,

@@ -34,11 +34,11 @@ CMS.Use([], function (CMS) {
         },
 
         getPosition: function () {
-            return this.domElement.index();
+            return this.domElement.parents('.block-wrapper:first').index();
         },
 
         getLayout: function () {
-            return this.domElement.parent().attr('id');
+            return this.domElement.parents('.location:first').attr('id');
         }
     });
 });
