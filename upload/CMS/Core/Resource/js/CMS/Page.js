@@ -11,7 +11,6 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
             $.extend(this, data);
             this.domElement = $('#page-' + this.id);
             this._setupLocations();
-                    console.log(this);
         },
 
         _setupLocations: function () {
@@ -22,7 +21,6 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
             for (i in this.locations) {
                 this.locations[i].domElement.bind('sortupdate', function (event, ui) {
                     self.updateBlockLocations(event, ui);
-                    console.log(self);
                 });
                 for (var j in this.locations) {
                     if (i != j) {
