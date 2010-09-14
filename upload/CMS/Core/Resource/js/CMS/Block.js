@@ -22,8 +22,15 @@ CMS.Use([], function (CMS) {
             }
 
             CMS.Use(pluginPaths, function () {
-                var actionsBlock = $('<ul class="block-actions">');
-                self.domElement.parent().prepend(actionsBlock);
+                var actionsBlock = $('<ul>', {
+                    css: {
+                        position: 'absolute',
+                        right: 0,
+                        top: 0
+                    },
+                    class: 'block-actions'
+                });
+                self.domElement.parent().css('position', 'relative').prepend(actionsBlock);
                 for (i in self.actions) {
                         self.domElement.trigger('Action loaded');
                         self.actions[i] = CMS.Action.Action.createAction(self.actions[i]);

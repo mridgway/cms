@@ -48,39 +48,36 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
             }
             this.locations[$(event.target).attr('id')].updateBlocks();
 
-            if (!this.saveBlocks()) {
-                if (null != ui.sender) {
-                    $(ui.sender).sortable('cancel');
-                    this.locations[$(ui.sender).attr('id')].updateBlocks();
-                } else {
-                    $(event.target).sortable('cancel');
-                    this.locations[$(event.target).attr('id')].updateBlocks();
-                }
+            if (null != ui.sender) {
+                this.saveBlocks($(ui.sender));
+            } else {
+                this.saveBlocks($(event.target));
             }
         },
 
         /**
          * sends block order and location to the backend
          * this request is done synchronously so that we can ensure it succeded
+         *
+         * @todo make this fire only once for each block move 
          */
-        saveBlocks: function () {
-            var isSuccessful = false;
+        saveBlocks: function (sourceLocation) {
             var self = this;
             $.ajax({
-                async: false,
+                async: true,
                 data: {
                     page: JSON.stringify({data: [this]})
                 },
                 dataType: 'json',
                 success: function (result) {
-                    if (result.code.id == 0) {
-                        isSuccessful = true;
+                    if (result.code.id > 0) {
+                        sourceLocation.sortable('cancel');
+                        self.locations[sourceLocation.attr('id')].updateBlocks();
                     }
                 },
                 type: 'POST',
                 url: this.actions['blockRearrange'].postback
             });
-            return isSuccessful;
         }
     });
 });

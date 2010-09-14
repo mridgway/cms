@@ -45,7 +45,7 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
             }
             this.blocks.sort(function (a, b) {
                 return a.weight - b.weight;
-            })
+            });
         }
     });
 });
