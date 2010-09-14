@@ -35,7 +35,6 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
         updateBlockLocations: function (event, ui) {
             if (null != ui.sender) { // block changed locations
                 var movedBlock = null;
-                console.log(event);
                 var movedBlockElement = $(event.originalTarget).parents('.block-actions:first').siblings('.block:first');
                 var movedBlockId = parseInt(movedBlockElement.attr('id').substring(6));
                 var originalLocation = this.locations[$(ui.sender).attr('id')];

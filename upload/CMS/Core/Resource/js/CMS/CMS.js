@@ -655,8 +655,8 @@ CMS.ScriptQueue = Class.extend({
     }
 });
 
-CMS.log = function () {
-    if (CMS.debug && window.console && window.console.log) {
+CMS.log = function (force) {
+    if (force == true || (CMS.debug && window.console && window.console.log)) {
         console.log.apply(console, arguments);
     }
 }
