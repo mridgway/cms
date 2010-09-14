@@ -43,7 +43,7 @@ ul.block-actions {
         height: 15px;
         width: 15px;
         background-color: #ccc;
-        margin: 0 0 0 5px;
+        margin: 0 5px 0 0;
     }
 
 .page-block-new {

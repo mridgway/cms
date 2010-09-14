@@ -80,7 +80,7 @@ class Block extends \Core\Service\AbstractService
      */
     public function getBlockController(\Core\Model\Block $block)
     {
-        $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage();
+        $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
                 if ($type->class == get_class($block->content)) {

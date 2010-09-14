@@ -28,7 +28,8 @@ class Block extends \Doctrine\ORM\EntityRepository
     public function getDependentValues(\Core\Model\Block $block)
     {
         $qb = $this->_em->getRepository('Core\Model\Block\Config\Value')->createQueryBuilder('v');
-        $qb->where('v.inheritsFrom.id = :block_id');
+        $qb->innerJoin('v.inheritsFrom', 'i');
+        $qb->where('i.id = :block_id');
         $qb->setParameter('block_id', $block->id);
 
         return $qb->getQuery()->getResult();

@@ -660,3 +660,7 @@ CMS.log = function () {
         console.log.apply(console, arguments);
     }
 }
+
+CMS.alert = function (msg) {
+    alert(msg);
+}

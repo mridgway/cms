@@ -34,7 +34,8 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
                 forcePlaceholderSize: true,
                 helper: 'clone',
                 revert: true,
-                revertDuration: 400
+                revertDuration: 400,
+                handle: 'li.block-move'
             }).css('min-height', '50px');
         },
 
