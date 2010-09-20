@@ -23,7 +23,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $config->setQueryCacheImpl($cache);
         $driverImpl = $config->newDefaultAnnotationDriver(array());
         $config->setMetadataDriverImpl($driverImpl);
-        //$config->setSqlLogger(new \Doctrine\DBAL\Logging\EchoSqlLogger);
+        //$config->setSqlLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger);
         $config->setSqlLogger(new \ZendX\Doctrine2\FirebugProfiler());
         $config->setProxyDir(APPLICATION_ROOT . '/data/proxies');
         $config->setProxyNamespace('Model\Proxy');
