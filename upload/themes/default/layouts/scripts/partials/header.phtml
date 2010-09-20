@@ -42,10 +42,12 @@
 
 <?php if (isset($this->layout()->page)) : ?>
 <body id="page-<?php echo $this->layout()->page->id; ?>">
-<?php if (false && \Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+    <?php if (false && \Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <ul id="adminMenu">
         <li><a href="#" class="editPage">Edit Page</a></li>
         <li><a href="#" class="assetManager">Asset Manager</a></li>
     </ul>
-<?php endif; ?>
+    <?php endif; ?>
+<?php else: ?>
+<body>
 <?php endif; ?>

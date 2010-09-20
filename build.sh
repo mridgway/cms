@@ -6,7 +6,8 @@ cd vendor/Doctrine2
 git submodule init
 git submodule update
 rm -Rf ../../upload/library/Doctrine
-cp -R lib/Doctrine ../../upload/library/
+mkdir ../../upload/library/Doctrine
+cp -R lib/Doctrine/ORM ../../upload/library/Doctrine/
 cp -R lib/vendor/doctrine-common/lib/Doctrine/Common ../../upload/library/Doctrine/
 cp -R lib/vendor/doctrine-dbal/lib/Doctrine/DBAL ../../upload/library/Doctrine/
 cd ../..
