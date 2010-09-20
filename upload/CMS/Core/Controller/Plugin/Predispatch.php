@@ -24,7 +24,7 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
             $routeRepository = \Zend_Registry::get('doctrine')->getRepository('Core\Model\PageRoute');
             $pageId = $routeRepository->getPageIdForRoute($request->getRouteId(), $request->getSerializedParams());
             if (null === $pageId) {
-                throw new \Modo\Exception('Page does not exist.');
+                throw new \Exception('Page does not exist.');
             }
 
             $request->setParam('id', $pageId);

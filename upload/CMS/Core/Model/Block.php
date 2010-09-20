@@ -70,7 +70,7 @@ abstract class Block
      * The view script that is used to render the contents of this block
      *
      * @var \Core\Model\View
-     * @OneToOne(targetEntity="Core\Model\View")
+     * @ManyToOne(targetEntity="Core\Model\View")
      * @JoinColumn(name="view_id", referencedColumnName="id", nullable="false")
      */
     protected $view;
