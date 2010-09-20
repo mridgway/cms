@@ -140,7 +140,7 @@ ul li li li { list-style-type: circle; }
 lists into multiple columns */
 .columnlist li {
 	float: left;
-	width: 150px; /* adjust as necessary */
+	width: 100%; /* adjust as necessary */
 }
 
 /* list with no bullets, separated
@@ -314,7 +314,7 @@ textarea:focus, select:focus {
 input[type=text], input[type=password],
 input.text,
 textarea { 
-    width: 300px;
+    width: 100%;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
 }

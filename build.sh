@@ -26,19 +26,19 @@ rm -Rf upload/library/ZendX/Doctrine2
 cp -R vendor/ZendX_Doctrine2/lib/ZendX/Doctrine2 upload/library/ZendX/
 
 # jquery
-rm upload/CMS/Core/Resource/js/jquery.min.js
-cd vendor/jquery
-make
-cp dist/jquery.min.js ../../upload/CMS/Core/Resource/js/
-cd ../..
+#rm upload/CMS/Core/Resource/js/jquery.min.js
+#cd vendor/jquery
+#make
+#cp dist/jquery.min.js ../../upload/CMS/Core/Resource/js/
+#cd ../..
 
 # jquery-ui
-rm -Rf upload/CMS/Core/Resource/js/jquery-ui
-cd vendor/jquery-ui/build
-ant
-cp -R dist/jquery-ui-1.8.4 ../../../upload/CMS/Core/Resource/js/
-mv ../../../upload/CMS/Core/Resource/js/jquery-ui-1.8.4 ../../../upload/CMS/Core/Resource/js/jquery-ui
-cd ../../..
+#rm -Rf upload/CMS/Core/Resource/js/jquery-ui
+#cd vendor/jquery-ui/build
+#ant
+#cp -R dist/jquery-ui-1.8.4 ../../../upload/CMS/Core/Resource/js/
+#mv ../../../upload/CMS/Core/Resource/js/jquery-ui-1.8.4 ../../../upload/CMS/Core/Resource/js/jquery-ui
+#cd ../../..
 
 # aloha
 #rm -Rf upload/CMS/Core/Resource/js/aloha

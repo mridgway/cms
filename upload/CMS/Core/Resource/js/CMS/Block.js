@@ -18,7 +18,7 @@ CMS.Use([], function (CMS) {
 
             var pluginPaths = [];
             for (i in this.actions) {
-                pluginPaths.push('Core/CMS.Action.'+this.actions[i].plugin);
+                pluginPaths.push('Core/CMS.BlockAction.'+this.actions[i].plugin);
             }
 
             CMS.Use(pluginPaths, function () {
@@ -33,7 +33,7 @@ CMS.Use([], function (CMS) {
                 self.domElement.parent().css('position', 'relative').prepend(actionsBlock);
                 for (i in self.actions) {
                         self.domElement.trigger('Action loaded');
-                        self.actions[i] = CMS.Action.Action.createAction(self.actions[i]);
+                        self.actions[i] = CMS.BlockAction.Action.createAction(self.actions[i]);
                         actionsBlock.prepend(self.actions[i].domElement);
                 }
             });

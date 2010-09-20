@@ -72,6 +72,9 @@ class PageController extends \Zend_Controller_Action
      */
     public function addBlockAction()
     {
+        //$this->_em->getRepository('Core\Model\Content\Text')->findSharedContent();
+        if ($this->getRequest()->isPost()) {
+        }
         throw new \Exception('Adding pages not implemented yet.');
     }
 

@@ -59,7 +59,7 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
          * sends block order and location to the backend
          * this request is done synchronously so that we can ensure it succeded
          *
-         * @todo make this fire only once for each block move 
+         * @todo make this fire only one ajax call for each block move
          */
         saveBlocks: function (sourceLocation) {
             var self = this;

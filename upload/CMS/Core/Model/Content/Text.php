@@ -13,7 +13,7 @@ use \Core\Model;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  *
- * @Entity
+ * @Entity(repositoryClass="Core\Repository\Content\Text")
  * @property int $id
  * @property string $title
  * @property string $content
