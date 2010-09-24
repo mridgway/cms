@@ -23,29 +23,38 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                 if (data.code.id <= 0) {
                     var block = self.domElement.parent().siblings('.block:first');
                     self.prevHtml = block.html();
-                    var newBlock = $(data.html);
-                    var form = newBlock.is('form') ? newBlock : newBlock.find('form:first');
-                    // hook submit
-                    form.submit(function (e) {
-                        self.submitForm($(this).serialize());
-                        return false;
-                    });
-                    // add cancel link
-                    var cancelLink = $('<a>', {
-                        click: function () {
-                            self.cancelForm();
-                            return false;
-                        },
-                        text: 'Cancel',
-                        href: '#'
-                    });
-                    form.append(cancelLink);
-                    self.setHtml(newBlock, true);
+                    self.receiveHtml(data.html);
                 } else {
                     CMS.alert(data.code.message);
                     self.showContainer();
                 }
             }, 'json');
+        },
+
+        receiveHtml: function (html) {
+            html = $(html);
+            var form = html.is('form') ? html : html.find('form:first');
+            this.alterForm(form);
+            this.setHtml(html, true);
+        },
+
+        alterForm: function (form) {
+            var self = this;
+            // hook submit
+            form.submit(function (e) {
+                self.submitForm($(this).serialize());
+                return false;
+            });
+            // add cancel link
+            var cancelLink = $('<a>', {
+                click: function () {
+                    self.cancelForm();
+                    return false;
+                },
+                text: 'Cancel',
+                href: '#'
+            });
+            form.append(cancelLink);
         },
 
         submitForm: function (data) {
@@ -54,7 +63,11 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                 if (data.code.id <= 0) {
                     self.setHtml(data.html);
                 } else {
-                    CMS.alert(data.code.message);
+                    var html = $(data.html);
+                    var form = html.is('form') ? html : html.find('form:first');
+                    self.alterForm(form);
+                    var block = self.domElement.parent().siblings('.block:first');
+                    block.html(html);
                 }
             }, 'json');
         },
