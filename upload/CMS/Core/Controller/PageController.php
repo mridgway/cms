@@ -105,7 +105,6 @@ class PageController extends \Zend_Controller_Action
                 $this->_page->setData($data);
                 $this->_em->flush();
                 $frontend->success();
-                header('Location: ' . $this->_page->getUrl());
             } else {
                 $frontend->fail();
             }

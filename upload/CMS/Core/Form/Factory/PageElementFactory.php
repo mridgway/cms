@@ -16,7 +16,7 @@ class PageElementFactory
 
     public static function getIdElement()
     {
-        return new \Zend_Form_Element_Hidden('id');
+        return new \Core\Form\Element\Hidden('id');
     }
 
     public static function getTitleElement()

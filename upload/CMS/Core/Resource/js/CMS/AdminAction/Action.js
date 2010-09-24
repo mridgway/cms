@@ -5,13 +5,14 @@ CMS.Use([], function (CMS) {
 
         name: null,
         postback: null,
+        page: null,
 
         actionClass: 'action',
         domElement: null,
+        modal: null,
 
         init: function (data) {
             $.extend(this, data);
-            this.getDomElement();
         }
     });
     

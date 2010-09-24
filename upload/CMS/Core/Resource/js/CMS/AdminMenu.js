@@ -1,20 +1,35 @@
-CMS.Use([], function (CMS) {
+CMS.Use(['Core/CMS.Modal'], function (CMS) {
     CMS.AdminMenu = Class.extend({
 
         page: null,
-        actions: [],
+        actions: {
+            pageAdd: {
+                plugin: 'PageAdd',
+                postback: '/direct/page/add'
+            },
+            pageEdit: {
+                plugin: 'PageEdit',
+                postback: '/direct/page/edit'
+            },
+            pageDelete: {
+                plugin: 'PageDelete',
+                postback: '/direct/page/delete'
+            }
+        },
 
         domElement: null,
+        modal: null,
 
         init: function (data) {
             $.extend(this, data);
             this.domElement = $('#adminMenu');
+            this.modal = new CMS.Modal();
             this._setupActions();
-            $('#modal').jqm(); // this should be done globally
         },
 
         // @todo make this use actions that are passed from the backend
         _setupActions: function () {
+
             var self = this;
             $('.addPage', this.domElement).click(function (e){
                 // fire ajax to load add form
@@ -22,53 +37,18 @@ CMS.Use([], function (CMS) {
                 return false;
             });
 
-            $('.editPage', this.domElement).click(function (e){
-                // fire ajax to load edit form
-                $.get('/direct/page/edit?id=' + self.page.id, function (data) {
-                    if (data.code.id <= 0) {
-                        var html = $(data.html);
-                        var form = html.is('form') ? html : html.find('form:first');
-                        // hook submit
-                        form.submit(function (e) {
-                            var data = $(this).serialize();
-                            $.post('/direct/page/edit?id=' + self.page.id, data, function(data) {
-                                alert('test');
-                                if (data.code.id <= 0) {
-                                    $('#modal').jqmHide();
-                                    window.location = '/';
-                                } else {
-                                    CMS.alert(data.code.message);
-                                }
-                            }, 'json');
-                            return false;
-                        });
-                        // add cancel link
-                        var cancelLink = $('<a>', {
-                            click: function () {
-                                $('#modal').jqmHide();
-                                return false;
-                            },
-                            text: 'Cancel',
-                            href: '#'
-                        });
-                        form.append(cancelLink);
-                        $('#modal').html(html).jqm({modal: true}).jqmShow();
-                    }
-                }, 'json');
-                // show form in modal window
-                return false;
+            CMS.Use(['Core/CMS.AdminAction.PageEdit'], function (CMS) {
+                self.actions.pageEdit.domElement = $('.editPage:first', self.domElement);
+                self.actions.pageEdit.modal = self.modal;
+                self.actions.pageEdit.page = self.page;
+                self.actions.pageEdit = new CMS.AdminAction.PageEdit(self.actions.pageEdit);
             });
-            
-            $('.deletePage', this.domElement).click(function (e){
-                if (confirm('Are you sure you want to delete this page?')) {
-                    $.get('/direct/page/delete?id=' + self.page.id, function (data) {
-                        if (data.code.id <= 0) {
-                            alert('Page deleted successfully.');
-                            window.location = '/';
-                        }
-                    }, 'json');
-                }
-                return false;
+
+            CMS.Use(['Core/CMS.AdminAction.PageDelete'], function (CMS) {
+                self.actions.pageDelete.domElement = $('.deletePage:first', self.domElement);
+                self.actions.pageDelete.modal = self.modal;
+                self.actions.pageDelete.page = self.page;
+                self.actions.pageDelete = new CMS.AdminAction.PageDelete(self.actions.pageDelete);
             });
         }
     });
