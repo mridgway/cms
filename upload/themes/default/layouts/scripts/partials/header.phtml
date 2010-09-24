@@ -33,8 +33,9 @@
 
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <script type="text/javascript">
-    CMS.Use(['Core/CMS.Page'], function (CMS) {
+    CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
         this.Page = new CMS.Page(PAGE_INFO.data[0]);
+        this.AdminMenu = new CMS.AdminMenu({page: this.Page});
     });
     </script>
 <?php endif; ?>
@@ -42,10 +43,12 @@
 
 <?php if (isset($this->layout()->page)) : ?>
 <body id="page-<?php echo $this->layout()->page->id; ?>">
-    <?php if (false && \Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
+    <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <ul id="adminMenu">
+        <li><a href="#" class="addPage">Add Page</a></li>
         <li><a href="#" class="editPage">Edit Page</a></li>
-        <li><a href="#" class="assetManager">Asset Manager</a></li>
+        <li><a href="#" class="deletePage">Delete Page</a></li>
+        <?php //<li><a href="#" class="assetManager">Asset Manager</a></li> ?>
     </ul>
     <?php endif; ?>
 <?php else: ?>
