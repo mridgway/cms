@@ -17,27 +17,12 @@ class AbstractPage extends \Core\Form\AbstractForm
     {
         $this->setName('abstractPageForm');
 
-        $id = new \Zend_Form_Element_Hidden('id');
-        $this->addElement($id);
-
-        $title = new \Core\Form\Element\Text('title');
-        $title->setLabel('Title:');
-        $title->setAllowEmpty(false);
-        $title->addValidator(new \Zend_Validate_StringLength(0, 255));
-        $this->addElement($title);
-
-        $description = new \Core\Form\Element\Textarea('description');
-        $description->setLabel('Description:');
-        $description->setAllowEmpty(true);
-        $description->addValidator(new \Zend_Validate_StringLength(0, 500));
-        $this->addElement($description);
-
-        $layoutSelect = new \Core\Form\Element\Radio('layout');
-        $layouts = \Zend_Registry::get('doctrine')->getRepository('Core\Model\Layout')->findAll();
-        foreach ($layouts AS $layout) {
-            $layoutSelect->addMultiOption($layout->getSysname(), $layout->getTitle());
-        }
-        $this->addElement($layoutSelect);
+        $this->addElements(array(
+            Factory\PageElementFactory::getIdElement(),
+            Factory\PageElementFactory::getTitleElement(),
+            Factory\PageElementFactory::getDescriptionElement(),
+            Factory\PageElementFactory::getLayoutElement()
+        ));
 
         $submit = new \Core\Form\Element\Submit('submit');
         $submit->setValue('Submit');

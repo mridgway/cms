@@ -15,20 +15,11 @@ class Article extends \Core\Form\AbstractForm
 {
     public function init()
     {
-        $id = new \Core\Form\Element\Hidden('id');
-        $this->addElement($id);
-
-        $title = new \Core\Form\Element\Text('title');
-        $title->setLabel('Title:');
-        $title->setAllowEmpty(false);
-        $title->addValidator(new \Zend_Validate_StringLength(3, 150));
-        $this->addElement($title);
-
-        $content = new \Core\Form\Element\Textarea('content');
-        $content->setLabel('Content:');
-        $content->setAllowEmpty(false);
-        $content->addValidator(new \Zend_Validate_StringLength(3, 10000));
-        $this->addElement($content);
+        $this->addElements(array(
+            Factory\ArticleElementFactory::getIdElement(),
+            Factory\ArticleElementFactory::getTitleElement(),
+            Factory\ArticleElementFactory::getContentElement()
+        ));
 
         $submit = new \Core\Form\Element\Submit('submit');
         $submit->setValue('Submit');

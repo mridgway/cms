@@ -17,13 +17,8 @@ class Page extends \Core\Form\AbstractPage
     {
         parent::init();
         $this->setName('pageForm');
-
-        $pageRoute = new \Core\Form\Element\Text('pageRoute');
-        $pageRoute->setLabel('Url:');
-        $pageRoute->setAllowEmpty(true);
-        $pageRoute->addValidator(new \Zend_Validate_StringLength(0, 255));
-        $pageRoute->setAttrib('disabled', true);
-        $this->addElement($pageRoute);
+        
+        $this->addElement(Page\PageElementFactory::getPageRouteElement());
 
         $this->getElement('title')->setOrder(0);
         $this->getElement('pageRoute')->setOrder(1);
