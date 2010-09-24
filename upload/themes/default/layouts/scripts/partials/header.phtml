@@ -24,11 +24,13 @@
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
 	<link href="/resources/core/css/admin.css" rel="stylesheet" type="text/css" media="screen" />
 <?php endif; ?>
+	<link href="/resources/core/js/jqModal/jqModal.css" rel="stylesheet" type="text/css" media="screen" />
     <!--[if lt IE 8]>
 	<link href="/resources/core/css/ie.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
     <script type="text/javascript" src="/resources/core/js/jquery.min.js"></script>
     <script type="text/javascript" src="/resources/core/js/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/resources/core/js/jqModal/jqModal.js"></script>
     <script type="text/javascript" src="/resources/core/js/CMS/CMS.js"></script>
 
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>

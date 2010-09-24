@@ -23,7 +23,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                 if (data.code.id <= 0) {
                     var block = self.domElement.parent().siblings('.block:first');
                     self.prevHtml = block.html();
-                    var newBlock = $(data.html);  // newBlock is assumed to be the form element
+                    var newBlock = $(data.html);
                     var form = newBlock.is('form') ? newBlock : newBlock.find('form:first');
                     // hook submit
                     form.submit(function (e) {
