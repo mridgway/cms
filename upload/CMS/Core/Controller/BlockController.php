@@ -14,7 +14,7 @@ namespace Core\Controller;
 class BlockController extends \Zend_Controller_Action
 {
     /**
-     * @var \Modo\Orm\VersionedEntityManager
+     * @var \Doctrine\ORM\EntityManager
      */
     protected $_em;
 

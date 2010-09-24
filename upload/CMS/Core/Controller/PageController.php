@@ -72,6 +72,10 @@ class PageController extends \Zend_Controller_Action
      */
     public function addBlockAction()
     {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+            throw new \Exception('Not allowed to edit page.');
+        }
+
         //$this->_em->getRepository('Core\Model\Content\Text')->findSharedContent();
         if ($this->getRequest()->isPost()) {
         }
@@ -80,6 +84,10 @@ class PageController extends \Zend_Controller_Action
 
     public function editAction()
     {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+            throw new \Exception('Not allowed to edit page.');
+        }
+
         $frontend = new \Core\Model\Frontend\Simple();
         
         $form = ($this->_page instanceof \Core\Model\Page) ? new \Core\Form\Page()
@@ -121,6 +129,10 @@ class PageController extends \Zend_Controller_Action
      */
     public function rearrangeAction()
     {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+            throw new \Exception('Not allowed to edit page.');
+        }
+
         $receivedfrontendObject = $this->getRequest()->getParam('page', null);
         if (!isset($receivedfrontendObject)) {
             $frontendObject = new \Core\Model\Frontend\Simple();
@@ -155,6 +167,10 @@ class PageController extends \Zend_Controller_Action
      */
     public function infoAction()
     {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+            throw new \Exception('Not allowed to edit page.');
+        }
+
         $frontendObject = new \Core\Model\Frontend\PageInfo();
 
         echo $frontendObject->success($this->_page);
@@ -166,6 +182,10 @@ class PageController extends \Zend_Controller_Action
      */
     public function deleteAction()
     {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
+            throw new \Exception('Not allowed to delete page.');
+        }
+
         throw new \Exception('Deleting pages not implemented yet.');
     }
 }
