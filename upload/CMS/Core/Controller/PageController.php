@@ -26,11 +26,14 @@ class PageController extends \Zend_Controller_Action
     public function init()
     {
         $this->_em = \Zend_Registry::get('doctrine');
-        if (!$pageId = $this->getRequest()->getParam('id', false)) {
-            throw new \Exception('Page not set.');
-        }
-        if (!$this->_page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($pageId)) {
-            throw new \Exception('Page does not exist.');
+        if ($this->getRequest()->getActionName() != 'add') {
+            if (!$pageId = $this->getRequest()->getParam('id', false)) {
+                throw new \Exception('Page not set.');
+            }
+
+            if (!$this->_page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($pageId)) {
+                throw new \Exception('Page does not exist.');
+            }
         }
     }
 
@@ -68,6 +71,16 @@ class PageController extends \Zend_Controller_Action
         // Set the layout
         $this->_page->getLayout()->assign('page', $this->_page);
         $this->getResponse()->setBody($this->_page->getLayout()->render());
+    }
+
+    /**
+     * @todo implement this
+     */
+    public function addAction()
+    {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
+            throw new \Exception('Not allowed to add page.');
+        }
     }
 
     /**
