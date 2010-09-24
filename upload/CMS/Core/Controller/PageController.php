@@ -184,6 +184,9 @@ class PageController extends \Zend_Controller_Action
      */
     public function deleteAction()
     {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
+            throw new \Exception('Not allowed to delete page.');
+        }
         /*
          * @todo message notifying users if content exists on other pages
          * @todo message notifying users where content exists
