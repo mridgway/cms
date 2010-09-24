@@ -11,7 +11,7 @@ namespace Core\Model\Block;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  *
- * @Entity
+ * @Entity(repositoryClass="Core\Repository\StaticBlock")
  * @HasLifecycleCallbacks
  * @property \Core\Model\Content $content
  */

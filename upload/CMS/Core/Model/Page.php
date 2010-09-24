@@ -13,7 +13,7 @@ namespace Core\Model;
  * @license     <license>
  *
  * @Entity(repositoryClass="Core\Repository\Page")
- * @property PageRoute $primaryPageRoute
+ * @property PageRoute $pageRoute
  * @property int $weight
  * @property int $left
  * @property int $right
@@ -24,10 +24,9 @@ class Page extends AbstractPage
 {
     /**
      * @var PageRoute
-     * @OneToOne(targetEntity="PageRoute", fetch="LAZY")
-     * @JoinColumn(name="primary_pageroute", referencedColumnName="id", nullable="true")
+     * @OneToOne(targetEntity="PageRoute", inversedBy="page",fetch="LAZY",cascade={"remove","detach"})
      */
-    protected $primaryPageRoute;
+    protected $pageRoute;
 
     /**
      * @var Core\Model\Template
@@ -53,10 +52,10 @@ class Page extends AbstractPage
      */
     public function getURL()
     {
-        if (null === $this->primaryPageRoute) {
+        if (null === $this->pageRoute) {
             return null;
         }
-        return $this->primaryPageRoute->getURL();
+        return $this->pageRoute->getURL();
     }
 
     /**
@@ -64,9 +63,9 @@ class Page extends AbstractPage
      * @param PageRoute $pageRoute
      * @return Page
      */
-    public function setPrimaryPageRoute(PageRoute $pageRoute = null)
+    public function setPageRoute(PageRoute $pageRoute = null)
     {
-        $this->primaryPageRoute = $pageRoute;
+        $this->pageRoute = $pageRoute;
         return $this;
     }
 
@@ -80,4 +79,5 @@ class Page extends AbstractPage
         $this->template = $template;
         return $this;
     }
+    
 }

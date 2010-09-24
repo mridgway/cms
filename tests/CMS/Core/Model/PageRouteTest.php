@@ -90,7 +90,7 @@ class PageRouteTest extends \PHPUnit_Framework_TestCase
         $page = new Page(new Layout('test2'));
         $this->pageRoute->setPage($page);
         $this->assertEquals($page, $this->pageRoute->getPage());
-        $this->assertEquals($this->pageRoute, $page->getPrimaryPageRoute());
+        $this->assertEquals($this->pageRoute, $page->getPageRoute());
 
         $newPageRoute = new PageRoute(new Route('test2'), $page);
         $this->assertFalse($newPageRoute->getRedirect());
