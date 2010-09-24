@@ -181,16 +181,15 @@ class PageController extends \Zend_Controller_Action
 
     /**
      * Deletes the current page
+     * 
+     * @todo message notifying users if content exists on other pages
+     * @todo message notifying users where content exists
      */
     public function deleteAction()
     {
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
             throw new \Exception('Not allowed to delete page.');
         }
-        /*
-         * @todo message notifying users if content exists on other pages
-         * @todo message notifying users where content exists
-         */
         
         $page = $this->_page;
 
@@ -206,5 +205,7 @@ class PageController extends \Zend_Controller_Action
 
         $this->_em->remove($page);
         $this->_em->flush();
+
+        echo new \Core\Model\Frontend\Simple(0, 'Page deleted successfully.');
     }
 }

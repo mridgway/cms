@@ -15,8 +15,10 @@ CMS.Use(['Core/CMS.AdminAction.Action'], function (CMS) {
             if (confirm('Are you sure you want to delete this page?')) {
                 $.get('/direct/page/delete?id=' + self.page.id, function (data) {
                     if (data.code.id <= 0) {
-                        alert('Page deleted successfully.');
+                        alert(data.code.message);
                         window.location = '/';
+                    } else {
+                        alert(data.code.message);
                     }
                 }, 'json');
             }
