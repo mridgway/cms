@@ -23,7 +23,7 @@ class LatestArticles extends \Core\Model\Block\DynamicBlock
                    ->createQueryBuilder('a')
                    ->select('a, p, pr')
                    ->innerJoin('a.dependentPage', 'p')
-                   ->innerJoin('p.primaryPageRoute', 'pr')
+                   ->innerJoin('p.pageRoute', 'pr')
                    ->orderBy('a.id', 'DESC');
 
         $adapter = new \ZendX\Doctrine2\Paginator($qb);

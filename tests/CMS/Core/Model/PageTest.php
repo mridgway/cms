@@ -46,14 +46,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('/test/1/2/3/', $this->page->getURL());
 
-        $this->page->primaryPageRoute = null;
+        $this->page->pageRoute = null;
         $this->assertNull($this->page->getURL());
     }
 
-    public function testSetPrimaryPageRoute()
+    public function testSetPageRoute()
     {
-        $this->page->setPrimaryPageRoute($this->pageRoute);
-        $this->assertEquals($this->pageRoute, $this->page->getPrimaryPageRoute());
+        $this->page->setPageRoute($this->pageRoute);
+        $this->assertEquals($this->pageRoute, $this->page->getPageRoute());
     }
 
     public function testSetTemplate()

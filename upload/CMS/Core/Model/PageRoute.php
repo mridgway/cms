@@ -48,8 +48,7 @@ class PageRoute extends Model\AbstractModel
     /**
      *
      * @var Page
-     * @ManyToOne(targetEntity="Core\Model\Page")
-     * @JoinColumn(name="page_id", referencedColumnName="id", nullable="false")
+     * @OneToOne(targetEntity="Core\Model\Page",mappedBy="pageRoute")
      */
     protected $page;
 
@@ -161,9 +160,9 @@ class PageRoute extends Model\AbstractModel
      */
     public function setPage(\Core\Model\Page $page)
     {
-        if (null === $page->getPrimaryPageRoute()) {
-            $page->setPrimaryPageRoute($this);
-        } else if ($page->getPrimaryPageRoute() != $this) {
+        if (null === $page->getPageRoute()) {
+            $page->setPageRoute($this);
+        } else if ($page->getPageRoute() != $this) {
             $this->setRedirect(true);
         }
         $this->page = $page;

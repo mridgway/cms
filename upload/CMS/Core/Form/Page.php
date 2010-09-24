@@ -36,7 +36,7 @@ class Page extends \Core\Form\AbstractPage
     public function setObject($object)
     {
         parent::setObject($object);
-        $pageRoute = $object->getPrimaryPageRoute();
+        $pageRoute = $object->getPageRoute();
         $template = (null === $pageRoute)? '' : '/' . $pageRoute->getRoute()->getTemplate();
         $this->getElement('pageRoute')->setValue($template);
     }

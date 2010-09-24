@@ -18,6 +18,9 @@ class PageController extends \Zend_Controller_Action
      */
     protected $_em;
 
+    /**
+     * @var \Core\Model\Page
+     */
     protected $_page;
 
     public function init()
@@ -177,14 +180,28 @@ class PageController extends \Zend_Controller_Action
 
 
     /**
-     * @todo implement this
+     * Deletes the current page
      */
     public function deleteAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
-            throw new \Exception('Not allowed to delete page.');
+        /*
+         * @todo message notifying users if content exists on other pages
+         * @todo message notifying users where content exists
+         */
+        
+        $page = $this->_page;
+
+        foreach($page->dependentContent as $content)
+        {
+            $staticBlocks = $this->_em->getRepository('Core\Model\Block\StaticBlock')->getContentStaticBlocks($content);
+            foreach($staticBlocks as $block)
+            {
+                $this->_em->remove($block);
+            }
+            $this->_em->remove($content);
         }
 
-        throw new \Exception('Deleting pages not implemented yet.');
+        $this->_em->remove($page);
+        $this->_em->flush();
     }
 }
