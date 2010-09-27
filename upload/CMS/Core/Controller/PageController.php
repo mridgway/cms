@@ -91,9 +91,37 @@ class PageController extends \Zend_Controller_Action
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
             throw new \Exception('Not allowed to edit page.');
         }
+        if (!($location = $this->getRequest()->getParam('location'))){
+            throw new \Exception('Invalid location.');
+        }
+        if (!($location = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname($location))) {
+            throw new \Exception('Invalid location.');
+        }
+        $type = $this->getRequest()->getParam('type');
+
+        switch($type) {
+            case 'standard':
+                break;
+            case 'shared':
+                break;
+            case 'dynamic':
+                break;
+            default:
+                throw new \Exception('Invalid block type.');
+        }
 
         //$this->_em->getRepository('Core\Model\Content\Text')->findSharedContent();
         if ($this->getRequest()->isPost()) {
+            switch($type) {
+                case 'standard':
+                    break;
+                case 'shared':
+                    break;
+                case 'dynamic':
+                    break;
+                default:
+                    throw new \Exception('Invalid block type.');
+            }
         }
         throw new \Exception('Adding pages not implemented yet.');
     }

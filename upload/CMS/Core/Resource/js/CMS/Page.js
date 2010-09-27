@@ -11,6 +11,9 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
             $.extend(this, data);
             this.domElement = $('#page-' + this.id);
             this._setupLocations();
+            if (this.actions.addBlock) {
+                this._setupAddBlockActions();
+            }
         },
 
         _setupLocations: function () {
@@ -19,34 +22,51 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
                 this.locations[i] = new CMS.Location(this.locations[i]);
             }
             for (i in this.locations) {
-                this.locations[i].domElement.bind('sortupdate', function (event, ui) {
+                this.locations[i].sortable.bind('sortupdate', function (event, ui) {
                     self.updateBlockLocations(event, ui);
                 });
                 for (var j in this.locations) {
                     if (i != j) {
-                        this.locations[i].domElement.sortable('option', 'connectWith', this.locations[j].domElement);
-                        this.locations[j].domElement.sortable('option', 'connectWith', this.locations[i].domElement);
+                        this.locations[i].sortable.sortable('option', 'connectWith', this.locations[j].sortable);
+                        this.locations[j].sortable.sortable('option', 'connectWith', this.locations[i].sortable);
                     }
                 }
             }
         },
 
+        _setupAddBlockActions: function () {
+            var self = this;
+            CMS.Use(['Core/CMS.PageAction.PageAddBlock'], function(CMS) {
+                for (var i in self.locations) {
+                    var addBlockAction = new CMS.PageAction.PageAddBlock({
+                        page: self.id,
+                        location: i
+                    });
+                    self.locations[i].actions.push(addBlockAction);
+                    self.locations[i].domElement.append(addBlockAction.domElement);
+                }
+            });
+        },
+
         // Updates block locations based on the current DOM
         updateBlockLocations: function (event, ui) {
             if (null != ui.sender) { // block changed locations
-                var movedBlock = null;
-                var movedBlockElement = $(event.originalTarget).parents('.block-actions:first').siblings('.block:first');
+                var movedBlockElement = $(event.originalTarget).is('.block-actions') ?
+                    $(event.originalTarget).siblings('.block:first') :
+                    $(event.originalTarget).parents('.block-actions:first').siblings('.block:first');
                 var movedBlockId = parseInt(movedBlockElement.attr('id').substring(6));
-                var originalLocation = this.locations[$(ui.sender).attr('id')];
+                var originalLocation = this.locations[$(ui.sender).parent().attr('id')];
+                
+                var movedBlock = null;
                 for (i in originalLocation.blocks) {
                     if (originalLocation.blocks[i].id == movedBlockId) {
                         movedBlock = originalLocation.blocks.splice(i, 1);
                     }
                 }
-                this.locations[$(event.target).attr('id')].blocks.push(movedBlock[0]);
-                this.locations[$(ui.sender).attr('id')].updateBlocks();
+                this.locations[$(event.target).parent().attr('id')].blocks.push(movedBlock[0]);
+                this.locations[$(ui.sender).parent().attr('id')].updateBlocks();
             }
-            this.locations[$(event.target).attr('id')].updateBlocks();
+            this.locations[$(event.target).parent().attr('id')].updateBlocks();
 
             if (null != ui.sender) {
                 this.saveBlocks($(ui.sender));
@@ -76,8 +96,17 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
                     }
                 },
                 type: 'POST',
-                url: this.actions['blockRearrange'].postback
+                url: this.actions['blockRearrange'].postback + '?id=' + self.id
             });
+        },
+
+        printBlockOrders: function () {
+            for (var i in this.locations) {
+                CMS.log(i);
+                for (var j in this.locations[i].blocks) {
+                    CMS.log(this.locations[i].blocks[j].id);
+                }
+            }
         }
     });
 });

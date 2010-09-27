@@ -23,7 +23,7 @@ class Text extends \Core\Model\Content
 {
     /**
      * @var string
-     * @Column(name="title", type="string", length="100", nullable="false")
+     * @Column(name="title", type="string", length="100", nullable="true")
      */
     protected $title;
 
@@ -46,11 +46,13 @@ class Text extends \Core\Model\Content
         $this->setShared($shared);
     }
 
-    public function setTitle($title)
+    public function setTitle($title = null)
     {
-        $validator = new \Zend_Validate_StringLength(0, 100);
-        if (!$validator->isValid($title)) {
-            throw new \Core\Model\Exception('Title must be less than 100 characters.');
+        if (null !== $title) {
+            $validator = new \Zend_Validate_StringLength(0, 100);
+            if (!$validator->isValid($title)) {
+                throw new \Core\Model\Exception('Title must be less than 100 characters.');
+            }
         }
         $this->title = $title;
         return $this;

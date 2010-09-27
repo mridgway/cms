@@ -55,17 +55,17 @@ class PageInfo extends \Core\Model\Frontend
             $actions[$move->name] = $move;
         }
         if ($block->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $edit = new Action('block-edit', '/direct/block/edit/?id=' . $block->id);
+            $edit = new Action('block-edit', '/direct/block/edit/');
             $edit->plugin = 'BlockEdit';
             $actions[$edit->name] = $edit;
         }
         if ($block->canConfigure(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $configure = new Action('block-configure', '/direct/block/configure/?id=' . $block->id);
+            $configure = new Action('block-configure', '/direct/block/configure/');
             $configure->plugin = 'BlockConfigure';
             $actions[$configure->name] = $configure;
         }
         if ($block->canDelete(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $delete = new Action('block-delete', '/direct/block/delete/?id=' . $block->id);
+            $delete = new Action('block-delete', '/direct/block/delete/');
             $delete->plugin = 'BlockDelete';
             $actions[$delete->name] = $delete;
         }
@@ -77,12 +77,12 @@ class PageInfo extends \Core\Model\Frontend
         $actions = array();
 
         if ($page->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $rearrange = new Action('blockRearrange', '/direct/page/rearrange?id=' . $page->id);
+            $rearrange = new Action('blockRearrange', '/direct/page/rearrange');
             $actions[$rearrange->name] = $rearrange;
         }
 
         if ($page->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $add = new Action('addBlock', '/direct/page/add-block?id=' . $page->id);
+            $add = new Action('addBlock', '/direct/page/add-block?id=');
             $add->plugin = 'BlockAdd';
             $actions[$add->name] = $add;
         }

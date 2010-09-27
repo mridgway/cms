@@ -22,8 +22,9 @@ class TextElementFactory
     {
         $title = new \Core\Form\Element\Text('title');
         $title->setLabel('Title:');
-        $title->setAllowEmpty(false);
+        $title->setAllowEmpty(true);
         $title->addValidator(new \Zend_Validate_StringLength(0, 100));
+        $title->addFilter(new \Zend_Filter_Null());
 
         return $title;
     }
