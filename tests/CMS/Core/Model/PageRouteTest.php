@@ -51,6 +51,9 @@ class PageRouteTest extends \PHPUnit_Framework_TestCase
 
     public function testSetParam()
     {
+        $this->pageRoute->setParam('test1', 'value');
+        $this->assertEquals('value', $this->pageRoute->getParam('test1'));
+
         $this->pageRoute->setParam('test1', 3);
         $this->assertEquals(3, $this->pageRoute->getParam('test1'));
 
