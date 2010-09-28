@@ -49,5 +49,30 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->pageRoute->getURL(), $this->content->getURL());
         $this->assertEquals('/route/', $this->content->getURL());
     }
+
+    public function testGetResourceId()
+    {
+        $this->assertEquals('Content.' . $this->content->id, $this->content->getResourceId());
+    }
+
+    public function testRoles()
+    {
+        $acl = new \Zend_Acl();
+        $acl->addRole('admin');
+        $acl->addRole('user');
+        $acl->addResource(new \Zend_Acl_Resource('Content.'));
+        $acl->allow('admin', null, array('view', 'add', 'edit', 'delete'));
+        \Zend_Registry::set('acl', $acl);
+
+        $this->assertEquals(TRUE, $this->content->canView('admin'));
+        $this->assertEquals(TRUE, $this->content->canAdd('admin'));
+        $this->assertEquals(TRUE, $this->content->canEdit('admin'));
+        $this->assertEquals(TRUE, $this->content->canDelete('admin'));
+
+        $this->assertEquals(FALSE, $this->content->canView('user'));
+        $this->assertEquals(FALSE, $this->content->canAdd('user'));
+        $this->assertEquals(FALSE, $this->content->canEdit('user'));
+        $this->assertEquals(FALSE, $this->content->canDelete('user'));
+    }
 }
 ?>
