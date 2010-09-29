@@ -46,8 +46,3 @@ cd ../../..
 #ant
 #cp -R out/aloha-nightly/aloha ../../../upload/CMS/Core/Resource/js
 #cd ../../..
-
-# set up data directory
-mkdir upload/data
-mkdir upload/data/proxies
-chmod -R 777 upload/data
