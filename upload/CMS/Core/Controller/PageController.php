@@ -76,16 +76,6 @@ class PageController extends \Zend_Controller_Action
     /**
      * @todo implement this
      */
-    public function addAction()
-    {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
-            throw new \Exception('Not allowed to add page.');
-        }
-    }
-
-    /**
-     * @todo implement this
-     */
     public function addBlockAction()
     {
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {

@@ -31,10 +31,9 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
         _setupActions: function () {
 
             var self = this;
-            $('.addPage', this.domElement).click(function (e){
-                // fire ajax to load add form
-                // show form in modal window
-                return false;
+
+            CMS.Use(['Core/CMS.AdminAction.PageAdd'], function (CMS) {
+                
             });
 
             CMS.Use(['Core/CMS.AdminAction.PageEdit'], function (CMS) {
