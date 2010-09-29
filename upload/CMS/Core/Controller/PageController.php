@@ -176,7 +176,7 @@ class PageController extends \Zend_Controller_Action
         }
 
         $frontend = new \Core\Model\Frontend\Simple();
-        
+
         $form = ($this->_page instanceof \Core\Model\Page) ? new \Core\Form\Page()
                                                           : new \Core\Form\AbstractPage();
         $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
@@ -199,7 +199,7 @@ class PageController extends \Zend_Controller_Action
 
         $form->setObject($this->_page);
         $frontend->html = (string)$form;
-        
+
         $html = $this->getRequest()->getParam('html');
         if (isset($html)) {
             $this->_page->getLayout()->getLocation('main')->addContent($frontend->html);
@@ -241,7 +241,7 @@ class PageController extends \Zend_Controller_Action
             $frontendObject = new \Core\Model\Frontend\Simple();
             die($frontendObject->fail('Page object not sent.'));
         }
-        
+
         $this->_em->flush();
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
@@ -265,7 +265,7 @@ class PageController extends \Zend_Controller_Action
 
     /**
      * Deletes the current page
-     * 
+     *
      * @todo message notifying users if content exists on other pages
      * @todo message notifying users where content exists
      */
@@ -274,7 +274,7 @@ class PageController extends \Zend_Controller_Action
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
             throw new \Exception('Not allowed to delete page.');
         }
-        
+
         $page = $this->_page;
 
         foreach($page->dependentContent as $content)
