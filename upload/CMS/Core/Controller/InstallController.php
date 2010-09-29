@@ -30,8 +30,9 @@ class InstallController extends \ZendX\Application53\Controller\Action
         $this->_tool = new \Doctrine\ORM\Tools\SchemaTool($this->_em);
         $this->_classes = array (
             $em->getClassMetadata('Core\Model\Module'),
-            $em->getClassMetadata('Core\Model\Module\Block'),
-            $em->getClassMetadata('Core\Model\Module\Content'),
+            $em->getClassMetadata('Core\Model\Module\Resource'),
+            $em->getClassMetadata('Core\Model\Module\BlockType'),
+            $em->getClassMetadata('Core\Model\Module\ContentType'),
 
             $em->getClassMetadata('Core\Model\AbstractPage'),
             $em->getClassMetadata('Core\Model\Page'),
