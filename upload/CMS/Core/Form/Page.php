@@ -20,11 +20,12 @@ class Page extends \Core\Form\AbstractPage
         
         $this->addElement(Factory\PageElementFactory::getPageRouteElement());
 
-        $this->getElement('title')->setOrder(0);
-        $this->getElement('pageRoute')->setOrder(1);
-        $this->getElement('description')->setOrder(2);
-        $this->getElement('layout')->setOrder(3);
-        $this->getElement('submit')->setOrder(4);
+        $this->getElement('id')->setOrder(0);
+        $this->getElement('title')->setOrder(1);
+        $this->getElement('pageRoute')->setOrder(2);
+        $this->getElement('description')->setOrder(3);
+        $this->getElement('layout')->setOrder(4);
+        $this->getElement('submit')->setOrder(5);
     }
 
     /**

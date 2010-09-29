@@ -1,11 +1,5 @@
-CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
-    CMS.BlockAction.BlockEdit = CMS.BlockAction.Action.extend({
-
-        caption: 'Edit',
-        name: 'block-edit',
-        color: '#0865c1',
-
-        prevHtml: null,
+CMS.Use(['Core/CMS.AdminAction.Action'], function (CMS) {
+    CMS.AdminAction.PageEdit = CMS.AdminAction.Action.extend({
 
         init: function (data) {
             this._super(data);
@@ -18,15 +12,12 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
         showEditForm: function () {
             var self = this;
-            self.hideContainer();
-            $.get(self.postback, function(data) {
+            $.get(self.postback, {id: self.page.id}, function(data) {
                 if (data.code.id <= 0) {
-                    var block = self.domElement.parent().siblings('.block:first');
-                    self.prevHtml = block.html();
                     self.receiveHtml(data.html);
                 } else {
                     CMS.alert(data.code.message);
-                    self.showContainer();
+                    self.modal.hide();
                 }
             }, 'json');
         },
@@ -35,7 +26,9 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             html = $(html);
             var form = html.is('form') ? html : html.find('form:first');
             this.alterForm(form);
-            this.setHtml(html, true);
+            this.modal.setOptions({modal: true});
+            this.modal.setContent(html);
+            this.modal.show();
         },
 
         alterForm: function (form) {
@@ -61,30 +54,16 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             $.post(this.postback, data, function(data) {
                 if (data.code.id <= 0) {
-                    self.setHtml(data.html);
+                    self.modal.hide();
+                    window.location = '/';
                 } else {
-                    var html = $(data.html);
-                    var form = html.is('form') ? html : html.find('form:first');
-                    self.alterForm(form);
-                    var block = self.domElement.parent().siblings('.block:first');
-                    block.html(html);
+                    self.receiveHtml(data.html);
                 }
             }, 'json');
         },
 
         cancelForm: function () {
-            this.setHtml(this.prevHtml);
-        },
-
-        setHtml: function (html, hideContainer) {
-            var self = this;
-            var block = self.domElement.parent().siblings('.block:first');
-            block.hide(500, function () {
-                $(this).html(html);
-                $(this).show(500, function() {
-                    hideContainer ? self.hideContainer() : self.showContainer();
-                });
-            });
+            this.modal.hide();
         }
     });
 });

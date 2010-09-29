@@ -30,12 +30,17 @@ class Text extends \Core\Controller\Content\AbstractController
         $form = $textService->getEditForm($block->content, $data);
         $form->setAction('/direct/block/edit/?id='.$block->id);
 
-        if ($this->getRequest()->isPost() && $form->isValid($data)) {
-            // update the article
-            $form->removeElement('id');
-            $block->content->setData($form->getValues());
-            $this->getEntityManager()->flush();
-            $frontend->html = $block->render();
+        if ($this->getRequest()->isPost()) {
+            if ($form->isValid($data)) {
+                // update the article
+                $form->removeElement('id');
+                $block->content->setData($form->getValues());
+                $this->getEntityManager()->flush();
+                $frontend->html = $block->render();
+            } else {
+                $frontend->html = $form->render();
+                $frontend->fail();
+            }
         } else {
             $frontend->html = $form->render();
         }

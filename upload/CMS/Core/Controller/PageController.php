@@ -26,11 +26,14 @@ class PageController extends \Zend_Controller_Action
     public function init()
     {
         $this->_em = \Zend_Registry::get('doctrine');
-        if (!$pageId = $this->getRequest()->getParam('id', false)) {
-            throw new \Exception('Page not set.');
-        }
-        if (!$this->_page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($pageId)) {
-            throw new \Exception('Page does not exist.');
+        if ($this->getRequest()->getActionName() != 'add') {
+            if (!$pageId = $this->getRequest()->getParam('id', false)) {
+                throw new \Exception('Page not set.');
+            }
+
+            if (!$this->_page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($pageId)) {
+                throw new \Exception('Page does not exist.');
+            }
         }
     }
 
@@ -68,6 +71,16 @@ class PageController extends \Zend_Controller_Action
         // Set the layout
         $this->_page->getLayout()->assign('page', $this->_page);
         $this->getResponse()->setBody($this->_page->getLayout()->render());
+    }
+
+    /**
+     * @todo implement this
+     */
+    public function addAction()
+    {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
+            throw new \Exception('Not allowed to add page.');
+        }
     }
 
     /**
@@ -157,7 +170,6 @@ class PageController extends \Zend_Controller_Action
                 $this->_page->setData($data);
                 $this->_em->flush();
                 $frontend->success();
-                header('Location: ' . $this->_page->getUrl());
             } else {
                 $frontend->fail();
             }
@@ -231,13 +243,15 @@ class PageController extends \Zend_Controller_Action
 
     /**
      * Deletes the current page
+     * 
+     * @todo message notifying users if content exists on other pages
+     * @todo message notifying users where content exists
      */
     public function deleteAction()
     {
-        /*
-         * @todo message notifying users if content exists on other pages
-         * @todo message notifying users where content exists
-         */
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
+            throw new \Exception('Not allowed to delete page.');
+        }
         
         $page = $this->_page;
 
@@ -253,5 +267,7 @@ class PageController extends \Zend_Controller_Action
 
         $this->_em->remove($page);
         $this->_em->flush();
+
+        echo new \Core\Model\Frontend\Simple(0, 'Page deleted successfully.');
     }
 }
