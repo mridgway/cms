@@ -57,10 +57,17 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetName()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $n = 'name';
+        $this->value->setName($n);
+        $this->assertEquals($n, $this->value->name);
+
+        for($i = 0; $i < 20; $i++)
+        {
+            $n .= 'hereis10ch';
+        }
+
+        $this->setExpectedException('Exception');
+        $this->value->setName($n);
     }
 
     /**
@@ -68,10 +75,17 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetValue()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $v = 'value';
+        $this->value->setValue($v);
+        $this->assertEquals($v, $this->value->value);
+
+        for($i = 0; $i < 51; $i++)
+        {
+            $v .= 'hereis10ch';
+        }
+
+        $this->setExpectedException('Exception');
+        $this->value->setValue($v);
     }
 
     /**
@@ -79,10 +93,11 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetInheritsFrom()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->value->setInheritsFrom($this->block);
+        $this->assertEquals($this->block, $this->value->inheritsFrom);
+
+        $this->setExpectedException('Exception');
+        $this->value->setInheritsFrom(new \stdClass());
     }
 }
 ?>
