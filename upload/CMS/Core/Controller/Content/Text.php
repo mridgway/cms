@@ -23,6 +23,9 @@ class Text extends \Core\Controller\Content\AbstractController
         //@var $form \Zend_Form
         $form = $textService->getAddForm();
 
+        $blockView = new \Core\Model\View('Core', 'Block/addStandard');
+        $blockView->assign('form', $form);
+
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($data)) {
                 // update the article
@@ -32,11 +35,11 @@ class Text extends \Core\Controller\Content\AbstractController
                 $this->getEntityManager()->flush();
                 $frontend->html = $block ? $block->render() : $text;
             } else {
-                $frontend->html = $form->render();
+                $frontend->html = $blockView->render();
                 $frontend->fail();
             }
         } else {
-            $frontend->html = $form->render();
+            $frontend->html = $blockView->render();
         }
         return $frontend;
     }

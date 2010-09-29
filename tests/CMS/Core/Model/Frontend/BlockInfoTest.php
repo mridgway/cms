@@ -2,9 +2,9 @@
 
 namespace Core\Model\Frontend;
 
-class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
+class BlockInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
 {
-    protected $pageInfo;
+    protected $blockInfo;
     protected $route;
     protected $params;
     protected $page;
@@ -21,7 +21,7 @@ class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
         );
 
 
-        $this->pageInfo = new PageInfo();
+        $this->blockInfo = new BlockInfo();
         $this->route = new \Core\Model\Route('test/:test1/:test2/:test3');
         $this->params = array(
             'test1' => 1,
@@ -43,7 +43,7 @@ class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
 
         parent::setUp();
     }
-    
+
     public function testSuccess()
     {
         $em = \Zend_Registry::get('doctrine');
@@ -54,23 +54,15 @@ class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
         $acl = \Zend_Registry::get('acl');
         $acl->addRole($auth->getIdentity(), $auth->getIdentity()->getRoles());
 
-        $frontend = $this->pageInfo->success($this->page);
+        $frontend = $this->blockInfo->success($this->block1);
         $frontend = $frontend->data[0];
 
-        $this->assertEquals($this->page->id, $frontend->id);
+        $this->assertEquals($this->block1->id, $frontend->id);
+        $this->assertEquals(\Core\Service\Manager::get('Core\Service\Block')->getVariables($this->block1), $frontend->properties);
         $frontend->actions;
-
-        $frontendLocation = $frontend->locations[$this->location->sysname];
-        $this->assertEquals($this->location->sysname, $frontendLocation->sysname);
-        $frontendLocation->blocks;
-
-        $frontendBlock = $frontendLocation->blocks[0];
-        $this->assertEquals($this->block1->id, $frontendBlock->id);
-        $this->assertEquals(\Core\Service\Manager::get('Core\Service\Block')->getVariables($this->block1), $frontendBlock->properties);
-        $frontendBlock->actions;
     }
 
-    public function testGetPageActions()
+    public function testGetBlockActions()
     {
         $em = \Zend_Registry::get('doctrine');
         $user = $em->getRepository('User\Model\User')->find(1);
@@ -80,6 +72,6 @@ class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
         $acl = \Zend_Registry::get('acl');
         $acl->addRole($auth->getIdentity(), $auth->getIdentity()->getRoles());
 
-        $this->assertEquals(2, count($this->pageInfo->_getPageActions($this->page)));
+        $this->assertEquals(3, count($this->blockInfo->_getBlockActions($this->block1)));
     }
 }

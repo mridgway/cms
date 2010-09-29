@@ -65,9 +65,9 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBlockFailWeight()
     {
-        $this->setExpectedException('Core\Model\Exception');
         $this->block1->setWeight(null);
         $this->page->addBlock($this->block1, $this->left);
+        $this->assertEquals(1, $this->block1->weight);
     }
 
     public function testAddBlocks()
@@ -120,12 +120,12 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAndGetBlocks()
     {
-        $blocks = array($this->block1, $this->block2, $this->block3);
+        $blocks = new \Doctrine\Common\Collections\ArrayCollection(array($this->block1, $this->block2, $this->block3));
         $this->page->setBlocks($blocks);
         $this->assertEquals($blocks, $this->page->getBlocks());
 
         $this->page->setBlocks(null);
-        $this->assertEquals(null, $this->page->getBlocks());
+        $this->assertEquals(new \Doctrine\Common\Collections\ArrayCollection(), $this->page->getBlocks());
     }
 
     public function testSetAndGetBlocksFailedLocation()

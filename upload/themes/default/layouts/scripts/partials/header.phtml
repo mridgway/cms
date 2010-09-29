@@ -35,6 +35,7 @@
 
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <script type="text/javascript" src="/resources/core/js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/resources/core/js/ckeditor/adapters/jquery.js"></script>
     <script type="text/javascript">
     CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
         this.Page = new CMS.Page(PAGE_INFO.data[0]);

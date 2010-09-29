@@ -167,12 +167,12 @@ abstract class AbstractPage
                     throw new \Core\Model\Exception('Block array contains invalid blocks');
                 }
             }
-            $this->blocks = null;
+            $this->blocks = new ArrayCollection();
             foreach($blocks AS $block) {
                 $this->addBlock($block);
             }
         } else {
-            $this->blocks = null;
+            $this->blocks = new ArrayCollection();
         }
         return $this;
     }
