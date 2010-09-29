@@ -156,5 +156,30 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
         $this->page->setDependentContent($content);
         $this->assertEquals($content, $this->page->getDependentContent());
     }
+
+    public function testAddDependentContent()
+    {
+        $content = new \Core\Model\Content\Placeholder('test', 'Core\Model\Content\Text');
+        $this->page->addDependentContent($content);
+        $this->assertEquals($content, $this->page->dependentContent[0]);
+    }
+
+    public function testGetResourceId()
+    {
+        $this->assertEquals('Page.' . $this->page->getId(), $this->page->getResourceId());
+    }
+
+    public function testCanEdit()
+    {
+        $acl = new \Zend_Acl();
+        $acl->addRole(new \Zend_Acl_Role('admin'));
+        $acl->addRole(new \Zend_Acl_Role('user'));
+        $acl->addResource(new \Zend_Acl_Resource('Page.'));
+        $acl->allow('admin', null, 'edit');
+        \Zend_Registry::set('acl', $acl);
+
+        $this->assertEquals(TRUE, $this->page->canEdit('admin'));
+        $this->assertEquals(FALSE, $this->page->canEdit('user'));
+    }
 }
 ?>

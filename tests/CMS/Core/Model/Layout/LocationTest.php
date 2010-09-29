@@ -43,6 +43,13 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $this->location->setSysname(null);
     }
 
+    public function testAddContent()
+    {
+        $this->location->addContent('here');
+        $this->location->addContent(' is more content');
+        $this->assertEquals('here is more content', $this->location->content);
+    }
+
     public function testGetIdentifier()
     {
         $this->assertEquals($this->location->getSysname(), $this->location->getIdentifier());

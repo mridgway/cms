@@ -182,7 +182,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->block->setConfigProperties($properties);
     }
 
-    public function testSetConfigValues()
+    public function testSetAndUnsetConfigValues()
     {
         $property1 = new Block\Config\Property('test1');
         $property2 = new Block\Config\Property('test2');
@@ -200,6 +200,18 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($return));
         $this->assertEquals($value1, $return[$value1->getName()]);
         $this->assertEquals($value2, $return[$value2->getName()]);
+
+        $value3 = new Block\Config\Value('test3', 'test3');
+        $this->block->setConfigValues(array($value3));
+        $this->block->removeConfigValues(array('test1', 'test2'));
+        $values = $this->block->getConfigValues();
+        $this->assertEquals(FALSE, $values->contains($value1));
+        $this->assertEquals(FALSE, $values->contains($value2));
+        $this->assertEquals(TRUE, $values->contains($value3));
+
+        $this->block->removeConfigValues();
+        $values = $this->block->getConfigValues();
+        $this->assertEquals(FALSE, $values->contains($value3));
     }
 
     public function testSetConfigValuesInvalidClassType()
@@ -241,6 +253,38 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Core\Model\Exception');
         $this->block->setInheritedFrom($this->block);
+    }
+
+    public function testRender()
+    {
+        $this->assertEquals('', $this->block->render());
+    }
+
+    public function testGetResourceId()
+    {
+        $this->assertEquals('Block.' . $this->block->id, $this->block->getResourceId());
+    }
+
+    public function testRoles()
+    {
+        $acl = new \Zend_Acl();
+        $acl->addRole('admin');
+        $acl->addRole('user');
+        $acl->addResource(new \Zend_Acl_Resource('Block.'));
+        $acl->allow('admin', null, array('view', 'delete', 'edit', 'configure', 'move'));
+        \Zend_Registry::set('acl', $acl);
+
+        $this->assertEquals(TRUE, $this->block->canView('admin'));
+        $this->assertEquals(TRUE, $this->block->canDelete('admin'));
+        $this->assertEquals(TRUE, $this->block->canEdit('admin'));
+        $this->assertEquals(TRUE, $this->block->canConfigure('admin'));
+        $this->assertEquals(TRUE, $this->block->canMove('admin'));
+
+        $this->assertEquals(FALSE, $this->block->canView('user'));
+        $this->assertEquals(FALSE, $this->block->canDelete('user'));
+        $this->assertEquals(FALSE, $this->block->canEdit('user'));
+        $this->assertEquals(FALSE, $this->block->canConfigure('user'));
+        $this->assertEquals(FALSE, $this->block->canMove('user'));
     }
 }
 ?>

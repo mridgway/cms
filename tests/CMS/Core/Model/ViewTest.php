@@ -68,5 +68,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->view->getInstance()->render('Text/default.phtml');
     }
+
+    public function testGetInstance()
+    {
+        $helperLoader = new \Zend_Loader_PluginLoader();
+        \Core\Model\View::setPluginLoader($helperLoader, 'helper');
+
+        $filterLoader = new \Zend_Loader_PluginLoader();
+        \Core\Model\View::setPluginLoader($filterLoader, 'filter');
+    }
 }
 ?>

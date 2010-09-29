@@ -40,11 +40,26 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
     public function testSetTitle()
     {
+        $this->setExpectedException('Core\Model\Exception');
 
+        $t = '';
+        for($i = 0; $i < 11; $i++)
+        {
+            $t .= '0123456789';
+        }
+        $this->text->setTitle($t);
     }
 
     public function testSetContent()
     {
+        $this->setExpectedException('Core\Model\Exception');
+
+        $t = '';
+        for($i = 0; $i < 6501; $i++)
+        {
+            $t .= '0123456789';
+        }
+        $this->text->setContent($t);
     }
 
     /**

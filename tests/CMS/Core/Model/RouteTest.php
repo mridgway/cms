@@ -98,5 +98,44 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Core\Model\Exception');
         $this->route->setIsDirect('bananas');
     }
+
+    public function testGetIdentifier()
+    {
+        $this->assertEquals(null, $this->route->getIdentifier());
+    }
+
+    public function testSetData()
+    {
+        $this->route->setData(array(
+           'sysname' => 'testName'
+        ));
+        $this->assertEquals('testName', $this->route->getSysname());
+    }
+
+    public function testIsSet()
+    {
+        $this->assertEquals(null, $this->route->getId());
+        $this->assertEquals(FALSE, isset($this->route->id));
+
+        $this->route->setId(8);
+        $this->assertEquals(TRUE, isset($this->route->id));
+    }
+
+    public function testSetTemplate()
+    {
+        $this->setExpectedException('Exception');
+        $this->route->setTemplate('test');
+    }
+
+    public function testGet()
+    {
+        $this->route->version;
+    }
+
+    public function testCall()
+    {
+        $this->setExpectedException('Exception');
+        $this->route->getDoesNotExist();
+    }
 }
 ?>
