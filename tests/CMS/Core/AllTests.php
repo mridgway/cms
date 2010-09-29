@@ -37,7 +37,6 @@ class AllTests
         $suite->addTestSuite('Core\Model\PageTest');
         $suite->addTestSuite('Core\Model\RouteTest');
         $suite->addTestSuite('Core\Model\TemplateTest');
-        $suite->addTestSuite('Core\Model\ViewTest');
         $suite->addTestSuite('Core\Model\ModuleTest');
         $suite->addTestSuite('Core\Model\FrontendTest');
 
@@ -51,8 +50,9 @@ class AllTests
         $suite->addTestSuite('Core\Model\Content\PlaceholderTest');
         $suite->addTestSuite('Core\Model\Content\TextTest');
 
-        $suite->addTestSuite('Core\Model\Module\BlockTest');
-        $suite->addTestSuite('Core\Model\Module\ContentTest');
+        $suite->addTestSuite('Core\Model\Module\BlockTypeTest');
+        $suite->addTestSuite('Core\Model\Module\ContentTypeTest');
+        $suite->addTestSuite('Core\Model\Module\ViewTest');
 
         $suite->addTestSuite('Core\Model\Layout\LocationTest');
 

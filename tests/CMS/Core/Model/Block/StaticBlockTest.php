@@ -23,7 +23,7 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->view = new \Core\Model\View('Core', 'Text', 'default');
+        $this->view = new \Mock\View();
         $this->content = new \Mock\Content();
         $this->block = new StaticBlock($this->content, $this->view);
     }

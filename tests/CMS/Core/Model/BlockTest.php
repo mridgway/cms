@@ -24,7 +24,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->view = new \Core\Model\View('Core', 'test', 'test');
+        $this->view = new \Mock\View();
         $this->block = new \Mock\Block($this->view);
         $this->page = new Page(new Layout('test'));
         $this->left = new \Core\Model\Layout\Location('left');

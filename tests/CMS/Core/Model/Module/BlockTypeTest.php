@@ -6,13 +6,13 @@ require_once 'PHPUnit/Framework.php';
 /**
  * Test class for Block.
  */
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTypeTest extends \PHPUnit_Framework_TestCase
 {
     protected $block;
 
     protected function setUp()
     {
-        $this->block = new Block('title', 'discriminator', 'Core\Model\Block\StaticBlock');
+        $this->block = new BlockType('title', 'discriminator', 'Core\Model\Block\StaticBlock');
     }
 
     protected function tearDown()

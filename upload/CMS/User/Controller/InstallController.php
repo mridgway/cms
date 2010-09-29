@@ -11,26 +11,37 @@ namespace User\Controller;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  */
-class InstallController extends \Zend_Controller_Action
+class InstallController extends \Core\Controller\AbstractInstallController
 {
 
-    /**
-     * @var \Modo\Orm\VersionedEntityManager
-     */
-    protected $_em;
+    protected $moduleName = 'User';
 
-    public function init()
-    {
-        $this->_em = \Zend_Registry::getInstance()->get('doctrine');
-    }
+    protected $classes = array(
+        'User\Model\User',
+        'User\Model\Identity',
+        'User\Model\Session',
+        'User\Model\Group',
+
+        'User\Model\Acl\Role',
+        'User\Model\Acl\Permission',
+        'User\Model\Acl\Privilege',
+        'User\Model\Acl\Resource',
+        'User\Model\Acl\RoleAssignment\AbstractRoleAssignment',
+        'User\Model\Acl\RoleAssignment\UserRoleAssignment',
+        'User\Model\Acl\RoleAssignment\GroupRoleAssignment'
+    );
 
     public function installAction()
     {
         echo '<h3>Installing User Module</h3>';
         echo '<b>Creating tables...</b><br/>';
         ob_flush();
-        $this->_createSchema();
+        $this->createSchema();
         echo '<b>Tables created.</b><br/><br>';
+
+        echo '<b>Registering Module...</b><br/>';
+        $this->registerModule();
+        echo '<b>Module registered.</b><br/><br>';
 
         echo 'Adding Login Block to Homepage...<br/>';
         ob_flush();
@@ -42,38 +53,13 @@ class InstallController extends \Zend_Controller_Action
         $this->_addDefaultGroupsAndRoles();
         echo 'Default user groups and roles created.<br/>';
 
-        echo '<b>Registering Module...</b><br/>';
-        $this->_registerModule();
-        echo '<b>Module registered.</b>';
-
         echo '<h3>User Module Installed</h3>';
         ob_flush();
     }
 
-    public function _createSchema()
-    {
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->_em);
-        $classes = array(
-            $this->_em->getClassMetadata('User\Model\User'),
-            $this->_em->getClassMetadata('User\Model\Identity'),
-            $this->_em->getClassMetadata('User\Model\Session'),
-            $this->_em->getClassMetadata('User\Model\Group'),
-            
-            $this->_em->getClassMetadata('User\Model\Acl\Role'),
-            $this->_em->getClassMetadata('User\Model\Acl\Permission'),
-            $this->_em->getClassMetadata('User\Model\Acl\Privilege'),
-            $this->_em->getClassMetadata('User\Model\Acl\Resource'),
-            $this->_em->getClassMetadata('User\Model\Acl\RoleAssignment\AbstractRoleAssignment'),
-            $this->_em->getClassMetadata('User\Model\Acl\RoleAssignment\UserRoleAssignment'),
-            $this->_em->getClassMetadata('User\Model\Acl\RoleAssignment\GroupRoleAssignment')
-        );
-        $tool->createSchema($classes);
-    }
-
     public function _addBlockToHomePage()
     {
-        $loginView = new \Core\Model\View('User', 'Login', 'login');
-        $this->_em->persist($loginView);
+        $loginView = $this->module->getBlockType('LoginForm')->getView('default');
 
         $block = new \User\Block\Form\Login($loginView);
 
@@ -84,17 +70,6 @@ class InstallController extends \Zend_Controller_Action
         $location = $this->_em->getRepository('Core\Model\Layout\Location')->find('right');
         $page->addBlock($block, $location, 0);
 
-        $this->_em->flush();
-    }
-
-    public function _registerModule()
-    {
-        $moduleName = 'User';
-        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
-
-        $module->getBlockType('LoginForm')->addable = true;
-
-        $this->_em->persist($module);
         $this->_em->flush();
     }
 

@@ -36,7 +36,7 @@ class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
 
         $this->pageRoute = new \Core\Model\PageRoute($this->route, $this->page, $this->params);
 
-        $this->block1 = new \Core\Model\Block\StaticBlock(new \Core\Model\Content\Text('testTitle', 'testContent'), new \Core\Model\View('Core', 'test', 'test'));
+        $this->block1 = new \Core\Model\Block\StaticBlock(new \Core\Model\Content\Text('testTitle', 'testContent'), new \Mock\View());
         $this->block1->setLocation($this->location);
         $this->block1->weight = 0;
         $this->page->addBlock($this->block1);

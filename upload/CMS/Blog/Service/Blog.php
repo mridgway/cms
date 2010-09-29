@@ -26,12 +26,10 @@ class Blog extends \Core\Service\AbstractService
         
         //create page from template
         $pageService = new \Core\Service\Page($this->getEntityManager());
-        $this->_em->getReference('Core\Model\View', 5);
-        $this->_em->getRepository('Core\Model\View')->getView('Blog', 'Article', 'default');
         $placeholders = array(
             self::ARTICLE_SYSNAME => array(
                 'content' => $article,
-                'view' => $this->_em->getRepository('Core\Model\View')->getView('Blog', 'Article', 'default')
+                'view' => \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Blog')->getContentType('BlogArticle')->getView('default')
                 )
             );
         $page = $pageService->createPageFromTemplate($template, $placeholders);

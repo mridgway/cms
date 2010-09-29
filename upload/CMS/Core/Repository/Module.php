@@ -16,9 +16,8 @@ class Module extends \Doctrine\ORM\EntityRepository
     public function findAll()
     {
         $qb = \Zend_Registry::get('doctrine')->getRepository('Core\Model\Module')->createQueryBuilder('m');
-        $qb->select('m, b, c')
-           ->leftJoin('m.blockTypes', 'b')
-           ->leftJoin('m.contentTypes', 'c');
+        $qb->select('m, r')
+           ->leftJoin('m.resources', 'r');
 
         return $qb->getQuery()->getResult();
     }
