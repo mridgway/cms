@@ -1,5 +1,5 @@
 <?php
-namespace Core\Model;
+namespace Core\Model\Module;
 
 require_once 'PHPUnit/Framework.php';
 
@@ -14,13 +14,20 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $view;
 
+    protected $module;
+
+    protected $resource;
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp()
     {
-        $this->view = new View('Core', 'test', 'test');
+        $this->module = new \Core\Model\Module('Core', 'Core');
+        $this->resource = new ContentType('Test', 'test', 'Mock\Block\Dynamic\Form\NonAbstractForm');
+        $this->module->addResource($this->resource);
+        $this->view = new View($this->resource, 'test');
     }
 
     /**
@@ -33,49 +40,49 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testMapViewScriptCore()
     {
-        $this->view->module = 'Core';
-        $this->view->type   = 'Text';
-        $this->view->sysname = 'Text';
+        $this->view->resource->module->sysname = 'Core';
+        $this->view->resource->discriminator = 'Text';
+        $this->view->sysname = 'default';
 
         $this->assertEquals(APPLICATION_PATH.'/Core/View/', $this->view->getBasePath());
-        $this->assertEquals('Text/text.phtml', $this->view->getFile());
+        $this->assertEquals('Content/Text/default.phtml', $this->view->getFile());
     }
 
     public function testMapViewScriptModule()
     {
-        $this->view->module = 'Blog';
-        $this->view->type   = 'Article';
-        $this->view->sysname = 'Article';
+        $this->view->resource->module->sysname = 'Blog';
+        $this->view->resource->discriminator = 'Article';
+        $this->view->sysname = 'article';
 
         $this->assertEquals(APPLICATION_PATH.'/Blog/View/', $this->view->getBasePath());
-        $this->assertEquals('Article/article.phtml', $this->view->getFile());
+        $this->assertEquals('Content/Article/article.phtml', $this->view->getFile());
     }
 
     public function testConstructor()
     {
-        $view = new View('Core', 'Text', 'Text');
-        $this->assertEquals('Core', $view->module);
-        $this->assertEquals('Text', $view->type);
+        $view = new View($this->resource, 'Text');
+        $this->assertEquals($this->resource, $view->getResource());
         $this->assertEquals('Text', $view->sysname);
     }
 
     public function testRender()
     {
-        $this->view->module = 'Core';
-        $this->view->type   = 'Text';
+        $this->view->resource->module->sysname = 'Core';
+        $this->view->resource->discriminator = 'Text';
         $this->view->sysname = 'default';
+        
         $this->view->getInstance()->render($this->view->getFile());
 
-        $this->view->getInstance()->render('Text/default.phtml');
+        $this->view->getInstance()->render('Content/Text/default.phtml');
     }
 
     public function testGetInstance()
     {
         $helperLoader = new \Zend_Loader_PluginLoader();
-        \Core\Model\View::setPluginLoader($helperLoader, 'helper');
+        \Core\Model\Module\View::setPluginLoader($helperLoader, 'helper');
 
         $filterLoader = new \Zend_Loader_PluginLoader();
-        \Core\Model\View::setPluginLoader($filterLoader, 'filter');
+        \Core\Model\Module\View::setPluginLoader($filterLoader, 'filter');
     }
 }
 ?>

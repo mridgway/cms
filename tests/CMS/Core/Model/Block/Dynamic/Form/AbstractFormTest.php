@@ -13,7 +13,7 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $view = new \Core\Model\View('module', 'type', 'sysname');
+        $view = new \Mock\View();
         $this->form = new \Mock\Block\Dynamic\Form\NonAbstractForm($view);
         $this->zendForm = new \Zend_Form();
         $this->form->setForm($this->zendForm);

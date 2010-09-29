@@ -53,38 +53,38 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBlock()
     {
-        $block = new Module\Block('title', 'discriminator', 'Core\Model\Block\StaticBlock');
-        $this->module->addBlock($block);
+        $block = new Module\BlockType('title', 'discriminator', 'Core\Model\Block\StaticBlock');
+        $this->module->addResource($block);
         $this->assertEquals($block, $this->module->getBlockType('discriminator'));
     }
 
     public function testAddContent()
     {
-        $content = new Module\Content('title', 'discriminator', 'Core\Model\Content\Text');
-        $this->module->addContent($content);
+        $content = new Module\ContentType('title', 'discriminator', 'Core\Model\Content\Text');
+        $this->module->addResource($content);
         $this->assertEquals($content, $this->module->getContentType('discriminator'));
     }
 
     public function testGetBlockDiscriminatorMap()
     {
-        $block1 = new Module\Block('title', 'discriminator1', 'Core\Model\Block\StaticBlock');
-        $block2 = new Module\Block('title', 'discriminator2', 'Core\Model\Block\StaticBlock');
+        $block1 = new Module\BlockType('title', 'discriminator1', 'Core\Model\Block\StaticBlock');
+        $block2 = new Module\BlockType('title', 'discriminator2', 'Core\Model\Block\StaticBlock');
         $a = array($block1->discriminator => $block1->class, $block2->discriminator => $block2->class);
 
-        $this->module->addBlock($block1);
-        $this->module->addBlock($block2);
+        $this->module->addResource($block1);
+        $this->module->addResource($block2);
 
         $this->assertEquals($a, $this->module->getBlockDiscriminatorMap());
     }
 
     public function testGetContentDiscriminatorMap()
     {
-        $content1 = new Module\Content('title', 'discriminator1', 'Core\Model\Content\Text');
-        $content2 = new Module\Content('title', 'discriminator2', 'Core\Model\Content\Text');
+        $content1 = new Module\ContentType('title', 'discriminator1', 'Core\Model\Content\Text');
+        $content2 = new Module\ContentType('title', 'discriminator2', 'Core\Model\Content\Text');
         $a = array($content1->discriminator => $content1->class, $content2->discriminator => $content2->class);
 
-        $this->module->addContent($content1);
-        $this->module->addContent($content2);
+        $this->module->addResource($content1);
+        $this->module->addResource($content2);
 
         $this->assertEquals($a, $this->module->getContentDiscriminatorMap());
     }

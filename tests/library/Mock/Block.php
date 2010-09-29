@@ -7,7 +7,7 @@ class Block extends \Core\Model\Block
 
     public function __construct()
     {
-        parent::__construct(new \Core\Model\View('Core', 'test', 'test'));
+        parent::__construct(new \Mock\View());
     }
 
     protected $configuration = array(

@@ -26,7 +26,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     {
         $this->value = new Value('awesome', 'test');
         $this->content = new \Mock\Content();
-        $this->view = new \Core\Model\View('Core', 'Text', 'text');
+        $this->view = new \Mock\View();
         $this->block = new \Core\Model\Block\StaticBlock($this->content, $this->view);
     }
 
