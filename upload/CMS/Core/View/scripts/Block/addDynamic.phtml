@@ -1,0 +1,9 @@
+<?php if (count($this->types)) : ?>
+<ul>
+<?php foreach ($this->types as $type) : ?>
+    <li><a href="<?php echo "/direct/page/add-block/?id={$this->id}&location={$this->location}&type={$this->type}&blockType={$type->id}"; ?>"><?php echo $type->title; ?></a></li>
+<?php endforeach; ?>
+</ul>
+<?php else : ?>
+<p>There are no dynamic blocks available.  Contact your friendly developer now.</p>
+<?php endif; ?>

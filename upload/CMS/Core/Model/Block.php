@@ -24,7 +24,7 @@ use \Core\Model;
  * @property \Core\Model\Page $page
  * @property string $location
  * @property int $weight
- * @property \Core\Model\View $view
+ * @property \Core\Model\Module\View $view
  * @property array $configProperties
  * @property array $configValues
  * @property Block $inheritedFrom
@@ -69,8 +69,8 @@ abstract class Block
     /**
      * The view script that is used to render the contents of this block
      *
-     * @var \Core\Model\View
-     * @ManyToOne(targetEntity="Core\Model\View")
+     * @var \Core\Model\Module\View
+     * @ManyToOne(targetEntity="Core\Model\Module\View")
      * @JoinColumn(name="view_id", referencedColumnName="id", nullable="false")
      */
     protected $view;
@@ -119,10 +119,10 @@ abstract class Block
      *
      * @param Page $page
      * @param string $location
-     * @param View $view
+     * @param Module\View $view
      * @param int $weight
      */
-    public function __construct(View $view)
+    public function __construct(Module\View $view)
     {
         $this->_collectionKeysSet = true; // prevent postload from running
         $this->setView($view);
@@ -350,7 +350,7 @@ abstract class Block
      * @param View $view
      * @return Block
      */
-    public function setView(\Core\Model\View $view)
+    public function setView(\Core\Model\Module\View $view)
     {
         $this->view = $view;
         $this->getViewInstance();

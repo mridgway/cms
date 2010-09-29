@@ -17,7 +17,7 @@ class Article extends \Core\Controller\Content\AbstractController
     {
         throw new \Exception('Not implemented yet.');
         
-        $view = new \Core\Model\View('core', 'Route', 'form');
+        $view = \Core\Module\Registry::getInstance()->getModule('Core')->getBlockType('Form')->getView('default');
         $block = new \Blog\Block\Form\Article($view);
 
         $block->init();

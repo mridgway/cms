@@ -2,129 +2,71 @@
 
 namespace Core\Model;
 
-use \Core\Model;
-
 /**
- * Represents a a view script that is installed in the system. Creates instances
- * of Zend_View that blocks use to display their content.
- *
- * @package     CMS
- * @subpackage  Core
- * @category    Model
- * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
- * @license     <license>
- *
- * @Entity(repositoryClass="Core\Repository\View")
- * @property int $id
- * @property string $module
- * @property string $type
- * @property string $sysname
- * @property string $label
- */
-class View extends Model\AbstractModel
+* A view script model that can be created on the fly
+*
+* @package CMS
+* @subpackage Core
+* @category Model
+* @copyright Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+* @license <license>
+*/
+class View extends \Zend_View
 {
-    /**
-     * @var integer
-     * @Id @Column(name="id", type="integer")
-     * @GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
 
     /**
-     * @var string
-     * @Column(name="module", type="string", length="100", nullable="false")
-     */
+    * @var string
+    */
     protected $module;
 
     /**
-     * @var string
-     * @Column(name="type", type="string", length="100", nullable="false")
-     */
-    protected $type;
+    * @var string
+    */
+    protected $path;
 
     /**
-     * @var string
-     * @Column(name="sysname", type="string", length="100", nullable="false")
-     */
-    protected $sysname;
-
-    /**
-     * @var string
-     * @Column(name="label", type="string", length="100", nullable="true")
-     */
-    protected $label;
-
-    /**
-     * @var Zend_Loader_PluginLoader
-     */
-    private static $_pluginLoader = array();
-
-    /**
-     * @param string $module
-     * @param string $type
-     * @param string $sysname
-     */
-    public function __construct($module, $type, $sysname)
+    * @param string $module
+    * @param string $path
+    */
+    public function __construct($module, $path)
     {
         $this->module = $module;
-        $this->type = $type;
-        $this->sysname = $sysname;
+        $this->path = $path;
+
+        $this->setBasePath($this->getBasePath());
+    }
+
+    public function render($name = null)
+    {
+        if (null === $name) {
+            $name = $this->getFile();
+        }
+        return parent::render($name);
     }
 
     /**
-     * Returns the view script location
-     *
-     * @return string
-     */
+    * Returns the view script location
+    *
+    * @return string
+    */
     public function getBasePath()
     {
-        $file = \APPLICATION_PATH . \DIRECTORY_SEPARATOR
+        $path = \APPLICATION_PATH . \DIRECTORY_SEPARATOR
               . $this->module . \DIRECTORY_SEPARATOR
               . 'View' . \DIRECTORY_SEPARATOR;
 
-        return $file;
+        return $path;
     }
 
     /**
-     * Returns the view script relative to the base view path
-     *
-     * @return string
-     */
+    * Returns the view script relative to the base view path
+    *
+    * @return string
+    */
     public function getFile()
     {
-        $file = $this->type . \DIRECTORY_SEPARATOR;
-        $file .= strtolower($this->sysname).'.phtml';
+        $file = $this->path.'.phtml';
 
         return $file;
-    }
-
-    public function getInstance()
-    {
-        /* @var $view Zend_View */
-        $view;
-        if (\Zend_Controller_Front::getInstance()->getParam('bootstrap')) {
-            $view =  clone \Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');
-        } else {
-            $view = new \Zend_View();
-        }
-        $view->clearVars();
-        $view->addBasePath($this->getBasePath());
-        if ($helperLoader = self::getPluginLoader('helper')) {
-            $view->setPluginLoader($helperLoader, 'helper');
-        }
-        if ($filterLoader = self::getPluginLoader('filter')) {
-            $view->setPluginLoader(self::getPluginLoader('filter'), 'filter');
-        }
-        return $view;
-    }
-
-    public static function setPluginLoader($pluginLoader, $type)
-    {
-        self::$_pluginLoader[$type] = $pluginLoader;
-    }
-
-    public static function getPluginLoader($type)
-    {
-        return array_key_exists($type, self::$_pluginLoader) ? self::$_pluginLoader[$type] : false;
     }
 }

@@ -20,7 +20,7 @@ class DynamicBlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->block = new \Mock\Block\DynamicBlock(new \Core\Model\View('Core', 'test', 'test'));
+        $this->block = new \Mock\Block\DynamicBlock(new \Mock\View());
     }
 
     /**

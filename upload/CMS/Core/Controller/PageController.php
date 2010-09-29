@@ -74,17 +74,7 @@ class PageController extends \Zend_Controller_Action
     }
 
     /**
-     * @todo implement this
-     */
-    public function addAction()
-    {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
-            throw new \Exception('Not allowed to add page.');
-        }
-    }
-
-    /**
-     * @todo implement this
+     * @todo refactor the crap out of this
      */
     public function addBlockAction()
     {
@@ -112,7 +102,7 @@ class PageController extends \Zend_Controller_Action
                 if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
                     $text = $frontend->html;
                     $frontend = new \Core\Model\Frontend\BlockInfo();
-                    $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+                    $view = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Core')->getContentType('Text')->getView('default');
                     $block = new \Core\Model\Block\StaticBlock($text, $view);
                     $this->_page->addBlock($block, $location);
                     $this->_em->persist($block);
@@ -123,7 +113,6 @@ class PageController extends \Zend_Controller_Action
                     $block = new \stdClass();
                     $block->id = 'new';
                 }
-                
                 $view = new \Zend_View();
                 $view->assign('content', $frontend->html);
                 $view->assign('block', $block);
@@ -135,17 +124,16 @@ class PageController extends \Zend_Controller_Action
                 return;
             case 'shared':
                 $types = $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
-                $view = new \Core\Model\View('Core', 'Block', 'addShared');
-                $viewInstance = $view->getInstance();
-                $viewInstance->assign('types', $types);
-                $viewInstance->assign('type', $type);
-                $viewInstance->assign('id', $this->_page->id);
-                $viewInstance->assign('location', $location->sysname);
+                $view = new \Core\Model\View('Core', 'Block/addShared');
+                $view->assign('types', $types);
+                $view->assign('type', $type);
+                $view->assign('id', $this->_page->id);
+                $view->assign('location', $location->sysname);
                 $frontend = new \Core\Model\Frontend\Simple();
-                $frontend->html = $viewInstance->render($view->getFile());
+                $frontend->html = $view->render();
                 if ($contentId = $this->getRequest()->getParam('content', null)) {
                     $content = $this->_em->getReference('Core\Model\Content', $contentId);
-                    $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+                    $view = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Core')->getContentType('Text')->getView('default');
                     $block = new \Core\Model\Block\StaticBlock($content, $view);
                     $this->_page->addBlock($block, $location);
                     $this->_em->persist($block);
@@ -156,21 +144,18 @@ class PageController extends \Zend_Controller_Action
                 echo $frontend;
                 return;
             case 'dynamic':
-                $types = $this->_em->getRepository('Core\Model\Block')->findAddableBlocks();
-                $view = new \Core\Model\View('Core', 'Block', 'addDynamic');
-                $viewInstance = $view->getInstance();
-                $viewInstance->assign('types', $types);
-                $viewInstance->assign('type', $type);
-                $viewInstance->assign('id', $this->_page->id);
-                $viewInstance->assign('location', $location->sysname);
+                $types = $this->_em->getRepository('Core\Model\Module\BlockType')->findAddableBlockTypes();
+                $view = new \Core\Model\View('Core', 'Block/addDynamic');
+                $view->assign('types', $types);
+                $view->assign('type', $type);
+                $view->assign('id', $this->_page->id);
+                $view->assign('location', $location->sysname);
                 $frontend = new \Core\Model\Frontend\Simple();
-                $frontend->html = $viewInstance->render($view->getFile());
-                if ($blockId = $this->getRequest()->getParam('block', null)) {
-                    $content = $this->_em->getReference('Core\Model\Content', $blockId);
-                    // THIS IS WHERE I LEFT OFF
-                    // NEED A WAY TO GET THE DEFAULT VIEW FOR A DYNAMIC BLOCK
-                    $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
-                    $block = new \Core\Model\Block\StaticBlock($content, $view);
+                $frontend->html = $view->render($view->getFile());
+                if ($blockId = $this->getRequest()->getParam('blockType', null)) {
+                    $blockType = $this->_em->find('Core\Model\Module\BlockType', $blockId);
+                    $view = $blockType->getView('default');
+                    $block = $blockType->createInstance(array($view));
                     $this->_page->addBlock($block, $location);
                     $this->_em->persist($block);
                     $this->_em->flush();
@@ -182,9 +167,6 @@ class PageController extends \Zend_Controller_Action
             default:
                 throw new \Exception('Invalid block type.');
         }
-
-        
-        throw new \Exception('Adding blocks not implemented yet.');
     }
 
     public function editAction()
