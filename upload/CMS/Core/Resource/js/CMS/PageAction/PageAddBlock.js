@@ -111,8 +111,23 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
         },
 
         clickDynamic: function (sendData) {
+            var self = this;
             $.get(this.postback, sendData, function (data) {
-                
+                if (data.code.id <= 0) {
+                    try {
+                        self.modal.show();
+                    } catch (e) {}
+                    var html = $(data.html);
+                    html.find('a').click(function () {
+                        $.get($(this).attr('href'), function (data) {
+                            if (data.code.id <= 0) {
+                                window.location.reload(true);
+                            }
+                        }, 'json');
+                        return false;
+                    });
+                    self.modal.setContent(html);
+                }
             }, 'json')
         },
 
