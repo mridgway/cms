@@ -98,6 +98,55 @@ class PageController extends \Zend_Controller_Action
         throw new \Exception('Adding pages not implemented yet.');
     }
 
+    /**
+     * This function presents a form to add a new page.  Upon valid submission of the form, a new page is created.
+     */
+    public function addAction()
+    {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'add')) {
+            throw new \Exception('Not allowed to add page.');
+        }
+
+        $frontend = new \Core\Model\Frontend\Simple();
+
+        $form = new \Core\Form\Page();
+        $form->setAction('/direct/page/add');
+
+        $page = null;
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if ($form->isValid($data)) {
+
+                $layout = $this->_em->getRepository('Core\Model\Layout')->findBy(array('sysname' => $data['layout']));
+                unset($data['layout']);
+                
+                $page = new \Core\Model\Page($layout);
+                $page->setData($data);
+                $this->_em->flush();
+
+                $frontend->success();
+                header('Location: ' . $this->_page->getUrl());
+            } else {
+                $frontend->fail();
+            }
+        }
+
+        if($page)
+        {
+            $form->setObject($page);
+        }
+        $frontend->html = (string)$form;
+
+        $html = $this->getRequest()->getParam('html');
+        if (isset($html)) {
+            $this->_page->getLayout()->getLocation('main')->addContent($frontend->html);
+            $this->_page->getLayout()->assign('page', $this->_page);
+            echo $this->_page->getLayout()->render();
+        } else {
+            echo $frontend;
+        }
+    }
+
     public function editAction()
     {
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
