@@ -3,7 +3,7 @@
 namespace Core\Model\Module;
 
 /**
- * Represents a block type that is installed with a module
+ * Represents an abstract module resource
  *
  * @package     CMS
  * @subpackage  Core
@@ -12,10 +12,16 @@ namespace Core\Model\Module;
  * @license     <license>
  *
  * @Entity
- * @Table(name="Module_Block")
+ * @Table(name="Module_Resource")
+ * @InheritanceType("JOINED")
+ * @DiscriminatorColumn(name="type", type="string")
+ * @DiscriminatorMap({
+ *      "ContentType"="Core\Model\Module\ContentType",
+ *      "BlockType"="Core\Model\Module\BlockType"
+ * })
  * @property int $id
  */
-class Block
+abstract class Resource
     extends \Core\Model\AbstractModel
     implements \Zend_Acl_Resource_Interface
 {
@@ -25,10 +31,10 @@ class Block
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var Core\Model\Module
-     * @ManyToOne(targetEntity="Core\Model\Module")
+     * @ManyToOne(targetEntity="Core\Model\Module", inversedBy="resources")
      * @JoinColumn(name="module", referencedColumnName="sysname", nullable="false")
      */
     protected $module;
@@ -57,11 +63,20 @@ class Block
      */
     protected $addable = false;
 
+    /**
+     * @var Doctrine\Common\Collections\ArrayCollection
+     * @OneToMany(targetEntity="Core\Model\Module\View", mappedBy="resource", cascade={"update", "persist"})
+     */
+    protected $views;
+
+    protected $resourceString = '';
+
     public function __construct($title, $discriminator, $class)
     {
         $this->setTitle($title);
         $this->setDiscriminator($discriminator);
         $this->setClass($class);
+        $this->views = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setTitle($title)
@@ -95,11 +110,39 @@ class Block
         return $this;
     }
 
+    public function getView($sysname)
+    {
+        foreach ($this->views AS $view) {
+            if ($view->sysname == $sysname) {
+                return $view;
+            }
+        }
+        return null;
+    }
+
+    public function createView($sysname)
+    {
+        $view = new View($this, $sysname);
+        $this->views->add($view);
+        return $view;
+    }
+
+    public function createInstance($args)
+    {
+        $reflector = new \ReflectionClass($this->class);
+        return $reflector->newInstanceArgs($args);
+    }
+
+    public function getResourceString()
+    {
+        return $this->resourceString;
+    }
+
     /**
      * @return string
      */
     public function getResourceId()
     {
-        return $this->getModule()->getResourceId() . '.Block.' . $this->getDiscriminator();
+        return $this->getModule()->getResourceId() . '.'.$this->resourceString.'.' . $this->getDiscriminator();
     }
 }

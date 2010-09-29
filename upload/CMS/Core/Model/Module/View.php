@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Model;
+namespace Core\Model\Module;
 
 use \Core\Model;
 
@@ -14,7 +14,7 @@ use \Core\Model;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  *
- * @Entity(repositoryClass="Core\Repository\View")
+ * @Entity(repositoryClass="Core\Repository\Module\View")
  * @property int $id
  * @property string $module
  * @property string $type
@@ -31,16 +31,11 @@ class View extends Model\AbstractModel
     protected $id;
 
     /**
-     * @var string
-     * @Column(name="module", type="string", length="100", nullable="false")
+     * @var Core\Model\Module\Resource
+     * @ManyToOne(targetEntity="Core\Model\Module\Resource", inversedBy="views")
+     * @JoinColumn(referencedColumnName="id")
      */
-    protected $module;
-
-    /**
-     * @var string
-     * @Column(name="type", type="string", length="100", nullable="false")
-     */
-    protected $type;
+    protected $resource;
 
     /**
      * @var string
@@ -49,25 +44,17 @@ class View extends Model\AbstractModel
     protected $sysname;
 
     /**
-     * @var string
-     * @Column(name="label", type="string", length="100", nullable="true")
-     */
-    protected $label;
-
-    /**
      * @var Zend_Loader_PluginLoader
      */
     private static $_pluginLoader = array();
 
     /**
-     * @param string $module
-     * @param string $type
+     * @param string Core\Model\Module\Resource
      * @param string $sysname
      */
-    public function __construct($module, $type, $sysname)
+    public function __construct(Resource $resource, $sysname)
     {
-        $this->module = $module;
-        $this->type = $type;
+        $this->resource = $resource;
         $this->sysname = $sysname;
     }
 
@@ -79,7 +66,7 @@ class View extends Model\AbstractModel
     public function getBasePath()
     {
         $file = \APPLICATION_PATH . \DIRECTORY_SEPARATOR
-              . $this->module . \DIRECTORY_SEPARATOR
+              . $this->resource->module->sysname . \DIRECTORY_SEPARATOR
               . 'View' . \DIRECTORY_SEPARATOR;
 
         return $file;
@@ -92,7 +79,8 @@ class View extends Model\AbstractModel
      */
     public function getFile()
     {
-        $file = $this->type . \DIRECTORY_SEPARATOR;
+        $file = $this->resource->getResourceString() . \DIRECTORY_SEPARATOR;
+        $file .= $this->resource->discriminator . \DIRECTORY_SEPARATOR;
         $file .= strtolower($this->sysname).'.phtml';
 
         return $file;

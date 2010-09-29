@@ -6,13 +6,13 @@ require_once 'PHPUnit/Framework.php';
 /**
  * Test class for Content.
  */
-class ContentTest extends \PHPUnit_Framework_TestCase
+class ContentTypeTest extends \PHPUnit_Framework_TestCase
 {
     protected $content;
 
     protected function setUp()
     {
-        $this->content = new Content('title', 'discriminator', 'Core\Model\Content\Text');
+        $this->content = new ContentType('title', 'discriminator', 'Core\Model\Content\Text');
     }
 
     protected function tearDown()

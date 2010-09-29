@@ -25,7 +25,7 @@ class StaticBlock extends \Core\Model\Block
      */
     protected $content;
 
-    public function __construct(\Core\Model\Content $content, \Core\Model\View $view)
+    public function __construct(\Core\Model\Content $content, \Core\Model\Module\View $view)
     {
         parent::__construct($view);
         $this->setContent($content);

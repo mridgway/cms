@@ -11,26 +11,31 @@ namespace Asset\Controller;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  */
-class InstallController extends \Zend_Controller_Action
+class InstallController extends \Core\Controller\AbstractInstallController
 {
-    protected $_em;
 
-    public function init()
-    {
-        $this->_em = \Zend_Registry::getInstance()->get('doctrine');
-    }
+    protected $moduleName = 'Asset';
+
+    protected $classes = array(
+        'Asset\Model\Asset',
+        'Asset\Model\Group',
+        'Asset\Model\MimeType',
+        'Asset\Model\Size',
+        'Asset\Model\Type',
+        'Asset\Model\Extension'
+    );
 
     public function installAction()
     {
         echo '<h3>Installing Asset Module</h3>';
         echo '<b>Creating tables...</b><br/>';
         ob_flush();
-        $this->_createSchema();
+        $this->createSchema();
         echo '<b>Tables created.</b><br/><br/>';
 
         echo '<b>Registering module...</b><br/>';
         ob_flush();
-        $this->_registerModule();
+        $this->registerModule();
         echo '<b>Module registered.</b><br/><br/>';
 
         echo '<b>Installing base...</b><br/>';
@@ -40,29 +45,6 @@ class InstallController extends \Zend_Controller_Action
 
         echo '<h3>Asset Module Installed</h3>';
         ob_flush();
-    }
-
-    public function _createSchema()
-    {
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->_em);
-        $classes = array(
-            $this->_em->getClassMetadata('Asset\Model\Asset'),
-            $this->_em->getClassMetadata('Asset\Model\Group'),
-            $this->_em->getClassMetadata('Asset\Model\MimeType'),
-            $this->_em->getClassMetadata('Asset\Model\Size'),
-            $this->_em->getClassMetadata('Asset\Model\Type'),
-            $this->_em->getClassMetadata('Asset\Model\Extension')
-        );
-        $tool->createSchema($classes);
-    }
-
-    public function _registerModule()
-    {
-        $moduleName = 'Asset';
-        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
-
-        $this->_em->persist($module);
-        $this->_em->flush();
     }
 
     public function _loadBase()

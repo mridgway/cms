@@ -13,7 +13,7 @@ namespace User\Block\Form;
  *
  * @Entity
  */
-class Login extends \Core\Model\Block\Dynamic\Form\AbstractForm
+class Login extends \Core\Model\Block\Dynamic\Form
 {
     protected $_blogService;
 

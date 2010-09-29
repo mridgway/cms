@@ -1,17 +1,18 @@
 <?php
 
-namespace Core\Model\Block\Dynamic\Form;
+namespace Core\Model\Block\Dynamic;
 
 /**
- * An abstract form block
+ * An form block
  *
  * @package     CMS
  * @subpackage  Core
  * @category    Model
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
+ * @Entity
  */
-abstract class AbstractForm extends \Core\Model\Block\DynamicBlock
+class Form extends \Core\Model\Block\DynamicBlock
 {
     /**
      * Stores the form that is being used on the block
@@ -19,6 +20,11 @@ abstract class AbstractForm extends \Core\Model\Block\DynamicBlock
      * @var Zend_Form
      */
     protected $_form;
+
+    public function init ()
+    {
+        
+    }
     
     /**
      * Registers a form as successful by doing a redirect to prevent refresh submits

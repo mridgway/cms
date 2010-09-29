@@ -14,8 +14,8 @@ namespace Core\Model;
  * @Entity(repositoryClass="Core\Repository\Module")
  *
  * @property string $name;
- * @property Core\Model\Module\Block[] $blockTypes
- * @property Core\Model\Module\Content[] $contentTypes
+ * @property Core\Model\Module\BlockType[] $blockTypes
+ * @property Core\Model\Module\ContentType[] $contentTypes
  */
 class Module
     extends \Core\Model\AbstractModel
@@ -35,15 +35,12 @@ class Module
 
     /**
      * @var array
-     * @OneToMany(targetEntity="Core\Model\Module\Block", mappedBy="module", cascade={"persist"}, fetch="EAGER")
+     * @OneToMany(targetEntity="Core\Model\Module\Resource", mappedBy="module", cascade={"persist"}, fetch="EAGER")
      */
-    protected $blockTypes;
+    protected $resources;
 
-    /**
-     * @var array
-     * @OneToMany(targetEntity="Core\Model\Module\Content", mappedBy="module", cascade={"persist"}, fetch="EAGER")
-     */
-    protected $contentTypes;
+    protected $blockTypes = null;
+    protected $contentTypes = null;
 
     public function __construct($sysname, $title='')
     {
@@ -52,8 +49,7 @@ class Module
             $title = $sysname;
         }
         $this->setTitle($title);
-        $this->blockTypes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contentTypes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->resources = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setSysname($sysname)
@@ -76,33 +72,68 @@ class Module
         return $this;
     }
 
-    public function addBlock(\Core\Model\Module\Block $block)
+    public function addResource(\Core\Model\Module\Resource $resource)
     {
-        $block->module = $this;
-        $this->blockTypes[$block->discriminator] = $block;
+        $resource->module = $this;
+        if ($resource instanceof Core\Model\Module\BlockType) {
+            $this->blockTypes[] = $resource;
+        } else if ($resource instanceof Core\Model\Module\ContentType) {
+            $this->contentTypes[] = $resource;
+        }
+        $this->resources[] = $resource;
     }
 
-    public function addContent(\Core\Model\Module\Content $content)
+    public function getBlockTypes()
     {
-        $content->module = $this;
-        $this->contentTypes[$content->discriminator] = $content;
+        if (null === $this->blockTypes) {
+            $this->blockTypes = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($this->resources as $resource) {
+                if ($resource instanceof Module\BlockType) {
+                    $this->blockTypes->add($resource);
+                }
+            }
+        }
+        return $this->blockTypes;
+    }
+
+    public function getContentTypes()
+    {
+        if (null === $this->contentTypes) {
+            $this->contentTypes = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($this->resources as $resource) {
+                if ($resource instanceof Module\ContentType) {
+                    $this->contentTypes->add($resource);
+                }
+            }
+        }
+        return $this->contentTypes;
     }
 
     public function getBlockType($name)
     {
-        return $this->blockTypes[$name];
+        foreach ($this->getBlockTypes() as $resource) {
+            if ($resource->discriminator == $name) {
+                return $resource;
+            }
+        }
+        return null;
     }
 
     public function getContentType($name)
     {
-        return $this->contentTypes[$name];
+        foreach ($this->getContentTypes() as $resource) {
+            if ($resource->discriminator == $name) {
+                return $resource;
+            }
+        }
+        return null;
     }
 
     public function getBlockDiscriminatorMap()
     {
         $map = array();
-        foreach ($this->blockTypes AS $block) {
-            $map[$block->discriminator] = $block->class;
+        foreach ($this->getBlockTypes() AS $blockType) {
+            $map[$blockType->discriminator] = $blockType->class;
         }
         return $map;
     }
@@ -110,8 +141,8 @@ class Module
     public function getContentDiscriminatorMap()
     {
         $map = array();
-        foreach ($this->contentTypes AS $contentTypes) {
-            $map[$contentTypes->discriminator] = $contentTypes->class;
+        foreach ($this->getContentTypes() AS $contentType) {
+            $map[$contentType->discriminator] = $contentType->class;
         }
         return $map;
     }
