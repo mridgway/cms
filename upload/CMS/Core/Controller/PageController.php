@@ -101,29 +101,90 @@ class PageController extends \Zend_Controller_Action
 
         switch($type) {
             case 'standard':
-                break;
+                $controller = new \Core\Controller\Content\Text();
+                $controller->setEntityManager($this->_em);
+                $controller->setRequest($this->getRequest());
+                $controller->setResponse($this->getResponse());
+
+                $frontend = $controller->addAction();
+
+                $block = null;
+                if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
+                    $text = $frontend->html;
+                    $frontend = new \Core\Model\Frontend\BlockInfo();
+                    $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+                    $block = new \Core\Model\Block\StaticBlock($text, $view);
+                    $this->_page->addBlock($block, $location);
+                    $this->_em->persist($block);
+                    $this->_em->flush();
+                    $frontend->success($block);
+                    $frontend->html = $block->render();
+                } else {
+                    $block = new \stdClass();
+                    $block->id = 'new';
+                }
+                
+                $view = new \Zend_View();
+                $view->assign('content', $frontend->html);
+                $view->assign('block', $block);
+                $edit = $this->getRequest()->getParam('edit', true);
+                $view->assign('edit', $edit);
+                $view->setBasePath(APPLICATION_ROOT . '/themes/default/layouts');
+                $frontend->html = $view->render('partials/block.phtml');
+                echo $frontend;
+                return;
             case 'shared':
-                break;
+                $types = $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
+                $view = new \Core\Model\View('Core', 'Block', 'addShared');
+                $viewInstance = $view->getInstance();
+                $viewInstance->assign('types', $types);
+                $viewInstance->assign('type', $type);
+                $viewInstance->assign('id', $this->_page->id);
+                $viewInstance->assign('location', $location->sysname);
+                $frontend = new \Core\Model\Frontend\Simple();
+                $frontend->html = $viewInstance->render($view->getFile());
+                if ($contentId = $this->getRequest()->getParam('content', null)) {
+                    $content = $this->_em->getReference('Core\Model\Content', $contentId);
+                    $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+                    $block = new \Core\Model\Block\StaticBlock($content, $view);
+                    $this->_page->addBlock($block, $location);
+                    $this->_em->persist($block);
+                    $this->_em->flush();
+                    echo new \Core\Model\Frontend\Simple();
+                    return;
+                }
+                echo $frontend;
+                return;
             case 'dynamic':
+                $types = $this->_em->getRepository('Core\Model\Block')->findAddableBlocks();
+                $view = new \Core\Model\View('Core', 'Block', 'addDynamic');
+                $viewInstance = $view->getInstance();
+                $viewInstance->assign('types', $types);
+                $viewInstance->assign('type', $type);
+                $viewInstance->assign('id', $this->_page->id);
+                $viewInstance->assign('location', $location->sysname);
+                $frontend = new \Core\Model\Frontend\Simple();
+                $frontend->html = $viewInstance->render($view->getFile());
+                if ($blockId = $this->getRequest()->getParam('block', null)) {
+                    $content = $this->_em->getReference('Core\Model\Content', $blockId);
+                    // THIS IS WHERE I LEFT OFF
+                    // NEED A WAY TO GET THE DEFAULT VIEW FOR A DYNAMIC BLOCK
+                    $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+                    $block = new \Core\Model\Block\StaticBlock($content, $view);
+                    $this->_page->addBlock($block, $location);
+                    $this->_em->persist($block);
+                    $this->_em->flush();
+                    echo new \Core\Model\Frontend\Simple();
+                    return;
+                }
+                echo $frontend;
                 break;
             default:
                 throw new \Exception('Invalid block type.');
         }
 
-        //$this->_em->getRepository('Core\Model\Content\Text')->findSharedContent();
-        if ($this->getRequest()->isPost()) {
-            switch($type) {
-                case 'standard':
-                    break;
-                case 'shared':
-                    break;
-                case 'dynamic':
-                    break;
-                default:
-                    throw new \Exception('Invalid block type.');
-            }
-        }
-        throw new \Exception('Adding pages not implemented yet.');
+        
+        throw new \Exception('Adding blocks not implemented yet.');
     }
 
     public function editAction()

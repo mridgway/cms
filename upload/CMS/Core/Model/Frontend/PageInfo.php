@@ -33,43 +33,15 @@ class PageInfo extends \Core\Model\Frontend
         foreach($page->getBlocks() AS $block) {
             if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
                 if (isset($frontendPage->locations[$block->location->sysname])) {
-                    $frontendBlock = new \stdClass();
-                    $frontendBlock->id = $block->id;
-                    $frontendBlock->properties = \Core\Service\Manager::get('Core\Service\Block')->getVariables($block);
-                    $frontendPage->locations[$block->location->sysname]->blocks[] = $frontendBlock;
-                    $frontendBlock->actions = $this->_getBlockActions($block);
+                    $frontendBlock = new BlockInfo();
+                    $frontendBlock->success($block);
+                    $frontendPage->locations[$block->location->sysname]->blocks[] = $frontendBlock->data[0];
                 }
             }
         }
         $this->data[] = $frontendPage;
 
         return $this;
-    }
-
-    public function _getBlockActions(\Core\Model\Block $block)
-    {
-        $actions = array();
-        if ($block->canMove(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $move = new Action('block-move');
-            $move->plugin = 'BlockMove';
-            $actions[$move->name] = $move;
-        }
-        if ($block->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $edit = new Action('block-edit', '/direct/block/edit/');
-            $edit->plugin = 'BlockEdit';
-            $actions[$edit->name] = $edit;
-        }
-        if ($block->canConfigure(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $configure = new Action('block-configure', '/direct/block/configure/');
-            $configure->plugin = 'BlockConfigure';
-            $actions[$configure->name] = $configure;
-        }
-        if ($block->canDelete(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $delete = new Action('block-delete', '/direct/block/delete/');
-            $delete->plugin = 'BlockDelete';
-            $actions[$delete->name] = $delete;
-        }
-        return $actions;
     }
 
     public function _getPageActions($page)
@@ -82,7 +54,7 @@ class PageInfo extends \Core\Model\Frontend
         }
 
         if ($page->canEdit(\Core\Auth\Auth::getInstance()->getIdentity())) {
-            $add = new Action('addBlock', '/direct/page/add-block?id=');
+            $add = new Action('addBlock', '/direct/page/add-block');
             $add->plugin = 'BlockAdd';
             $actions[$add->name] = $add;
         }

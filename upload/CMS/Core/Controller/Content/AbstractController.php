@@ -22,6 +22,12 @@ abstract class AbstractController implements ControllerInterface
 
     /**
      *
+     * @var \Zend_Controller_Response_Http
+     */
+    protected $_response;
+
+    /**
+     *
      * @var \Doctrine\ORM\EntityManager
      */
     protected $_em;
@@ -44,6 +50,26 @@ abstract class AbstractController implements ControllerInterface
     public function getRequest()
     {
         return $this->_request;
+    }
+
+    /**
+     * Sets the response object
+     *
+     * @param Zend_Controller_Response_Http $response
+     */
+    public function setResponse(\Zend_Controller_Response_Http $response)
+    {
+        $this->_response = $response;
+    }
+
+    /**
+     * Gets the request object
+     *
+     * @return \Zend_Controller_Response_Http
+     */
+    public function getResponse()
+    {
+        return $this->_response;
     }
 
     /**

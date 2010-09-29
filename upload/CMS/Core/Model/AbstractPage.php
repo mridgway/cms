@@ -84,7 +84,7 @@ abstract class AbstractPage
      * @param Block $block
      * @return AbstractPage
      */
-    public function addBlock(\Core\Model\Block $block, $location = null, $weight = null)
+    public function addBlock(\Core\Model\Block $block, Layout\Location $location = null, $weight = null)
     {
         $block->page = $this;
         if (null !== $location) {
@@ -97,9 +97,13 @@ abstract class AbstractPage
         if (null !== $weight) {
             $block->weight = $weight;
         } else {
-            if (null === $block->weight) {
-                throw new \Core\Model\Exception('Block cannot be added because it does not have a weight.');
+            $heaviestWeight = 0;
+            foreach ($this->blocks AS $existingBlock) {
+                if ($existingBlock->location == $location && $existingBlock->weight > $heaviestWeight) {
+                    $heaviestWeight = $existingBlock->weight;
+                }
             }
+            $block->weight = $heaviestWeight + 1;
         }
         $this->blocks[] = $block;
         return $this;

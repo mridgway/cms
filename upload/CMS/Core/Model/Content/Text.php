@@ -39,11 +39,13 @@ class Text extends \Core\Model\Content
      */
     protected $shared;
 
-    public function __construct($title, $content, $shared = false)
+    public function __construct($title, $content, $shared = null)
     {
         $this->setTitle($title);
         $this->setContent($content);
-        $this->setShared($shared);
+        if (null !== $shared) {
+            $this->setShared($shared);
+        }
     }
 
     public function setTitle($title = null)
@@ -53,6 +55,9 @@ class Text extends \Core\Model\Content
             if (!$validator->isValid($title)) {
                 throw new \Core\Model\Exception('Title must be less than 100 characters.');
             }
+            $this->shared = true;
+        } else {
+            $this->shared = false;
         }
         $this->title = $title;
         return $this;

@@ -31,7 +31,7 @@ class TextElementFactory
 
     public static function getContentElement()
     {
-        $content = new \Core\Form\Element\Textarea('content');
+        $content = new \Core\Form\Element\Wysiwyg('content');
         $content->setLabel('Content:');
         $content->setAllowEmpty(false);
         $content->addValidator(new \Zend_Validate_StringLength(0, 10000));

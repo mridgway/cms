@@ -23,7 +23,7 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
         init: function (data) {
             $.extend(this, data);
             this.domElement = $('#adminMenu');
-            this.modal = new CMS.Modal();
+            this.modal = this.page.modal;
             this._setupActions();
         },
 
