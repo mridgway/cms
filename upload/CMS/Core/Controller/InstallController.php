@@ -11,59 +11,31 @@ namespace Core\Controller;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  */
-class InstallController extends \ZendX\Application53\Controller\Action
+class InstallController extends AbstractInstallController
 {
-    /**
-     * @var \Doctrine\ORM\Tools\SchemaTool
-     */
-    protected $_tool;
-    protected $_classes;
+    protected $moduleName = 'Core';
 
-    /**
-     * @var \Modo\Orm\VersionedEntityManager
-     */
-    protected $_em;
+    protected $classes = array(
+        'Core\Model\Module',
+        'Core\Model\Module\Resource',
+        'Core\Model\Module\BlockType',
+        'Core\Model\Module\ContentType',
+        'Core\Model\Module\View',
 
-    public function init()
-    {
-        $em = $this->_em = \Zend_Registry::getInstance()->get('doctrine');
-        $this->_tool = new \Doctrine\ORM\Tools\SchemaTool($this->_em);
-        $this->_classes = array (
-            $em->getClassMetadata('Core\Model\Module'),
-            $em->getClassMetadata('Core\Model\Module\Resource'),
-            $em->getClassMetadata('Core\Model\Module\BlockType'),
-            $em->getClassMetadata('Core\Model\Module\ContentType'),
+        'Core\Model\AbstractPage',
+        'Core\Model\Page',
+        'Core\Model\Template',
+        'Core\Model\Layout',
+        'Core\Model\Layout\Location',
+        'Core\Model\PageRoute',
+        'Core\Model\Route',
+        'Core\Model\Block',
+        'Core\Model\Block\Config\Value',
+        'Core\Model\Content',
 
-            $em->getClassMetadata('Core\Model\AbstractPage'),
-            $em->getClassMetadata('Core\Model\Page'),
-            $em->getClassMetadata('Core\Model\Template'),
-            $em->getClassMetadata('Core\Model\Layout'),
-            $em->getClassMetadata('Core\Model\Layout\Location'),
-            $em->getClassMetadata('Core\Model\PageRoute'),
-            $em->getClassMetadata('Core\Model\Route'),
-            $em->getClassMetadata('Core\Model\Block'),
-            $em->getClassMetadata('Core\Model\Block\Config\Value'),
-            $em->getClassMetadata('Core\Model\Content'),
-            $em->getClassMetadata('Core\Model\View'),
-
-            /*
-            $em->getClassMetadata('Core\Model\Revision'),
-            $em->getClassMetadata('Core\Model\Revision\Change'),
-            $em->getClassMetadata('Core\Model\Revision\Value'),
-            $em->getClassMetadata('Core\Model\Revision\Value\Integer'),
-            $em->getClassMetadata('Core\Model\Revision\Value\String'),
-            $em->getClassMetadata('Core\Model\Revision\Value\Text'),
-             */
-            
-            $em->getClassMetadata('Core\Model\Content\Placeholder'),
-            $em->getClassMetadata('Core\Model\Content\Text')
-        );
-    }
-
-    public function indexAction()
-    {
-        $this->installAction();
-    }
+        'Core\Model\Content\Placeholder',
+        'Core\Model\Content\Text'
+    );
 
     public function installAction ()
     {
@@ -71,20 +43,19 @@ class InstallController extends \ZendX\Application53\Controller\Action
         
         echo '<h3>Installing Core</h3>';
         echo '<b>Creating tables...</b><br/>';
-        foreach ($this->_tool->getCreateSchemaSql($this->_classes) as $sql) {
-            echo $sql.';<br/>'."\n";
-            ob_flush();
-        }
-        $this->_tool->createSchema($this->_classes);
+        ob_flush();
+        $this->createSchema();
         echo '<b>Tables created.</b><br/><br/>';
 
+        echo '<b>Registering Module...</b><br/>';
+        ob_flush();
+        $this->registerModule();
+        echo '<b>Module registered.</b><br/><br>';
+
         echo '<b>Creating Base Models...</b><br/>';
+        ob_flush();
         $this->_createBase();
         echo '<b>Base models created.</b><br/></br>';
-
-        echo '<b>Registering Module...</b><br/>';
-        $this->_registerModule();
-        echo '<b>Module registered.</b>';
 
         echo '<h3>Core Module Installed</h3>';
         ob_flush();
@@ -114,22 +85,6 @@ class InstallController extends \ZendX\Application53\Controller\Action
         $coreDirect->isDirect = true;
         $this->_em->persist($coreDirect);
 
-        $moduleAjax = new \Core\Model\Route('ajax/:module/:controller/:action');
-        $moduleAjax->sysname = 'AjaxModule';
-        $moduleAjax->isDirect = true;
-        $this->_em->persist($moduleAjax);
-
-        $coreAjax = new \Core\Model\Route('ajax/:controller/:action');
-        $coreAjax->sysname = 'AjaxCore';
-        $coreAjax->isDirect = true;
-        $this->_em->persist($coreAjax);
-
-        $coreAjaxController = new \Core\Model\Route('ajax/:action');
-        $coreAjaxController->sysname = 'AjaxCoreAjax';
-        $coreAjaxController->controller = 'ajax';
-        $coreAjaxController->isDirect = true;
-        $this->_em->persist($coreAjaxController);
-
         echo 'Creating locations<br/>';
         $left = new \Core\Model\Layout\Location('left');
         $right = new \Core\Model\Layout\Location('right');
@@ -155,50 +110,7 @@ class InstallController extends \ZendX\Application53\Controller\Action
         $layout4->setTitle('1 Column');
         $layout4->setLocations(array($main));
         $this->_em->persist($layout4);
-
-        echo 'Creating a text view<br/>';
-        $textView = new \Core\Model\View('Core', 'Text', 'default');
-        $textView->label = 'Text Block';
-        $this->_em->persist($textView);
-
-        echo 'Creating a placeholder view<br/>';
-        $placeholderView = new \Core\Model\View('Core', 'Placeholder', 'default');
-        $placeholderView->label = 'Placeholder Block';
-        $this->_em->persist($placeholderView);
-
-        echo 'Creating a default form view<br/>';
-        $formView = new \Core\Model\View('Core', 'Form', 'default');
-        $formView->label = 'Form Block';
-        $this->_em->persist($formView);
         
-        $this->_em->flush();
-    }
-
-    public function _registerModule()
-    {
-        $moduleName = 'Core';
-        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
-
-        $module->getContentType('Text')->addable = true;
-        $module->getBlockType('StaticBlock')->addable = true;
-
-        $this->_em->persist($module);
-        $this->_em->flush();
-    }
-
-    public function addBlockAction ()
-    {
-        /* @var $page Core\Model\AbstractPage */
-        $page = $this->_em->getRepository('Core\Model\AbstractPage')->find($this->getRequest()->getParam('page'));
-        $location = $this->_em->getRepository('Core\Model\Layout\Location')->find($this->getRequest()->getParam('location'));
-        $view = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
-
-        $content = new \Core\Model\Content\Text('Test', 'Test', false);
-        $block = new \Core\Model\Block\StaticBlock($content, $view);
-        $page->addBlock($block, $location, 0);
-
-        $this->_em->persist($content);
-        $this->_em->persist($block);
         $this->_em->flush();
     }
 

@@ -63,11 +63,20 @@ abstract class Resource
      */
     protected $addable = false;
 
+    /**
+     * @var Doctrine\Common\Collections\ArrayCollection
+     * @OneToMany(targetEntity="Core\Model\Module\View", mappedBy="resource", cascade={"update", "persist"})
+     */
+    protected $views;
+
+    protected $resourceString = '';
+
     public function __construct($title, $discriminator, $class)
     {
         $this->setTitle($title);
         $this->setDiscriminator($discriminator);
         $this->setClass($class);
+        $this->views = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setTitle($title)
@@ -99,5 +108,41 @@ abstract class Resource
         }
         $this->class = $class;
         return $this;
+    }
+
+    public function getView($sysname)
+    {
+        foreach ($this->views AS $view) {
+            if ($view->sysname == $sysname) {
+                return $view;
+            }
+        }
+        return null;
+    }
+
+    public function createView($sysname)
+    {
+        $view = new View($this, $sysname);
+        $this->views->add($view);
+        return $view;
+    }
+
+    public function createInstance($args)
+    {
+        $reflector = new \ReflectionClass($this->class);
+        return $reflector->newInstanceArgs($args);
+    }
+
+    public function getResourceString()
+    {
+        return $this->resourceString;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return $this->getModule()->getResourceId() . '.'.$this->resourceString.'.' . $this->getDiscriminator();
     }
 }

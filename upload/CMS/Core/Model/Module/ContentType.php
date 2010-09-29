@@ -24,6 +24,8 @@ class ContentType
      */
     protected $controller;
 
+    protected $resourceString = 'Content';
+
     public function __construct($title, $discriminator, $class, $controller = null)
     {
         parent::__construct($title, $discriminator, $class);
@@ -39,13 +41,5 @@ class ContentType
         }
         $this->controller = $controller;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return $this->getModule()->getResourceId() . '.Content.' . $this->getDiscriminator();
     }
 }

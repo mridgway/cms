@@ -20,7 +20,8 @@ class Module extends \Core\Service\AbstractService
         if ($config->blockTypes) {
             foreach ($config->blockTypes AS $disc => $type) {
                 $blockType = new \Core\Model\Module\BlockType($type->name, $disc, $type->class);
-                $module->addBlock($blockType);
+                $blockType->addable = $type->addable ? $type->addable : false;
+                $module->addResource($blockType);
             }
         }
 
@@ -28,7 +29,8 @@ class Module extends \Core\Service\AbstractService
             foreach ($config->contentTypes AS $disc => $type) {
                 $controller = $type->controller?$type->controller:null;
                 $contentType = new \Core\Model\Module\ContentType($type->name, $disc, $type->class, $controller);
-                $module->addContent($contentType);
+                $contentType->addable = $type->addable ? $type->addable : false;
+                $module->addResource($contentType);
             }
         }
 

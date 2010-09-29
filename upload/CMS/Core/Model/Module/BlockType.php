@@ -19,11 +19,5 @@ class BlockType
     extends Resource
 {
 
-    /**
-     * @return string
-     */
-    public function getResourceId()
-    {
-        return $this->getModule()->getResourceId() . '.Block.' . $this->getDiscriminator();
-    }
+    protected $resourceString = 'Block';
 }

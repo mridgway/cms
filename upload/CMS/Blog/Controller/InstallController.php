@@ -11,28 +11,29 @@ namespace Blog\Controller;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  */
-class InstallController extends \Zend_Controller_Action
+class InstallController extends \Core\Controller\AbstractInstallController
 {
 
-    /**
-     * @var \Modo\Orm\VersionedEntityManager
-     */
-    protected $_em;
+    protected $moduleName = 'Blog';
+
+    protected $classes = array(
+        'Blog\Model\Article'
+    );
 
     protected $text;
 
-    public function init()
-    {
-        $this->_em = \Zend_Registry::getInstance()->get('doctrine');
-    }
-    
     public function installAction()
     {
         echo '<h3>Installing Blog Module</h3>';
         echo '<b>Creating tables...</b><br/>';
         ob_flush();
-        $this->_createSchema();
+        $this->createSchema();
         echo '<b>Tables created.</b><br/><br>';
+
+        echo '<b>Registering Module...</b><br/>';
+        ob_flush();
+        $this->registerModule();
+        echo '<b>Module registered.</b><br/><br>';
 
         echo 'Adding blog article template...<br/>';
         ob_flush();
@@ -50,20 +51,9 @@ class InstallController extends \Zend_Controller_Action
         ob_flush();
         $this->_createHomepage();
         $this->_em->flush();
-
-        echo '<b>Registering Module...</b><br/>';
-        $this->_registerModule();
-        echo '<b>Module registered.</b>';
         
         echo '<h3>Blog Module Installed</h3>';
         ob_flush();
-    }
-
-    public function _createSchema()
-    {
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($this->_em);
-        $classes = array($this->_em->getClassMetadata('Blog\Model\Article'));
-        $tool->createSchema($classes);
     }
 
     /**
@@ -79,15 +69,13 @@ class InstallController extends \Zend_Controller_Action
         $this->_em->persist($placeholder);
 
         // create the view for the article
-        $view = new \Core\Model\View('Blog', 'Article', 'default');
-        $this->_em->persist($view);
+        $view = $this->module->getBlockType('LatestArticles')->getView('default');
 
         // create the view for the latest article aggregator
-        $latestView = new \Core\Model\View('Blog', 'Article', 'latest');
-        $this->_em->persist($latestView);
+        $latestView = $this->module->getBlockType('LatestArticles')->getView('latest');
 
         // create the blocks
-        $placeholderView = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Placeholder', 'default');
+        $placeholderView = $this->getModule('Core')->getContentType('Placeholder')->getView('default');
         $mainBlock0 = new \Core\Model\Block\StaticBlock($placeholder, $placeholderView);
 
         $rightBlock0 = new \Blog\Block\LatestArticles($latestView);
@@ -98,7 +86,7 @@ class InstallController extends \Zend_Controller_Action
         $text = new \Core\Model\Content\Text('Add New Article', '<a href="/blog/add">Add New Article</a>');
         $this->text = $text;
         $this->_em->persist($text);
-        $textView = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+        $textView = $this->getModule('Core')->getContentType('Text')->getView('default');
         $leftBlock0 = new \Core\Model\Block\StaticBlock($text, $textView);
 
         // add the blocks to the template
@@ -119,14 +107,14 @@ class InstallController extends \Zend_Controller_Action
         $page = new \Core\Model\Page($this->_em->getReference('Core\Model\Layout', '2colalt'));
 
         // the form block
-        $formView = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Form', 'default');
+        $formView = $this->getModule('Core')->getBlockType('Form')->getView('default');
         $block = new \Blog\Block\Form\Article($formView);
 
         // some text
         $text = new \Core\Model\Content\Text('Add Article', 'Here you can add an article to the homepage. By default the home page displays the last 10 blog articles.');
         $this->_em->persist($text);
 
-        $textView = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+        $textView = $this->getModule('Core')->getContentType('Text')->getView('default');
         $leftBlock0 = new \Core\Model\Block\StaticBlock($text, $textView);
 
         // the route to get to the page
@@ -155,11 +143,11 @@ class InstallController extends \Zend_Controller_Action
         $page = new \Core\Model\Page($this->_em->getReference('Core\Model\Layout', '2col'));
 
         // add new article block
-        $textView = $this->_em->getRepository('Core\Model\View')->getView('Core', 'Text', 'default');
+        $textView = $this->getModule('Core')->getContentType('Text')->getView('default');
         $leftBlock0 = new \Core\Model\Block\StaticBlock($this->text, $textView);
 
         // main block
-        $aggregatorView = new \Core\Model\View('Blog', 'Article', 'aggregator');
+        $aggregatorView = $this->getModule()->getBlockType('LatestArticles')->getView('default');
         $this->_em->persist($aggregatorView);
         $rightBlock0 = new \Blog\Block\LatestArticles($aggregatorView);
         $rightBlock0->setConfigValue('count', 10);
@@ -172,29 +160,5 @@ class InstallController extends \Zend_Controller_Action
         $this->_em->persist($homeRoute->routeTo($page));
 
         $this->_em->persist($page);
-    }
-
-    public function _registerModule()
-    {
-        $moduleName = 'Blog';
-        $module = \Core\Module\Registry::getInstance()->getConfigStorage()->getModule($moduleName);
-
-        $module->getContentType('BlogArticle')->addable = true;
-        $module->getBlockType('LatestArticles')->addable = true;
-
-        $this->_em->persist($module);
-        $this->_em->flush();
-    }
-
-    public function fillAction()
-    {
-        for ($i=1; $i<=30; $i++) {
-            $data = array(
-                'title' => 'Article '.$i,
-                'content' => 'This is article number '.$i
-                );
-            $test[$i] = \Core\Service\Manager::get('Blog\Service\Blog')->createArticle($data);
-        }
-        echo $i-1 . ' Articles Created';
     }
 }
