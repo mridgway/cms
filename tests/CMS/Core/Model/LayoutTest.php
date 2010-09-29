@@ -85,5 +85,76 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->layout->getSysname(), $this->layout->getIdentifier());
     }
+
+    public function testGetBasePath()
+    {
+        $this->assertEquals(APPLICATION_ROOT . "/themes/default/layouts/scripts", $this->layout->getBasePath());
+    }
+
+    public function testSetTitle()
+    {
+        $title = 'test';
+        $this->assertEquals($title, $this->layout->setTitle($title)->title);
+
+        for($i = 0; $i < 5; $i++)
+        {
+            $title .= $title;
+        }
+
+        $this->setExpectedException('Exception');
+        $this->layout->setTitle($title);        
+    }
+
+    public function testGetTitle()
+    {
+        $title = 'title';
+        $this->layout->setTitle($title);
+        $this->assertEquals($title, $this->layout->getTitle());
+
+        $this->layout->setTitle(null);
+        $this->assertEquals($this->layout->getFile(), $this->layout->getTitle());
+    }
+
+    public function testGetLocation()
+    {
+        $this->layout->addLocation($this->right);
+        $this->assertEquals($this->right, $this->layout->getLocation('right'));
+
+        $this->assertEquals(null, $this->layout->getLocation('highUpThere'));
+    }
+
+    public function testAddPropertyChangedListener()
+    {
+        $this->layout->addPropertyChangedListener(new \Mock\PropertyChangedListener);
+        $this->setExpectedException('Exception');
+        $this->layout->addPropertyChangedListener('listener');
+    }
+
+    public function testIsSet()
+    {
+        $this->layout->setTitle('testTitle');
+        $this->assertEquals(TRUE, isset($this->layout->title));
+
+        $this->layout->setTitle(null);
+        $this->assertEquals(FALSE, isset($this->layout->title));
+    }
+
+    public function testSet()
+    {
+        $this->layout->title = 'title';
+        $this->assertEquals('title', $this->layout->getTitle());
+        $this->layout->_layout = 'new';
+        $this->assertEquals('new', $this->layout->_layout);
+    }
+
+    public function testSetData()
+    {
+        $this->layout->setData(array(
+            'title' => 'title',
+            'sysname' => 'sysname'
+        ));
+        $this->assertEquals('title', $this->layout->title);
+        $this->assertEquals('sysname', $this->layout->sysname);
+    }
 }
 ?>

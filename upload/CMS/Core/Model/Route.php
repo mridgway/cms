@@ -228,7 +228,7 @@ class Route
      * @return bool
      */
     public function __isset ($name) {
-        if (property_exists($this, $name)) {
+        if (property_exists($this, $name) && isset($this->{$name})) {
             return true;
         }
         return false;

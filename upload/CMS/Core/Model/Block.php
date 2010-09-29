@@ -411,11 +411,11 @@ abstract class Block
     {
         if (empty($values)) {
             foreach ($this->configValues AS $key => $value) {
-                unset($this->configValues[$key]);
+                $this->removeConfigValue($key);
             }
         } else {
             foreach ($values AS $key) {
-                unset($this->configValues[$key]);
+                $this->removeConfigValue($key);
             }
         }
     }
