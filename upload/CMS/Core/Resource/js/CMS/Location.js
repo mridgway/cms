@@ -4,8 +4,10 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
         sysname: null,
 
         domElement: null,
+        sortable: null,
 
         blocks: [],
+        actions: [],
 
         init: function (data) {
             $.extend(this, data);
@@ -21,7 +23,15 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
         },
 
         _setupSortable: function () {
-            this.domElement.sortable({
+            var wrap = $('<div>', {class: 'locationInnerWrap'});
+            var children = this.domElement.children();
+            if (children.length) {
+                children.wrapAll(wrap);
+            } else {
+                this.domElement.append(wrap);
+            }
+            this.sortable = $('.locationInnerWrap:first', this.domElement);
+            this.sortable.sortable({
                 items: 'div.block-wrapper',
                 //containment: $('body'),
                 cursor: 'move',

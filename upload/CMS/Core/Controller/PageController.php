@@ -77,23 +77,104 @@ class PageController extends \Zend_Controller_Action
     }
 
     /**
-     * @todo implement this
+     * @todo refactor the crap out of this
      */
     public function addBlockAction()
     {
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
             throw new \Exception('Not allowed to edit page.');
         }
-
-        //$this->_em->getRepository('Core\Model\Content\Text')->findSharedContent();
-        if ($this->getRequest()->isPost()) {
+        if (!($location = $this->getRequest()->getParam('location'))){
+            throw new \Exception('Invalid location.');
         }
-        throw new \Exception('Adding pages not implemented yet.');
+        if (!($location = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname($location))) {
+            throw new \Exception('Invalid location.');
+        }
+        $type = $this->getRequest()->getParam('type');
+
+        switch($type) {
+            case 'standard':
+                $controller = new \Core\Controller\Content\Text();
+                $controller->setEntityManager($this->_em);
+                $controller->setRequest($this->getRequest());
+                $controller->setResponse($this->getResponse());
+
+                $frontend = $controller->addAction();
+
+                $block = null;
+                if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
+                    $text = $frontend->html;
+                    $frontend = new \Core\Model\Frontend\BlockInfo();
+                    $view = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Core')->getContentType('Text')->getView('default');
+                    $block = new \Core\Model\Block\StaticBlock($text, $view);
+                    $this->_page->addBlock($block, $location);
+                    $this->_em->persist($block);
+                    $this->_em->flush();
+                    $frontend->success($block);
+                    $frontend->html = $block->render();
+                } else {
+                    $block = new \stdClass();
+                    $block->id = 'new';
+                }
+                $view = new \Zend_View();
+                $view->assign('content', $frontend->html);
+                $view->assign('block', $block);
+                $edit = $this->getRequest()->getParam('edit', true);
+                $view->assign('edit', $edit);
+                $view->setBasePath(APPLICATION_ROOT . '/themes/default/layouts');
+                $frontend->html = $view->render('partials/block.phtml');
+                echo $frontend;
+                return;
+            case 'shared':
+                $types = $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
+                $view = new \Core\Model\View('Core', 'Block/addShared');
+                $view->assign('types', $types);
+                $view->assign('type', $type);
+                $view->assign('id', $this->_page->id);
+                $view->assign('location', $location->sysname);
+                $frontend = new \Core\Model\Frontend\Simple();
+                $frontend->html = $view->render();
+                if ($contentId = $this->getRequest()->getParam('content', null)) {
+                    $content = $this->_em->getReference('Core\Model\Content', $contentId);
+                    $view = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Core')->getContentType('Text')->getView('default');
+                    $block = new \Core\Model\Block\StaticBlock($content, $view);
+                    $this->_page->addBlock($block, $location);
+                    $this->_em->persist($block);
+                    $this->_em->flush();
+                    echo new \Core\Model\Frontend\Simple();
+                    return;
+                }
+                echo $frontend;
+                return;
+            case 'dynamic':
+                $types = $this->_em->getRepository('Core\Model\Module\BlockType')->findAddableBlockTypes();
+                $view = new \Core\Model\View('Core', 'Block/addDynamic');
+                $view->assign('types', $types);
+                $view->assign('type', $type);
+                $view->assign('id', $this->_page->id);
+                $view->assign('location', $location->sysname);
+                $frontend = new \Core\Model\Frontend\Simple();
+                $frontend->html = $view->render($view->getFile());
+                if ($blockId = $this->getRequest()->getParam('blockType', null)) {
+                    $blockType = $this->_em->find('Core\Model\Module\BlockType', $blockId);
+                    $view = $blockType->getView('default');
+                    $block = $blockType->createInstance(array($view));
+                    $this->_page->addBlock($block, $location);
+                    $this->_em->persist($block);
+                    $this->_em->flush();
+                    echo new \Core\Model\Frontend\Simple();
+                    return;
+                }
+                echo $frontend;
+                break;
+            default:
+                throw new \Exception('Invalid block type.');
+        }
     }
 
     /**
-     * This function presents a form to add a new page.  Upon valid submission of the form, a new page is created.
-     */
+    * This function presents a form to add a new page. Upon valid submission of the form, a new page is created.
+    */
     public function addAction()
     {
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
@@ -157,7 +238,7 @@ class PageController extends \Zend_Controller_Action
         }
 
         $frontend = new \Core\Model\Frontend\Simple();
-        
+
         $form = ($this->_page instanceof \Core\Model\Page) ? new \Core\Form\Page()
                                                           : new \Core\Form\AbstractPage();
         $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
@@ -180,7 +261,7 @@ class PageController extends \Zend_Controller_Action
 
         $form->setObject($this->_page);
         $frontend->html = (string)$form;
-        
+
         $html = $this->getRequest()->getParam('html');
         if (isset($html)) {
             $this->_page->getLayout()->getLocation('main')->addContent($frontend->html);
@@ -222,7 +303,7 @@ class PageController extends \Zend_Controller_Action
             $frontendObject = new \Core\Model\Frontend\Simple();
             die($frontendObject->fail('Page object not sent.'));
         }
-        
+
         $this->_em->flush();
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
@@ -246,7 +327,7 @@ class PageController extends \Zend_Controller_Action
 
     /**
      * Deletes the current page
-     * 
+     *
      * @todo message notifying users if content exists on other pages
      * @todo message notifying users where content exists
      */
@@ -255,7 +336,7 @@ class PageController extends \Zend_Controller_Action
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
             throw new \Exception('Not allowed to delete page.');
         }
-        
+
         $page = $this->_page;
         $route = $page->getPageRoute()->getRoute();
 

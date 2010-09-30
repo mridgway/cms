@@ -70,19 +70,6 @@ class PageInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
         $frontendBlock->actions;
     }
 
-    public function testGetBlockActions()
-    {
-        $em = \Zend_Registry::get('doctrine');
-        $user = $em->getRepository('User\Model\User')->find(1);
-        $session = new \User\Model\Session($user);
-        $auth = \Core\Auth\Auth::getInstance();
-        $auth->getStorage()->write($session);
-        $acl = \Zend_Registry::get('acl');
-        $acl->addRole($auth->getIdentity(), $auth->getIdentity()->getRoles());
-
-        $this->assertEquals(3, count($this->pageInfo->_getBlockActions($this->block1)));
-    }
-
     public function testGetPageActions()
     {
         $em = \Zend_Registry::get('doctrine');

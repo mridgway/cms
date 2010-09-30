@@ -2,6 +2,8 @@ CMS.Use([], function (CMS) {
     CMS.BlockAction = {};
     CMS.BlockAction.Action = Class.extend({
 
+        blockId: null,
+
         caption: '',
         name: null,
         color: '#cccccc',

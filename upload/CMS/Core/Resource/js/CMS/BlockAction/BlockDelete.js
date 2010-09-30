@@ -17,7 +17,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         deleteBlock: function () {
             var blockWrapper = this.domElement.parents('.block-wrapper:first');
             blockWrapper.hide(500);
-            $.get(this.postback, function (data) {
+            $.get(this.postback, {id: this.blockId}, function (data) {
                 if (data.code.id <= 0) {
                     blockWrapper.parents('.location:first').remove(blockWrapper);
                 } else {

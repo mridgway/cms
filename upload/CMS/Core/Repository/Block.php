@@ -34,4 +34,9 @@ class Block extends \Doctrine\ORM\EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findAddableBlocks()
+    {
+        return $this->_em->getRepository('Core\Model\Module\Block')->findByAddable(true);
+    }
 }

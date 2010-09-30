@@ -35,7 +35,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('Test', $this->text->getTitle());
         $this->assertEquals('This is a test.', $this->text->getContent());
-        $this->assertFalse($this->text->getShared());
+        $this->assertTrue($this->text->getShared());
     }
 
     public function testSetTitle()
@@ -67,10 +67,13 @@ class TextTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetShared()
     {
-        $this->assertFalse($this->text->getShared());
+        $this->assertTrue($this->text->getShared());
 
         $this->text->setShared(true);
         $this->assertTrue($this->text->getShared());
+
+        $this->text->setShared(false);
+        $this->assertFalse($this->text->getShared());
 
         $this->setExpectedException('Core\Model\Exception');
         $this->text->setShared('test');

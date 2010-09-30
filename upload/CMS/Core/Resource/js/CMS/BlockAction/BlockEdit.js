@@ -19,7 +19,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         showEditForm: function () {
             var self = this;
             self.hideContainer();
-            $.get(self.postback, function(data) {
+            $.get(self.postback, {id: this.blockId}, function(data) {
                 if (data.code.id <= 0) {
                     var block = self.domElement.parent().siblings('.block:first');
                     self.prevHtml = block.html();

@@ -23,7 +23,7 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
         init: function (data) {
             $.extend(this, data);
             this.domElement = $('#adminMenu');
-            this.modal = new CMS.Modal();
+            this.modal = this.page.modal;
             this._setupActions();
         },
 
@@ -32,25 +32,25 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
 
             var self = this;
 
-            CMS.Use(['Core/CMS.AdminAction.PageAdd'], function (CMS) {
+            CMS.Use(['Core/CMS.PageAction.PageAdd'], function (CMS) {
                 self.actions.pageAdd.domElement = $('.addPage:first', self.domElement);
                 self.actions.pageAdd.modal = self.modal;
                 self.actions.pageAdd.page = self.page;
-                self.actions.pageAdd = new CMS.AdminAction.PageAdd(self.actions.pageAdd);
+                self.actions.pageAdd = new CMS.PageAction.PageAdd(self.actions.pageAdd);
             });
 
-            CMS.Use(['Core/CMS.AdminAction.PageEdit'], function (CMS) {
+            CMS.Use(['Core/CMS.PageAction.PageEdit'], function (CMS) {
                 self.actions.pageEdit.domElement = $('.editPage:first', self.domElement);
                 self.actions.pageEdit.modal = self.modal;
                 self.actions.pageEdit.page = self.page;
-                self.actions.pageEdit = new CMS.AdminAction.PageEdit(self.actions.pageEdit);
+                self.actions.pageEdit = new CMS.PageAction.PageEdit(self.actions.pageEdit);
             });
 
-            CMS.Use(['Core/CMS.AdminAction.PageDelete'], function (CMS) {
+            CMS.Use(['Core/CMS.PageAction.PageDelete'], function (CMS) {
                 self.actions.pageDelete.domElement = $('.deletePage:first', self.domElement);
                 self.actions.pageDelete.modal = self.modal;
                 self.actions.pageDelete.page = self.page;
-                self.actions.pageDelete = new CMS.AdminAction.PageDelete(self.actions.pageDelete);
+                self.actions.pageDelete = new CMS.PageAction.PageDelete(self.actions.pageDelete);
             });
         }
     });

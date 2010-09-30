@@ -32,9 +32,9 @@ CMS.Use([], function (CMS) {
                 });
                 self.domElement.parent().css('position', 'relative').prepend(actionsBlock);
                 for (i in self.actions) {
-                        self.domElement.trigger('Action loaded');
-                        self.actions[i] = CMS.BlockAction.Action.createAction(self.actions[i]);
-                        actionsBlock.prepend(self.actions[i].domElement);
+                    self.actions[i].blockId = self.id;
+                    self.actions[i] = CMS.BlockAction.Action.createAction(self.actions[i]);
+                    actionsBlock.prepend(self.actions[i].domElement);
                 }
             });
             

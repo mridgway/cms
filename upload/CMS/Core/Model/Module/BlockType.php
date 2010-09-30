@@ -11,7 +11,7 @@ namespace Core\Model\Module;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     <license>
  *
- * @Entity
+ * @Entity(repositoryClass="Core\Repository\Module\BlockType")
  * @Table(name="Module_BlockType")
  * @property int $id
  */

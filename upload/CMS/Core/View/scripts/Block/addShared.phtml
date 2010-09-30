@@ -1,0 +1,9 @@
+<?php if (count($this->types)) : ?>
+<ul>
+<?php foreach ($this->types as $type) : ?>
+    <li><a href="<?php echo "/direct/page/add-block/?id={$this->id}&location={$this->location}&type={$this->type}&content={$type->id}"; ?>"><?php echo $type->title; ?></a></li>
+<?php endforeach; ?>
+</ul>
+<?php else : ?>
+<p>There are no shared blocks available. Add a title to a standard block to share it.</p>
+<?php endif; ?>

@@ -563,9 +563,11 @@ CMS._callbackQueue = new Array();
 CMS.Use = function (scripts, callback) {
     // Translate 'Module/Namespace.ClassName' into a path
     for (i in scripts) {
-        var scriptParts = scripts[i].split('/');
-        var scriptPath = '/resources/'+scriptParts[0].toLowerCase()+'/js/'+scriptParts[1].replace(/\./g, '/')+'.js';
-        scripts[i] = scriptPath;
+        if (scripts[i][0] != '/' && scripts[i].substr(0,5)!= 'http:') {
+            var scriptParts = scripts[i].split('/');
+            var scriptPath = '/resources/'+scriptParts[0].toLowerCase()+'/js/'+scriptParts[1].replace(/\./g, '/')+'.js';
+            scripts[i] = scriptPath;
+        }
     }
     var scriptsLength = scripts.length;
     var scriptsToLoad = new Array();
