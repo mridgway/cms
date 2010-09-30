@@ -30,14 +30,18 @@ class PageInfo extends \Core\Model\Frontend
             $frontendLocation->blocks = array();
             $frontendPage->locations[$location->sysname] = $frontendLocation;
         }
-        foreach($page->getBlocks() AS $block) {
-            if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
-                if (isset($frontendPage->locations[$block->location->sysname])) {
-                    $frontendBlock = new \stdClass();
-                    $frontendBlock->id = $block->id;
-                    $frontendBlock->properties = \Core\Service\Manager::get('Core\Service\Block')->getVariables($block);
-                    $frontendPage->locations[$block->location->sysname]->blocks[] = $frontendBlock;
-                    $frontendBlock->actions = $this->_getBlockActions($block);
+
+        if(count($page->getBlocks()) > 0)
+        {
+            foreach($page->getBlocks() AS $block) {
+                if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
+                    if (isset($frontendPage->locations[$block->location->sysname])) {
+                        $frontendBlock = new \stdClass();
+                        $frontendBlock->id = $block->id;
+                        $frontendBlock->properties = \Core\Service\Manager::get('Core\Service\Block')->getVariables($block);
+                        $frontendPage->locations[$block->location->sysname]->blocks[] = $frontendBlock;
+                        $frontendBlock->actions = $this->_getBlockActions($block);
+                    }
                 }
             }
         }

@@ -33,7 +33,10 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
             var self = this;
 
             CMS.Use(['Core/CMS.AdminAction.PageAdd'], function (CMS) {
-                
+                self.actions.pageAdd.domElement = $('.addPage:first', self.domElement);
+                self.actions.pageAdd.modal = self.modal;
+                self.actions.pageAdd.page = self.page;
+                self.actions.pageAdd = new CMS.AdminAction.PageAdd(self.actions.pageAdd);
             });
 
             CMS.Use(['Core/CMS.AdminAction.PageEdit'], function (CMS) {

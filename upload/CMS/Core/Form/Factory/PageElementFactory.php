@@ -46,6 +46,7 @@ class PageElementFactory
         foreach ($layouts AS $layout) {
             $layoutSelect->addMultiOption($layout->getSysname(), $layout->getTitle());
         }
+        $layoutSelect->setRequired(true);
 
         return $layoutSelect;
     }
@@ -54,9 +55,10 @@ class PageElementFactory
     {
         $pageRoute = new \Core\Form\Element\Text('pageRoute');
         $pageRoute->setLabel('Url:');
-        $pageRoute->setAllowEmpty(true);
+        $pageRoute->setAllowEmpty(false);
+        $pageRoute->setFilters(array(new \Core\Filter\Url));
         $pageRoute->addValidator(new \Zend_Validate_StringLength(0, 255));
-        $pageRoute->setAttrib('disabled', true);
+        $pageRoute->addValidator(new \Core\Validator\Route());
 
         return $pageRoute;
     }

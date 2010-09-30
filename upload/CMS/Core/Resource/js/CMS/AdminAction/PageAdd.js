@@ -1,5 +1,5 @@
 CMS.Use(['Core/CMS.AdminAction.Action'], function (CMS) {
-    CMS.AdminAction.PageEdit = CMS.AdminAction.Action.extend({
+    CMS.AdminAction.PageAdd = CMS.AdminAction.Action.extend({
 
         init: function (data) {
             this._super(data);
@@ -55,7 +55,7 @@ CMS.Use(['Core/CMS.AdminAction.Action'], function (CMS) {
             $.post(this.postback, data, function(data) {
                 if (data.code.id <= 0) {
                     self.modal.hide();
-                    window.location = '/';
+                    window.location = data.data.url;
                 } else {
                     self.receiveHtml(data.html);
                 }

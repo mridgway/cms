@@ -43,6 +43,9 @@ class Route
     protected $template;
 
     /**
+     * The sysname is required for non-unique routes.  If the sysname is null, the route will be
+     * deleted when the corresponding page is deleted.
+     *
      * @var string
      * @Column(name="sysname", type="string", length="100", nullable="true", unique="true")
      */
