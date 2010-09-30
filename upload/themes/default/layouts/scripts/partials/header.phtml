@@ -37,9 +37,10 @@
     <script type="text/javascript" src="/resources/core/js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/resources/core/js/ckeditor/adapters/jquery.js"></script>
     <script type="text/javascript">
+    var Page;
     CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
-        this.Page = new CMS.Page(PAGE_INFO.data[0]);
-        this.AdminMenu = new CMS.AdminMenu({page: this.Page});
+        Page = new CMS.Page(PAGE_INFO.data[0]);
+        var AdminMenu = new CMS.AdminMenu({page: this.Page});
     });
     </script>
 <?php endif; ?>

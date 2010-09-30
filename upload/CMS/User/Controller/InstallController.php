@@ -93,14 +93,14 @@ class InstallController extends \Core\Controller\AbstractInstallController
         // The standard permissions
         $customResources = array(
             'Page2' => new \User\Model\Acl\Resource('Page.2', 'AllPages'),
-            'Content2' => new \User\Model\Acl\Resource('Content.2', 'Core.Content.Text'),
+            'Content1' => new \User\Model\Acl\Resource('Content.1', 'Core.Content.Text'),
             'AdminMenu' => new \User\Model\Acl\Resource('AdminMenu')
         );
         $permissions = array(
             new \User\Model\Acl\Permission($adminRole),
             new \User\Model\Acl\Permission(null, null, 'view'),
             new \User\Model\Acl\Permission($publicRole, $customResources['Page2'], 'view', false),
-            new \User\Model\Acl\Permission($publicRole, $customResources['Content2'], 'view', false),
+            new \User\Model\Acl\Permission($publicRole, $customResources['Content1'], 'view', false),
             new \User\Model\Acl\Permission(null, $customResources['AdminMenu'], 'view', false),
             new \User\Model\Acl\Permission($adminRole, $customResources['AdminMenu'], 'view', true)
         );
