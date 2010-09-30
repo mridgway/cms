@@ -40,7 +40,7 @@
     var Page;
     CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
         Page = new CMS.Page(PAGE_INFO.data[0]);
-        var AdminMenu = new CMS.AdminMenu({page: this.Page});
+        var AdminMenu = new CMS.AdminMenu({page: Page});
     });
     </script>
 <?php endif; ?>
