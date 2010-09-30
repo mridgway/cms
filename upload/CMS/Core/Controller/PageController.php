@@ -43,28 +43,31 @@ class PageController extends \Zend_Controller_Action
             throw new \Exception('Not allowed to view page.');
         }
 
-        // Initialize blocks
-        foreach ($this->_page->getBlocks() as $block) {
-            if ($block instanceof \Core\Model\Block\DynamicBlock) {
-                // Initialize the dynamic block
-                $block->setRequest($this->getRequest());
-                $block->setEntityManager($this->_em);
-                $block->init();
+        if(count($this->_page->getBlocks()) > 0)
+        {
+            // Initialize blocks
+            foreach ($this->_page->getBlocks() as $block) {
+                if ($block instanceof \Core\Model\Block\DynamicBlock) {
+                    // Initialize the dynamic block
+                    $block->setRequest($this->getRequest());
+                    $block->setEntityManager($this->_em);
+                    $block->init();
+                }
             }
-        }
 
-        // Render blocks into block wrapper
-        $blockActions = array();
-        foreach ($this->_page->getBlocks() as $block) {
-            if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
-                $view = new \Zend_View();
-                $view->assign('content', $block->render());
-                $view->assign('block', $block);
-                $view->assign('page', $this->_page);
-                $edit = $this->getRequest()->getParam('edit', true);
-                $view->assign('edit', $edit);
-                $view->setBasePath(APPLICATION_ROOT . '/themes/default/layouts');
-                $block->getLocation()->addContent($view->render('partials/block.phtml'));
+            // Render blocks into block wrapper
+            $blockActions = array();
+            foreach ($this->_page->getBlocks() as $block) {
+                if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
+                    $view = new \Zend_View();
+                    $view->assign('content', $block->render());
+                    $view->assign('block', $block);
+                    $view->assign('page', $this->_page);
+                    $edit = $this->getRequest()->getParam('edit', true);
+                    $view->assign('edit', $edit);
+                    $view->setBasePath(APPLICATION_ROOT . '/themes/default/layouts');
+                    $block->getLocation()->addContent($view->render('partials/block.phtml'));
+                }
             }
         }
 
@@ -174,7 +177,7 @@ class PageController extends \Zend_Controller_Action
     */
     public function addAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'add')) {
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
             throw new \Exception('Not allowed to add page.');
         }
 
@@ -187,16 +190,26 @@ class PageController extends \Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             if ($form->isValid($data)) {
+                
+                $route = new \Core\Model\Route($data['pageRoute']);
+                $this->_em->persist($route);
 
-                $layout = $this->_em->getRepository('Core\Model\Layout')->findBy(array('sysname' => $data['layout']));
-                unset($data['layout']);
-
+                $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBy(array('sysname' => $data['layout']));
                 $page = new \Core\Model\Page($layout);
+
+                unset($data['id']);
+                unset($data['layout']);
+                unset($data['pageRoute']);
                 $page->setData($data);
+                $this->_em->persist($page);
+
+                $pageRoute = $route->routeTo($page);
+                $this->_em->persist($pageRoute);
+
                 $this->_em->flush();
 
                 $frontend->success();
-                header('Location: ' . $this->_page->getUrl());
+                $frontend->data['url'] = $page->getURL();
             } else {
                 $frontend->fail();
             }
@@ -325,6 +338,12 @@ class PageController extends \Zend_Controller_Action
         }
 
         $page = $this->_page;
+        $route = $page->getPageRoute()->getRoute();
+
+        if(!$route->getSysname())
+        {
+            $this->_em->remove($route);
+        }
 
         foreach($page->dependentContent as $content)
         {

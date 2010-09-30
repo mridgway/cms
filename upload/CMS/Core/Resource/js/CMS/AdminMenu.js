@@ -31,10 +31,12 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
         _setupActions: function () {
 
             var self = this;
-            $('.addPage', this.domElement).click(function (e){
-                // fire ajax to load add form
-                // show form in modal window
-                return false;
+
+            CMS.Use(['Core/CMS.PageAction.PageAdd'], function (CMS) {
+                self.actions.pageAdd.domElement = $('.addPage:first', self.domElement);
+                self.actions.pageAdd.modal = self.modal;
+                self.actions.pageAdd.page = self.page;
+                self.actions.pageAdd = new CMS.PageAction.PageAdd(self.actions.pageAdd);
             });
 
             CMS.Use(['Core/CMS.PageAction.PageEdit'], function (CMS) {
