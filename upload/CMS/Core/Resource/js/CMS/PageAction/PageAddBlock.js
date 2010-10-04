@@ -21,6 +21,7 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
             }
         },
         postback: '/direct/page/add-block',
+        editors: [],
 
         init: function (data) {
             this._super(data);
@@ -84,7 +85,11 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
                     var form = html.is('form') ? html : html.find('form:first');
                     self.alterForm(form, sendData);
 
-                    html.hide().insertBefore(self.domElement).show('fast');
+                    html.hide().insertBefore(self.domElement);
+                    html.find('.ckeditor').ckeditor(function() {
+                            self.editors.push(this);
+                        }, CMS.ckeditor.getConfig());
+                    html.show('fast');
                 }
             }, 'json');
         },
@@ -164,9 +169,18 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
                 } else {
                     var html = $(data.html);
                     var form = html.is('form') ? html : html.find('form:first');
+                    var sendData = {
+                        id: self.page,
+                        location: self.location,
+                        type: 'standard'
+                    }
                     self.alterForm(form, sendData);
 
+                    self.destroyEditors();
                     $('#block-new-wrapper').replaceWith(html);
+                    html.find('.ckeditor').ckeditor(function() {
+                        self.editors.push(this);
+                    }, CMS.ckeditor.getConfig());
                 }
             }, 'json');
         },
@@ -174,6 +188,7 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
         cancelForm: function () {
             var self = this;
             $('#block-new-wrapper').hide('fast', function (){
+                self.destroyEditors();
                 $('#block-new-wrapper').remove();
                 self.showMenus();
             });
@@ -185,6 +200,13 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
 
         showMenus: function () {
             $('.addBlockMenu').show('fast');
+        },
+
+        destroyEditors: function () {
+            for (var i in this.editors) {
+                this.editors[i].destroy();
+            }
+            this.editors = [];
         }
     });
 });

@@ -666,3 +666,19 @@ CMS.log = function (force) {
 CMS.alert = function (msg) {
     alert(msg);
 }
+
+CMS.ckeditor = {
+    getConfig : function () {
+        
+        return {
+            toolbar : [
+                ['Format', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Indent', 'Outdent'],
+                ['Undo', 'Redo', '-', 'Anchor', 'Link', 'Unlink', '-', 'Table', '-', 'PasteText', 'RemoveFormat', 'PasteFromWord', '-', 'Source', '-', 'Asset']
+            ],
+            format_tags : 'p;h1;h2;h3;h4;h5;h6',
+            //extraPlugins : 'asset,unique,linkclass',
+            toolbarCanCollapse : false,
+            resize_enabled : false
+        }
+    }
+}

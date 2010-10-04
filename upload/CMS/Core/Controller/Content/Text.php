@@ -63,11 +63,15 @@ class Text extends \Core\Controller\Content\AbstractController
                 $this->getEntityManager()->flush();
                 $frontend->html = $block->render();
             } else {
-                $frontend->html = $form->render();
+                $view = new \Core\Model\View('Core', 'Block/Form/default');
+                $view->assign('form', $form);
+                $frontend->html = $view->render();
                 $frontend->fail();
             }
         } else {
-            $frontend->html = $form->render();
+            $view = new \Core\Model\View('Core', 'Block/Form/default');
+            $view->assign('form', $form);
+            $frontend->html = $view->render();
         }
         return $frontend;
     }

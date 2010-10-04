@@ -6,6 +6,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         color: '#0865c1',
 
         prevHtml: null,
+        editors: [],
 
         init: function (data) {
             this._super(data);
@@ -62,17 +63,23 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             $.post(this.postback, data, function(data) {
                 if (data.code.id <= 0) {
                     self.setHtml(data.html);
+                    self.destroyEditors();
                 } else {
                     var html = $(data.html);
                     var form = html.is('form') ? html : html.find('form:first');
                     self.alterForm(form);
                     var block = self.domElement.parent().siblings('.block:first');
+                    self.destroyEditors();
                     block.html(html);
+                    block.find('.ckeditor').ckeditor(function() {
+                        self.editors.push(this);
+                    }, CMS.ckeditor.getConfig());
                 }
             }, 'json');
         },
 
         cancelForm: function () {
+            this.destroyEditors();
             this.setHtml(this.prevHtml);
         },
 
@@ -81,10 +88,20 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var block = self.domElement.parent().siblings('.block:first');
             block.hide(500, function () {
                 $(this).html(html);
+                $(this).find('.ckeditor').ckeditor(function() {
+                        self.editors.push(this);
+                    }, CMS.ckeditor.getConfig());
                 $(this).show(500, function() {
                     hideContainer ? self.hideContainer() : self.showContainer();
                 });
             });
+        },
+
+        destroyEditors: function () {
+            for (var i in this.editors) {
+                this.editors[i].destroy();
+            }
+            this.editors = [];
         }
     });
 });
