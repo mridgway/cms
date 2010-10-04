@@ -9,7 +9,7 @@ namespace Asset\Model;
  * @subpackage  Asset
  * @category    Model
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
- * @license     <license>
+ * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
  * @Table(name="Asset_Size")
@@ -60,7 +60,7 @@ class Size extends \Core\Model\AbstractModel
     protected $width;
 
     /**
-     * @var int
+     * @var boolean
      * @Column(name="crop", type="boolean", nullable="false")
      */
     protected $crop;
@@ -70,7 +70,7 @@ class Size extends \Core\Model\AbstractModel
      * @param int $width
      * @param bool $crop
      */
-    public function __construct($height, $width, $crop = false)
+        public function __construct($height, $width, $crop = false)
     {
         $this->setHeight($height);
         $this->setWidth($width);

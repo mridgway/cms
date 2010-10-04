@@ -9,7 +9,7 @@ namespace Core\Auth\Adapter;
  * @subpackage  Core
  * @category    Auth
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
- * @license     <license>
+ * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  */
 class Identity implements \Zend_Auth_Adapter_Interface
 {
