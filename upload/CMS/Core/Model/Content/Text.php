@@ -41,6 +41,7 @@ class Text extends \Core\Model\Content
 
     public function __construct($title, $content, $shared = null)
     {
+        parent::__construct();
         $this->setTitle($title);
         $this->setContent($content);
         if (null !== $shared) {

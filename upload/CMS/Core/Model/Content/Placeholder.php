@@ -53,6 +53,7 @@ class Placeholder extends \Core\Model\Content
      */
     public function __construct($sysname, $contentType, $description = '')
     {
+        parent::__construct();
         $this->setSysname($sysname);
         $this->setContentType($contentType);
         $this->setDescription($description);

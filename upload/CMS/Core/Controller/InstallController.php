@@ -34,7 +34,25 @@ class InstallController extends AbstractInstallController
         'Core\Model\Content',
 
         'Core\Model\Content\Placeholder',
-        'Core\Model\Content\Text'
+        'Core\Model\Content\Text',
+
+        // Core now depends on some models in User
+        'User\Model\User',
+        'User\Model\Identity',
+        'User\Model\Session',
+        'User\Model\Group',
+
+        'User\Model\Acl\Role',
+        'User\Model\Acl\Permission',
+        'User\Model\Acl\Privilege',
+        'User\Model\Acl\Resource',
+        'User\Model\Acl\RoleAssignment\AbstractRoleAssignment',
+        'User\Model\Acl\RoleAssignment\UserRoleAssignment',
+        'User\Model\Acl\RoleAssignment\GroupRoleAssignment',
+
+        // Core now depends on some models in Taxonomy
+        'Taxonomy\Model\Vocabulary',
+        'Taxonomy\Model\Term'
     );
 
     public function installAction ()
@@ -61,11 +79,13 @@ class InstallController extends AbstractInstallController
         ob_flush();
 
         // Install default modules
-        $this->_helper->actionStack('install', 'install', 'user');
-        ob_flush();
         $this->_helper->actionStack('install', 'install', 'blog');
         ob_flush();
         $this->_helper->actionStack('install', 'install', 'asset');
+        ob_flush();
+        $this->_helper->actionStack('install', 'install', 'taxonomy');
+        ob_flush();
+        $this->_helper->actionStack('install', 'install', 'user');
     }
 
     public function _createBase ()

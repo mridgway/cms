@@ -144,17 +144,23 @@ class InstallController extends \Core\Controller\AbstractInstallController
 
         // add new article block
         $textView = $this->getModule('Core')->getContentType('Text')->getView('default');
-        $leftBlock0 = new \Core\Model\Block\StaticBlock($this->text, $textView);
+        $rightBlock1 = new \Core\Model\Block\StaticBlock($this->text, $textView);
 
         // main block
         $aggregatorView = $this->getModule()->getBlockType('LatestArticles')->getView('default');
         $this->_em->persist($aggregatorView);
-        $rightBlock0 = new \Blog\Block\LatestArticles($aggregatorView);
-        $rightBlock0->setConfigValue('count', 10);
-        $rightBlock0->setConfigValue('paginate', true);
+        $mainBlock0 = new \Blog\Block\LatestArticles($aggregatorView);
+        $mainBlock0->setConfigValue('count', 10);
+        $mainBlock0->setConfigValue('paginate', true);
 
-        $page->addBlock($leftBlock0, $this->_em->getReference('Core\Model\Layout\Location', 'right'), 1);
-        $page->addBlock($rightBlock0, $this->_em->getReference('Core\Model\Layout\Location', 'main'), 0);
+        // login block
+        $loginView = $this->getModule('User')->getBlockType('LoginForm')->getView('default');
+        $rightBlock0 = new \User\Block\Form\Login($loginView);
+
+        $page->addBlock($rightBlock0, $this->_em->getReference('Core\Model\Layout\Location', 'right'), 0);
+        $page->addBlock($rightBlock1, $this->_em->getReference('Core\Model\Layout\Location', 'right'), 1);
+        $page->addBlock($mainBlock0, $this->_em->getReference('Core\Model\Layout\Location', 'main'), 0);
+
 
         $homeRoute = $this->_em->getRepository('Core\Model\Route')->getRoute('home');
         $this->_em->persist($homeRoute->routeTo($page));

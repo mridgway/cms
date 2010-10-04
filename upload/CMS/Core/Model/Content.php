@@ -35,6 +35,49 @@ abstract class Content
     protected $id;
 
     /**
+     * @var User\Model\User
+     * @ManyToOne(targetEntity="User\Model\User")
+     * @JoinColumn(referencedColumnName="id", nullable="true")
+     */
+    protected $author;
+
+    /**
+     * @var string
+     * @Column(type="string", nullable="false")
+     */
+    protected $authorName = '';
+
+    /**
+     * @var DateTime
+     * @Column(type="datetime")
+     */
+    protected $creationDate;
+
+    /**
+     * @var DateTime
+     * @Column(type="datetime")
+     */
+    protected $modificationDate;
+
+    /**
+     * @var array
+     * @ManyToMany(targetEntity="Taxonomy\Model\Term")
+     * @JoinTable(name="ContentTags",
+     *      joinColumns={@JoinColumn(name="content_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="term_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $tags;
+
+    /**
+     *
+     * @var Taxonomy\Model\Term
+     * @ManyToOne(targetEntity="Taxonomy\Model\Term")
+     * @JoinColumn(referencedColumnName="id", nullable = "false")
+     */
+    protected $status;
+
+    /**
      * The main page that this content shows up on. Example: blog article page. This is not
      * required, since many content types don't get their own page. This page relies on this content
      * and this content relies on this page. Deletions should probably be bidirectionally cascaded.
@@ -47,6 +90,9 @@ abstract class Content
 
     public function __construct()
     {
+        $this->creationDate = new \DateTime;
+        $this->modificationDate = new \DateTime;
+        $this->tags = new ArrayCollection();
         $this->dependentPage = null;
     }
 

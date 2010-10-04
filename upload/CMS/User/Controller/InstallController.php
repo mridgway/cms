@@ -17,36 +17,13 @@ class InstallController extends \Core\Controller\AbstractInstallController
     protected $moduleName = 'User';
 
     protected $classes = array(
-        'User\Model\User',
-        'User\Model\Identity',
-        'User\Model\Session',
-        'User\Model\Group',
-
-        'User\Model\Acl\Role',
-        'User\Model\Acl\Permission',
-        'User\Model\Acl\Privilege',
-        'User\Model\Acl\Resource',
-        'User\Model\Acl\RoleAssignment\AbstractRoleAssignment',
-        'User\Model\Acl\RoleAssignment\UserRoleAssignment',
-        'User\Model\Acl\RoleAssignment\GroupRoleAssignment'
     );
 
     public function installAction()
     {
-        echo '<h3>Installing User Module</h3>';
-        echo '<b>Creating tables...</b><br/>';
-        ob_flush();
-        $this->createSchema();
-        echo '<b>Tables created.</b><br/><br>';
-
         echo '<b>Registering Module...</b><br/>';
         $this->registerModule();
         echo '<b>Module registered.</b><br/><br>';
-
-        echo 'Adding Login Block to Homepage...<br/>';
-        ob_flush();
-        $this->_addBlockToHomePage();
-        echo 'Login block added to homepage<br/>';
 
         echo 'Creating default user groups and roles...<br/>';
         ob_flush();
@@ -55,22 +32,6 @@ class InstallController extends \Core\Controller\AbstractInstallController
 
         echo '<h3>User Module Installed</h3>';
         ob_flush();
-    }
-
-    public function _addBlockToHomePage()
-    {
-        $loginView = $this->module->getBlockType('LoginForm')->getView('default');
-
-        $block = new \User\Block\Form\Login($loginView);
-
-        $pageRoutes = $this->_em->getRepository('Core\Model\Route')->findOneBySysname('home')->getPageRoutes();
-        /* @var $page \Core\Model\Page */
-        $page = $pageRoutes[0]->getPage();
-
-        $location = $this->_em->getRepository('Core\Model\Layout\Location')->find('right');
-        $page->addBlock($block, $location, 0);
-
-        $this->_em->flush();
     }
 
     public function _addDefaultGroupsAndRoles()
