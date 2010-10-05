@@ -18,10 +18,11 @@ class ConfigStorage extends AbstractStorage
         $modules = array();
         $controllerDirs = \Zend_Controller_Front::getInstance()->getDispatcher()->getControllerDirectory();
         foreach ($controllerDirs AS $controllerDir) {
-            $configPath = realpath($controllerDir . '/../module.ini');
-            $config = new \Zend_Config_Ini($configPath);
-            $module = \Core\Service\Module::createModuleFromConfig($config);
-            $modules[$module->sysname] = $module;
+            if ($configPath = realpath($controllerDir . '/../module.ini')) {
+                $config = new \Zend_Config_Ini($configPath);
+                $module = \Core\Service\Module::createModuleFromConfig($config);
+                $modules[$module->sysname] = $module;
+            }
         }
         return $modules;
     }
