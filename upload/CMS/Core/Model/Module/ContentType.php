@@ -36,7 +36,7 @@ class ContentType
     {
         if(null !== $controller) {
             if (!class_exists($controller)) {
-                throw new \Core\Model\Exception('Class does not exist.');
+                throw new \Core\Model\Exception(sprintf('Class \'%s\' does not exist.', $controller));
             }
         }
         $this->controller = $controller;

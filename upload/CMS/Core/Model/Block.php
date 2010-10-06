@@ -110,7 +110,7 @@ abstract class Block
     /**
      * @todo cascade updates???
      * @var Block
-     * @OneToOne(targetEntity="Core\Model\Block")
+     * @ManyToOne(targetEntity="Core\Model\Block")
      * @JoinColumn(name="inherit_id", referencedColumnName="id", nullable="true")
      */
     protected $inheritedFrom;
