@@ -43,37 +43,9 @@ class PageController extends \Zend_Controller_Action
             throw new \Exception('Not allowed to view page.');
         }
 
-        if(count($this->_page->getBlocks()) > 0)
-        {
-            // Initialize blocks
-            foreach ($this->_page->getBlocks() as $block) {
-                if ($block instanceof \Core\Model\Block\DynamicBlock) {
-                    // Initialize the dynamic block
-                    $block->setRequest($this->getRequest());
-                    $block->setEntityManager($this->_em);
-                    $block->init();
-                }
-            }
-
-            // Render blocks into block wrapper
-            $blockActions = array();
-            foreach ($this->_page->getBlocks() as $block) {
-                if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
-                    $view = new \Zend_View();
-                    $view->assign('content', $block->render());
-                    $view->assign('block', $block);
-                    $view->assign('page', $this->_page);
-                    $edit = $this->getRequest()->getParam('edit', true);
-                    $view->assign('edit', $edit);
-                    $view->setBasePath(APPLICATION_ROOT . '/themes/default/layouts');
-                    $block->getLocation()->addContent($view->render('partials/block.phtml'));
-                }
-            }
-        }
-
-        // Set the layout
-        $this->_page->getLayout()->assign('page', $this->_page);
-        $this->getResponse()->setBody($this->_page->getLayout()->render());
+        $pageRenderer = new \Core\Service\PageRenderer($this->_em);
+        $content = $pageRenderer->renderPage($this->_page, $this->getRequest());
+        $this->getResponse()->setBody($content);
     }
 
     /**

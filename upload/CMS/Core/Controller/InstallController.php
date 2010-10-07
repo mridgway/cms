@@ -75,6 +75,11 @@ class InstallController extends AbstractInstallController
         $this->_createBase();
         echo '<b>Base models created.</b><br/></br>';
 
+        echo '<b>Creating 404 Page...</b><br/>';
+        ob_flush();
+        $this->_create404();
+        echo '<b>404 page created.</b><br/></br>';
+
         echo '<h3>Core Module Installed</h3>';
         ob_flush();
 
@@ -131,6 +136,20 @@ class InstallController extends AbstractInstallController
         $layout4->setLocations(array($main));
         $this->_em->persist($layout4);
         
+        $this->_em->flush();
+    }
+
+    public function _create404()
+    {
+        $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname('1col');
+        $main = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname('main');
+        $page = new \Core\Model\Page($layout);
+        $this->_em->persist($page);
+
+        $route = new \Core\Model\Route('404', '404');
+        $this->_em->persist($route);
+        $this->_em->persist($route->routeTo($page));
+
         $this->_em->flush();
     }
 

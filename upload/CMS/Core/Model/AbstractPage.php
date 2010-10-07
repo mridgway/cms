@@ -98,6 +98,9 @@ abstract class AbstractPage
             $block->weight = $weight;
         } else {
             $heaviestWeight = 0;
+            if (null === $this->blocks) {
+                $this->setBlocks(new ArrayCollection); // resets to an empty array collection
+            }
             foreach ($this->blocks AS $existingBlock) {
                 if ($existingBlock->location == $location && $existingBlock->weight > $heaviestWeight) {
                     $heaviestWeight = $existingBlock->weight;

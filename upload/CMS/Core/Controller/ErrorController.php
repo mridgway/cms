@@ -13,28 +13,41 @@ namespace Core\Controller;
  */
 class ErrorController extends \Zend_Controller_Action
 {
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $_em;
+
+    public function init()
+    {
+        $this->_em = \Zend_Registry::get('em');
+    }
 
     public function errorAction()
     {
         $errors = $this->_getParam('error_handler');
+
+        $this->getRequest()->setParam('exception', $errors->exception);
         
         switch ($errors->type) {
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-        
+
+                $route = $this->_em->getRepository('Core\Model\Route')->findOneBySysname('404');
+                $pageRoutes = $route->getPageRoutes();
+
+                $pageRenderer = new \Core\Service\PageRenderer($this->_em, $this->getRequest());
+                $content = $pageRenderer->renderPage($pageRoutes[0]->getPage(), $request);
+                $this->getResponse()->setBody($content);
+
                 // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
-                $this->view->message = 'Page not found';
                 break;
             default:
                 // application error
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->view->message = 'Application error';
                 break;
         }
-        
-        $this->view->exception = $errors->exception;
-        $this->view->request   = $errors->request;
     }
 
 
