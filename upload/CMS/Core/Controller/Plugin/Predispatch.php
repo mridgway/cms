@@ -20,9 +20,9 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
      */
     public function dispatchLoopStartup(\Zend_Controller_Request_Abstract $request)
     {
-        if (!$request->isDirect()) {
+        if (!$request->isDirect() && $request->getRouteId()) {
             $routeRepository = \Zend_Registry::get('doctrine')->getRepository('Core\Model\PageRoute');
-            $pageId = $routeRepository->getPageIdForRoute($request->getRouteId(), $request->getSerializedParams());
+                $pageId = $routeRepository->getPageIdForRoute($request->getRouteId(), $request->getSerializedParams());
             if (null === $pageId) {
                 throw new \Exception('Page does not exist.');
             }

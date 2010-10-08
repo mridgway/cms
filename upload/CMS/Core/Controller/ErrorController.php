@@ -20,7 +20,7 @@ class ErrorController extends \Zend_Controller_Action
 
     public function init()
     {
-        $this->_em = \Zend_Registry::get('em');
+        $this->_em = \Zend_Registry::get('doctrine');
     }
 
     public function errorAction()
@@ -32,12 +32,13 @@ class ErrorController extends \Zend_Controller_Action
         switch ($errors->type) {
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
 
+                // Render the 404 error page
                 $route = $this->_em->getRepository('Core\Model\Route')->findOneBySysname('404');
                 $pageRoutes = $route->getPageRoutes();
-
                 $pageRenderer = new \Core\Service\PageRenderer($this->_em, $this->getRequest());
-                $content = $pageRenderer->renderPage($pageRoutes[0]->getPage(), $request);
+                $content = $pageRenderer->renderPage($pageRoutes[0]->getPage(), $this->getRequest());
                 $this->getResponse()->setBody($content);
 
                 // 404 error -- controller or action not found
@@ -46,6 +47,7 @@ class ErrorController extends \Zend_Controller_Action
             default:
                 // application error
                 $this->getResponse()->setHttpResponseCode(500);
+                $this->getResponse()->setBody('500 Internal Server Error');
                 break;
         }
     }

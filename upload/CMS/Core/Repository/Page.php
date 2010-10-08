@@ -16,8 +16,8 @@ class Page extends \Doctrine\ORM\EntityRepository
     public function getPageForRender($id)
     {
         $qb = $this->createQueryBuilder('p');
-        $qb->select(' b, p, l, v, ll, cv');
-        $qb->leftJoin('p.layout', 'l');
+        $qb->select('p, b, l, v, ll, cv');
+        $qb->innerJoin('p.layout', 'l');
         $qb->leftJoin('l.locations', 'll');
         $qb->leftJoin('p.blocks', 'b');
         $qb->leftJoin('b.configValues', 'cv');

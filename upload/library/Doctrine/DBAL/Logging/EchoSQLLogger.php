@@ -49,6 +49,10 @@ class EchoSQLLogger implements SQLLogger
         if ($types) {
             var_dump($types);
         }
+
+        if (isset($_SESSION)) {
+            ob_flush();
+        }
     }
 
     /**
