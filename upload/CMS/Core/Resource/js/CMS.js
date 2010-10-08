@@ -563,9 +563,9 @@ CMS._callbackQueue = new Array();
 CMS.Use = function (scripts, callback) {
     // Translate 'Module/Namespace.ClassName' into a path
     for (i in scripts) {
-        if (scripts[i][0] != '/' && scripts[i].substr(0,5)!= 'http:') {
+        if (scripts[i][0] != '/' && scripts[i].substr(0,4)!= 'http') {
             var scriptParts = scripts[i].split('/');
-            var scriptPath = '/resources/'+scriptParts[0].toLowerCase()+'/js/'+scriptParts[1].replace(/\./g, '/')+'.js';
+            var scriptPath = '/resources/'+scriptParts[0].toLowerCase()+'/js/'+scriptParts[1].substring(4).replace(/\./g, '/')+'.js';
             scripts[i] = scriptPath;
         }
     }
@@ -669,7 +669,9 @@ CMS.alert = function (msg) {
 
 CMS.ckeditor = {
     getConfig : function () {
-        
+        CMS.Use(['Asset/CMS.AssetManager'], function (CMS) {
+            
+        });
         return {
             toolbar : [
                 ['Format', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Indent', 'Outdent'],

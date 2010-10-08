@@ -1,4 +1,4 @@
-; CKEDITOR.plugins.add( 'asset',
+CKEDITOR.plugins.add( 'asset',
 {
     init : function( editor )
     {

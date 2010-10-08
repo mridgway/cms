@@ -35,7 +35,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                     text: this.caption,
                     href: '#',
                     click: function () {
-                        $(this).parents('dl').find('dd').toggle('fast');
+                        $(this).parents('dl').find('dd').toggle(500);
                         return false;
                     }
                 })
@@ -89,7 +89,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                     html.find('.ckeditor').ckeditor(function() {
                             self.editors.push(this);
                         }, CMS.ckeditor.getConfig());
-                    html.show('fast');
+                    html.show(500);
                 }
             }, 'json');
         },
@@ -161,7 +161,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             $.post(this.postback, data, function(data) {
                 if (data.code.id <= 0) {
-                    $('#block-new-wrapper').hide('fast', function (){
+                    $('#block-new-wrapper').hide(500, function (){
                         $('#block-new-wrapper').remove();
                         self.showMenus();
                     });
@@ -187,7 +187,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
         cancelForm: function () {
             var self = this;
-            $('#block-new-wrapper').hide('fast', function (){
+            $('#block-new-wrapper').hide(500, function (){
                 self.destroyEditors();
                 $('#block-new-wrapper').remove();
                 self.showMenus();
