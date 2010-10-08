@@ -38,9 +38,9 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
 
         _setupAddBlockActions: function () {
             var self = this;
-            CMS.Use(['Core/CMS.PageAction.PageAddBlock'], function(CMS) {
+            CMS.Use(['Core/CMS.BlockAction.BlockAdd'], function(CMS) {
                 for (var i in self.locations) {
-                    var addBlockAction = new CMS.PageAction.PageAddBlock({
+                    var addBlockAction = new CMS.BlockAction.BlockAdd({
                         page: self.id,
                         location: i,
                         modal: self.modal

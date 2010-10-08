@@ -36,12 +36,14 @@ CMS.Use([], function (CMS) {
             return this.domElement;
         },
 
-        hideContainer: function () {
+        hideMenus: function () {
             $('.block-actions').children().hide(500);
+            $('.addBlockMenu').hide(500);
         },
 
-        showContainer: function () {
+        showMenus: function () {
             $('.block-actions').children().show(500);
+            $('.addBlockMenu').show(500);
         }
     });
     CMS.BlockAction.Action.createAction = function (data) {

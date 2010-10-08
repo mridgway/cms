@@ -19,7 +19,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
         showEditForm: function () {
             var self = this;
-            self.hideContainer();
+            self.hideMenus();
             $.get(self.postback, {id: this.blockId}, function(data) {
                 if (data.code.id <= 0) {
                     var block = self.domElement.parent().siblings('.block:first');
@@ -27,7 +27,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                     self.receiveHtml(data.html);
                 } else {
                     CMS.alert(data.code.message);
-                    self.showContainer();
+                    self.showMenus();
                 }
             }, 'json');
         },
@@ -92,7 +92,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                         self.editors.push(this);
                     }, CMS.ckeditor.getConfig());
                 $(this).show(500, function() {
-                    hideContainer ? self.hideContainer() : self.showContainer();
+                    hideContainer ? self.hideMenus() : self.showMenus();
                 });
             });
         },

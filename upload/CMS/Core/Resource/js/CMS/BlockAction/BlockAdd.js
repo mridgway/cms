@@ -1,5 +1,5 @@
-CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
-    CMS.PageAction.PageAddBlock = CMS.PageAction.Action.extend({
+CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
+    CMS.BlockAction.BlockAdd = CMS.BlockAction.Action.extend({
 
         page: null, // page id
         location: null, // location id
@@ -192,14 +192,6 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
                 $('#block-new-wrapper').remove();
                 self.showMenus();
             });
-        },
-
-        hideMenus: function () {
-            $('.addBlockMenu').hide('fast');
-        },
-
-        showMenus: function () {
-            $('.addBlockMenu').show('fast');
         },
 
         destroyEditors: function () {
