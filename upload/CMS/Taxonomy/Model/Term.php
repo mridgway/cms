@@ -56,6 +56,9 @@ class Term
 
     public function __construct($sysname, $name, $definition = '')
     {
+        $this->setSysname($sysname);
+        $this->setName($name);
+        $this->setDefinition($definition);
     }
 
     public function getId()
