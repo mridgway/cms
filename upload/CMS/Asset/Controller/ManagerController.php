@@ -25,8 +25,7 @@ class ManagerController extends \Zend_Controller_Action
         $frontend = new \Asset\Model\Frontend\Manager();
         
         // returns modal dialog frontend object
-        $viewModel = new \Core\Model\View('Asset', 'manager', 'manager');
-        $view = $viewModel->getInstance();
+        $view = new \Core\Model\View('Asset', 'manager/manager');
         $view->urlImageForm = new \Asset\Form\ImageFromUrl();
         $view->urlFlashForm = new \Asset\Form\FlashFromUrl();
 
@@ -35,7 +34,7 @@ class ManagerController extends \Zend_Controller_Action
         $libraryForm->setTypes($assetTypes);
         $view->libraryForm = $libraryForm;
 
-        $frontend->html = $view->render($viewModel->getFile());
+        $frontend->html = $view->render($view->getFile());
 
         $html = $this->getRequest()->getParam('html');
         if (isset($html)) {

@@ -46,7 +46,7 @@ class Asset extends \Core\Model\AbstractModel
 
     /**
      * @var string
-     * @OneToOne(targetEntity="Asset\Model\Extension")
+     * @ManyToOne(targetEntity="Asset\Model\Extension")
      * @JoinColumn(name="extension", referencedColumnName="sysname", nullable="false")
      */
     protected $extension;
