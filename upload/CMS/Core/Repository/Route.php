@@ -26,7 +26,11 @@ class Route extends \Doctrine\ORM\EntityRepository
         $results = $qb->getQuery()->execute();
         $routes = array();
         foreach ($results as $route) {
-            $routes['route-'.$route->id] = $route;
+            if ($route->sysname) {
+                $routes[$route->sysname] = $route;
+            } else {
+                $routes['route-'.$route->id] = $route;
+            }
         }
 
         return $routes;
