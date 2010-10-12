@@ -11,6 +11,10 @@ CMS.Use([], function (CMS) {
             this.domElement.jqm(data);
         },
 
+        getDomElement: function () {
+            return this.domElement;
+        },
+
         setOptions: function (options) {
             this.domElement.jqm(options);
         },

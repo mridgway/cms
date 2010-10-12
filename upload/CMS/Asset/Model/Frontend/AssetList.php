@@ -22,17 +22,17 @@ class AssetList extends \Core\Model\Frontend
         $this->data->perPage = 0;
         $this->data->currentPage = 1;
         $this->data->assets = array();
-        $template = new \Core\Model\View('asset', 'manager', 'templates/asset');
-        $this->templates['asset'] = $template->getInstance()->render($template->getFile());
-        $template = new \Core\Model\View('asset', 'manager', 'templates/insert');
-        $this->templates['Insert'] = $template->getInstance()->render($template->getFile());
+        $template = new \Core\Model\View('asset', 'manager/templates/asset');
+        $this->templates['asset'] = $template->render($template->getFile());
+        $template = new \Core\Model\View('asset', 'manager/templates/insert');
+        $this->templates['Insert'] = $template->render($template->getFile());
         $editForm = new \Asset\Form\Asset();
         $editForm->getElement('id')->setValue('{id}');
         $editForm->getElement('name')->setValue('{name}');
         $editForm->getElement('caption')->setValue('{caption}');
         $this->templates['Edit'] = $editForm->render();
-        $template = new \Core\Model\View('asset', 'manager', 'templates/delete');
-        $this->templates['Delete'] = $template->getInstance()->render($template->getFile());
+        $template = new \Core\Model\View('asset', 'manager/templates/delete');
+        $this->templates['Delete'] = $template->render($template->getFile());
     }
 
     public function success()
