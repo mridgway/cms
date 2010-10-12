@@ -95,9 +95,9 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
             data = JSON.parse(data);
             if ('undefined' !== typeof data.code && data.code.id <= 0) {
                 $('#UploadMessage').html('<div class="notification positive">Asset uploaded successfully.</div>');
-                if (null !== this.assetlist) {
-                    console.log(data);
-                    this.customSettings['uploader'].assetList.addAsset(new CMS.Asset(data.assets[0]));
+                if (null !== this.customSettings['uploader'].assetlist) {
+                    data.data.assets[0].templates = data.templates;
+                    this.customSettings['uploader'].assetList.addAsset(new CMS.Asset(data.data.assets[0]));
                 }
             } else {
                 this.customSettings['uploader'].uploadError(file, data, data);
