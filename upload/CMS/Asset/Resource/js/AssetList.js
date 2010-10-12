@@ -18,7 +18,7 @@ CMS.Use([], function (CMS) {
 
         init: function (data) {
             $.extend(this, data);
-            if (null !== data.assets) {
+            if ('undefined' !== typeof data.assets) {
                 this.addAssets(data.assets);
             }
         },
