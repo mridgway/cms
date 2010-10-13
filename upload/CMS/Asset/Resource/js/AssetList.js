@@ -31,9 +31,9 @@ CMS.Use([], function (CMS) {
 
         addAsset: function (asset) {
             this.assets.push(asset);
-            this.domElement.append($('<li>', {
-                html: asset.domElement
-            }));
+            this.domElement.prepend(asset.domElement.hide());
+            asset.setupActions();
+            asset.domElement.show(500);
         }
 
     });

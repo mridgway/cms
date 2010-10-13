@@ -24,6 +24,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         editors: [],
 
         init: function (data) {
+            this.editors = [];
             this._super(data);
             this._initDomElement();
         },

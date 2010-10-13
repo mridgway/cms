@@ -22,17 +22,13 @@ class AssetList extends \Core\Model\Frontend
         $this->data->perPage = 0;
         $this->data->currentPage = 1;
         $this->data->assets = array();
-        $template = new \Core\Model\View('Asset', 'manager/templates/asset');
-        $this->templates['asset'] = $template->render($template->getFile());
-        $template = new \Core\Model\View('Asset', 'manager/templates/insert');
-        $this->templates['Insert'] = $template->render($template->getFile());
         $editForm = new \Asset\Form\Asset();
-        $editForm->getElement('id')->setValue('{id}');
-        $editForm->getElement('name')->setValue('{name}');
-        $editForm->getElement('caption')->setValue('{caption}');
-        $this->templates['Edit'] = $editForm->render();
-        $template = new \Core\Model\View('Asset', 'manager/templates/delete');
-        $this->templates['Delete'] = $template->render($template->getFile());
+        $editForm->getElement('id')->setValue('${id}');
+        $editForm->getElement('name')->setValue('${name}');
+        $editForm->getElement('caption')->setValue('${caption}');
+        $template = new \Core\Model\View('Asset', 'manager/templates/asset');
+        $template->assign('editForm', $editForm);
+        $this->templates['asset'] = $template->render($template->getFile());
     }
 
     public function success()

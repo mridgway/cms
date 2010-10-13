@@ -9,6 +9,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         editors: [],
 
         init: function (data) {
+            this.editors = [];
             this._super(data);
             var self = this;
             this.domElement.click(function (e) {
@@ -19,6 +20,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
         showEditForm: function () {
             var self = this;
+            console.log(this.editors);
             self.hideMenus();
             $.get(self.postback, {id: this.blockId}, function(data) {
                 if (data.code.id <= 0) {
@@ -62,8 +64,8 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             $.post(this.postback, data, function(data) {
                 if (data.code.id <= 0) {
-                    self.setHtml(data.html);
                     self.destroyEditors();
+                    self.setHtml(data.html);
                 } else {
                     var html = $(data.html);
                     var form = html.is('form') ? html : html.find('form:first');
@@ -89,8 +91,8 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             block.hide(500, function () {
                 $(this).html(html);
                 $(this).find('.ckeditor').ckeditor(function() {
-                        self.editors.push(this);
-                    }, CMS.ckeditor.getConfig());
+                    self.editors.push(this);
+                }, CMS.ckeditor.getConfig());
                 $(this).show(500, function() {
                     hideContainer ? self.hideMenus() : self.showMenus();
                 });
@@ -98,10 +100,13 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         },
 
         destroyEditors: function () {
-            for (var i in this.editors) {
-                this.editors[i].destroy();
-            }
+            console.log(this.editors);
+            var self = this;
+            $.each(this.editors, function (index, value) {
+                self.editors[index].destroy();
+            });
             this.editors = [];
+            console.log(this.editors);
         }
     });
 });

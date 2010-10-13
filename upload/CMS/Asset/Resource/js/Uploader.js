@@ -96,8 +96,19 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
             if ('undefined' !== typeof data.code && data.code.id <= 0) {
                 $('#UploadMessage').html('<div class="notification positive">Asset uploaded successfully.</div>');
                 if (null !== this.customSettings['uploader'].assetlist) {
+                    var uploader = this.customSettings['uploader'];
                     data.data.assets[0].templates = data.templates;
-                    this.customSettings['uploader'].assetList.addAsset(new CMS.Asset(data.data.assets[0]));
+                    var found = false
+                    $.each(uploader.assetList.assets, function (index, value) {
+                        if (value.id == data.data.assets[0].id) {
+                            found = true;
+                            $('#asset-'+value.id, uploader.assetList.domElement).effect('pulsate', {times: 2});
+                            return;
+                        }
+                    });
+                    if (!found) {
+                        uploader.assetList.addAsset(new CMS.Asset(data.data.assets[0]));
+                    }
                 }
             } else {
                 this.customSettings['uploader'].uploadError(file, data, data);
