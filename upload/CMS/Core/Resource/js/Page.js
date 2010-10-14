@@ -6,7 +6,6 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
         actions: [],
 
         domElement: null,
-        modal: null,
 
         init: function (data) {
             $.extend(this, data);
@@ -15,7 +14,6 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
             if (this.actions.addBlock) {
                 this._setupAddBlockActions();
             }
-            this.modal = new CMS.Modal();
         },
 
         _setupLocations: function () {
@@ -42,8 +40,7 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
                 for (var i in self.locations) {
                     var addBlockAction = new CMS.BlockAction.BlockAdd({
                         page: self.id,
-                        location: i,
-                        modal: self.modal
+                        location: i
                     });
                     self.locations[i].actions.push(addBlockAction);
                     self.locations[i].domElement.append(addBlockAction.domElement);

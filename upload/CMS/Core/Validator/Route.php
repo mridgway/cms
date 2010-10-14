@@ -23,13 +23,11 @@ class Route extends \Zend_Validate_Abstract
     {
         $isValid = true;
 
-        if(!$this->correctFormat($value))
-        {
+        if(!$this->correctFormat($value)) {
             $isValid = false;
         }
 
-        if(!$this->isUnique($value))
-        {
+        if(!$this->isUnique($value)) {
             $isValid = false;
         }
 
@@ -40,8 +38,7 @@ class Route extends \Zend_Validate_Abstract
     {
         $isValid = true;
 
-        if(strlen(\preg_replace('/[\w-\/]/', '', $value)) != 0)
-        {
+        if(strlen(\preg_replace('/[\w-\/]/', '', $value)) != 0) {
             $isValid = false;
             $this->_error(self::PATH);
         }
@@ -54,8 +51,8 @@ class Route extends \Zend_Validate_Abstract
         $isValid = true;
 
         $routes = $this->_em->getRepository('Core\Model\Route')->findByTemplate($value);
-        if(count($routes) > 0)
-        {
+        if(count($routes) > 1
+                || (count($routes) == 1 && $routes[0]->template != $value)) {
             $isValid = false;
             $this->_error(self::UNIQUE);
         }

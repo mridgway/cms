@@ -83,7 +83,7 @@ abstract class AbstractModel
 
     /**
      * {@inheritdoc}
-     * 
+     *
      * @return mixed
      */
     public function getIdentifier()
