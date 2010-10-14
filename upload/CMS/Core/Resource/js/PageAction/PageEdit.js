@@ -17,7 +17,6 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
                     self.receiveHtml(data.html);
                 } else {
                     CMS.alert(data.code.message);
-                    self.modal.hide();
                 }
             }, 'json');
         },
@@ -26,9 +25,20 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
             html = $(html);
             var form = html.is('form') ? html : html.find('form:first');
             this.alterForm(form);
-            this.modal.setOptions({modal: true});
-            this.modal.setContent(html);
-            this.modal.show();
+            if (null !== this.modal) {
+                this.modal.setContent(html);
+            } else {
+                this.modal = new CMS.Modal(html, {
+                    title: 'Edit Page',
+                    modal: true,
+                    width: 450,
+                    resizable: false
+                });
+                var self = this;
+                this.modal.domElement.bind('dialogclose', function () {
+                    self.cancelForm();
+                });
+            }
         },
 
         alterForm: function (form) {
@@ -38,23 +48,13 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
                 self.submitForm($(this).serialize());
                 return false;
             });
-            // add cancel link
-            var cancelLink = $('<a>', {
-                click: function () {
-                    self.cancelForm();
-                    return false;
-                },
-                text: 'Cancel',
-                href: '#'
-            });
-            form.append(cancelLink);
         },
 
         submitForm: function (data) {
             var self = this;
             $.post(this.postback, data, function(data) {
                 if (data.code.id <= 0) {
-                    self.modal.hide();
+                    self.cancelForm();
                     window.location = '/';
                 } else {
                     self.receiveHtml(data.html);
@@ -63,7 +63,8 @@ CMS.Use(['Core/CMS.PageAction.Action'], function (CMS) {
         },
 
         cancelForm: function () {
-            this.modal.hide();
+            this.modal.destroy();
+            this.modal = null;
         }
     });
 });
