@@ -17,8 +17,6 @@ class Page extends \Core\Form\AbstractPage
     {
         parent::init();
         $this->setName('pageForm');
-        
-        $this->addElement(Factory\PageElementFactory::getPageRouteElement());
 
         $this->getElement('id')->setOrder(0);
         $this->getElement('title')->setOrder(1);
@@ -26,6 +24,9 @@ class Page extends \Core\Form\AbstractPage
         $this->getElement('description')->setOrder(3);
         $this->getElement('layout')->setOrder(4);
         $this->getElement('submit')->setOrder(5);
+
+        $currentRoute = new \Core\Form\Element\Hidden('currentRoute');
+        $this->addElement($currentRoute);
     }
 
     /**
@@ -39,5 +40,6 @@ class Page extends \Core\Form\AbstractPage
         $pageRoute = $object->getPageRoute();
         $template = (null === $pageRoute)? '' : '/' . $pageRoute->getRoute()->getTemplate();
         $this->getElement('pageRoute')->setValue($template);
+        $this->getElement('currentRoute')->setValue($pageRoute);
     }
 }

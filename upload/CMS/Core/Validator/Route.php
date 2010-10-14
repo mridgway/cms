@@ -6,8 +6,9 @@ class Route extends \Zend_Validate_Abstract
 {
     CONST PATH = 'path';
     CONST UNIQUE = 'unique';
-    
+
     private $_em;
+    private $_context;
 
     protected $_messageTemplates = array(
         self::PATH => "may only contain letters, numbers, dash(-), underscore(_), or forward slash(/)",
@@ -19,8 +20,10 @@ class Route extends \Zend_Validate_Abstract
         $this->_em = \Zend_Registry::get('doctrine');
     }
 
-    public function isValid($value)
+    public function isValid($value, $context = null)
     {
+        $this->_context = $context;
+
         $isValid = true;
 
         if(!$this->correctFormat($value))
@@ -28,7 +31,7 @@ class Route extends \Zend_Validate_Abstract
             $isValid = false;
         }
 
-        if(!$this->isUnique($value))
+        if(!$this->isUnique($value, $context))
         {
             $isValid = false;
         }
@@ -49,12 +52,21 @@ class Route extends \Zend_Validate_Abstract
         return $isValid;
     }
 
-    private function isUnique($value)
+    private function isUnique($value, $context)
     {
         $isValid = true;
 
-        $routes = $this->_em->getRepository('Core\Model\Route')->findByTemplate($value);
-        if(count($routes) > 0)
+        if(!\array_key_exists('currentRoute', $context))
+        {
+            throw new \Exception('&#60input type="hidden" name="currentRoute"&#62 is required in the form for unique route validation.');
+        }
+
+        if ($value == $context['currentRoute']) {
+            return $isValid;
+        }
+
+        $route = $this->_em->getRepository('Core\Model\Route')->findByTemplate($value);
+        if($route > 0)
         {
             $isValid = false;
             $this->_error(self::UNIQUE);

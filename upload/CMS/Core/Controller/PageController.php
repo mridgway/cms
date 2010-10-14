@@ -19,6 +19,11 @@ class PageController extends \Zend_Controller_Action
     protected $_em;
 
     /**
+     * @var \Core\Service\PageService
+     */
+    protected $_pageService;
+
+    /**
      * @var \Core\Model\Page
      */
     protected $_page;
@@ -26,14 +31,14 @@ class PageController extends \Zend_Controller_Action
     public function init()
     {
         $this->_em = \Zend_Registry::get('doctrine');
+
+        $this->_pageService = new \Core\Service\Page(\Zend_Registry::get('doctrine'));
+
         if ($this->getRequest()->getActionName() != 'add') {
             if (!$pageId = $this->getRequest()->getParam('id', false)) {
                 throw new \Exception('Page not set.');
             }
-
-            if (!$this->_page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($pageId)) {
-                throw new \Exception('Page does not exist.');
-            }
+            $this->_page = $this->_pageService->getPage($pageId);
         }
     }
 
@@ -161,34 +166,18 @@ class PageController extends \Zend_Controller_Action
         $page = null;
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
-            if ($form->isValid($data)) {
-                
-                $route = new \Core\Model\Route($data['pageRoute']);
-                $this->_em->persist($route);
-
-                $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBy(array('sysname' => $data['layout']));
-                $page = new \Core\Model\Page($layout);
-
-                unset($data['id']);
-                unset($data['layout']);
-                unset($data['pageRoute']);
-                $page->setData($data);
-                $this->_em->persist($page);
-
-                $pageRoute = $route->routeTo($page);
-                $this->_em->persist($pageRoute);
-
-                $this->_em->flush();
-
+            try {
+                $page = $this->_pageService->addPage($this->getRequest()->getParams());
                 $frontend->success();
                 $frontend->data['url'] = $page->getURL();
-            } else {
+            } catch (\Core\Exception\FormException $e) {
+                $form = $e->getForm();
+                $form->setAction('/direct/page/add');
                 $frontend->fail();
             }
         }
 
-        if($page)
-        {
+        if ($page) {
             $form->setObject($page);
         }
         $frontend->html = (string)$form;

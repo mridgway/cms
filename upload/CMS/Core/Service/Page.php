@@ -1,6 +1,7 @@
 <?php
 
 namespace Core\Service;
+use Core\Exception\FormException;
 
 /**
  * Service for pages
@@ -13,6 +14,22 @@ namespace Core\Service;
  */
 class Page extends \Core\Service\AbstractService
 {
+    /**
+     * Gets a page.
+     * 
+     * @param integer $id
+     * @return \Core\Model\Page
+     */
+    public function getPage($id)
+    {
+        $page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($id);
+        
+        if (!$page) {
+            throw new \Exception('Page does not exist.');
+        }
+
+        return $page;
+    }
 
     /**
      * Creates a page from a template replacing any placeholders with the appropriate objects.
@@ -79,5 +96,42 @@ class Page extends \Core\Service\AbstractService
             $vars = array_merge($vars, $blockService->getVariables($block));
         }
         return array_unique($vars);
+    }
+
+    /**
+     * Adds a page to the system.
+     * 
+     * @param array $data
+     * @return boolean
+     */
+    public function addPage($data)
+    {
+        \xdebug_break();
+        $form = new \Core\Form\Page();
+        $form->populate($data);
+
+        if ($form->isValid($data)) {
+
+            $route = new \Core\Model\Route($data['pageRoute']);
+            $this->_em->persist($route);
+
+            $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBy(array('sysname' => $data['layout']));
+            $page = new \Core\Model\Page($layout);
+
+            unset($data['id']);
+            unset($data['layout']);
+            unset($data['pageRoute']);
+            $page->setData($data);
+            $this->_em->persist($page);
+
+            $pageRoute = $route->routeTo($page);
+            $this->_em->persist($pageRoute);
+
+            $this->_em->flush();
+        } else {
+            throw FormException::invalidData($form);
+        }
+
+        return $page;
     }
 }

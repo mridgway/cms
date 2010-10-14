@@ -20,6 +20,7 @@ class AbstractPage extends \Core\Form\AbstractForm
         $this->addElements(array(
             Factory\PageElementFactory::getIdElement(),
             Factory\PageElementFactory::getTitleElement(),
+            Factory\PageElementFactory::getPageRouteElement(),
             Factory\PageElementFactory::getDescriptionElement(),
             Factory\PageElementFactory::getLayoutElement()
         ));
