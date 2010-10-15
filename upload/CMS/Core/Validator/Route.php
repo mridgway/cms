@@ -8,7 +8,6 @@ class Route extends \Zend_Validate_Abstract
     CONST UNIQUE = 'unique';
 
     private $_em;
-    private $_context;
 
     protected $_messageTemplates = array(
         self::PATH => "may only contain letters, numbers, dash(-), underscore(_), or forward slash(/)",
