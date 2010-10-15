@@ -9,13 +9,6 @@ CMS.Use([], function (CMS) {
 
         assets: [],
 
-        templates: {
-            Delete: '',
-            Edit: '',
-            Insert: '',
-            asset: ''
-        },
-
         init: function (data) {
             $.extend(this, data);
             if (true === this.paginate) {
@@ -26,7 +19,8 @@ CMS.Use([], function (CMS) {
                         manipulator: function (result) {
                             result.data.assets[0].templates = data.templates;
                             return new CMS.Asset(data.data.assets[0]);
-                        }
+                        },
+                        perPage: 4
                     });
                 });
             }

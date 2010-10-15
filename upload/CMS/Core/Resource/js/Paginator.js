@@ -17,22 +17,27 @@ CMS.Use([], function (CMS) {
 
         getCurrentItems: function () {
             if (null !== this.postback) {
-                this.loadCurrentPage();
                 return this.items;
             }
             var offset = this.perPage * (this.currentPage - 1);
             return this.items.slice(offset, this.perPage);
         },
 
-        loadCurrentPage: function () {
+        loadCurrentPage: function (extraData) {
             var self = this;
-            var postData = $.merge(this.extraPostData, {
+            var postData = {
                 page: this.currentPage,
                 perPage: this.perPage
-            });
-            $.get(this.postback, postData, function (results) {
-                self.items = results.data;
+            };
+            $.get(this.postback, $.merge(postData, extraData), function (results) {
+                self.itemCount = results.data.rowCount;
+                self.items = [];
+                $.each(results.data.assets, function (index, value) {
+                    self.items.push(self.responseManipulator(value));
+                });
             }, 'json');
+
+            return this;
         },
 
         setItems: function (items) {

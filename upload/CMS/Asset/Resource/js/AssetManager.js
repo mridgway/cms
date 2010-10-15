@@ -8,6 +8,7 @@ CMS.Use([], function (CMS) {
         domElement: null,
         modal: null,
         uploader: null,
+        library: null,
 
         init: function (data) {
             $.extend(this, data);
@@ -22,7 +23,7 @@ CMS.Use([], function (CMS) {
             self = this;
             $.get(this.url, function (data) {
                 if (data.code.id <= 0) {
-                    CMS.Use(['Asset/CMS.AssetList', 'Core/CMS.Modal', 'Asset/CMS.Uploader'], function () {
+                    CMS.Use(['Asset/CMS.AssetList', 'Core/CMS.Modal', 'Asset/CMS.Uploader', 'Asset/CMS.AssetLibrary'], function () {
                         self.domElement = $(data.html);
                         self.modal = new CMS.Modal(self.domElement, {
                             title: 'Asset Manager',
@@ -37,6 +38,15 @@ CMS.Use([], function (CMS) {
                             assetList: new CMS.AssetList({
                                 domElement: $('#new-file-list')
                             })
+                        });
+                        self.library = new CMS.AssetLibrary({
+                            domElement: $('#tabs-3', self.domElement),
+                            assetListElement: $('#library-list', self.domElement)
+                        });
+                        self.domElement.bind('tabsselect', function (event, ui) {
+                            if (2 == ui.index) {
+                                self.library.load();
+                            }
                         });
                         self.loaded = true;
                     });

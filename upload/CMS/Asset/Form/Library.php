@@ -58,11 +58,8 @@ class Library extends \Core\Form\AbstractForm
 
         $submit = new \Core\Form\Element\Submit('submit');
         $submit->setLabel('Search');
-        
-        $page = new \Core\Form\Element\Hidden('page');
-        $page->setValue(1);
 
-        $this->addElements(array($search, $type, $sort, $submit, $page));
+        $this->addElements(array($search, $type, $sort, $submit));
     }
 
     public function setTypes(array $types)
