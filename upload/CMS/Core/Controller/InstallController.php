@@ -16,6 +16,7 @@ class InstallController extends AbstractInstallController
     protected $moduleName = 'Core';
 
     protected $classes = array(
+
         'Core\Model\Module',
         'Core\Model\Module\Resource',
         'Core\Model\Module\BlockType',
@@ -32,6 +33,9 @@ class InstallController extends AbstractInstallController
         'Core\Model\Block',
         'Core\Model\Block\Config\Value',
         'Core\Model\Content',
+
+        'Core\Model\AbstractActivity',
+        'Core\Model\Activity\ContentActivity',
 
         'Core\Model\Content\Placeholder',
         'Core\Model\Content\Text',

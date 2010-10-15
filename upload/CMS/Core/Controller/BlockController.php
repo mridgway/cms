@@ -79,8 +79,8 @@ class BlockController extends \Zend_Controller_Action
         // dispatch to content controller
         if ($this->_block instanceof \Core\Model\Block\StaticBlock) {
             try {
-                $action = 'deleteAction';
-                $content = \Core\Service\Manager::get('Core\Service\Block')->getBlockController($this->_block);
+                \Core\Service\Manager::get('Core\Service\Block')
+                        ->dispatchBlockAction($this->_block, 'deleteAction', $this->getRequest());
             } catch (\Exception $e) {}
         }
         

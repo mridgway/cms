@@ -16,6 +16,7 @@ namespace Core\Model;
  * @property string $name;
  * @property Core\Model\Module\BlockType[] $blockTypes
  * @property Core\Model\Module\ContentType[] $contentTypes
+ * @property Core\Model\Module\ActivityType[] $activityTypes
  */
 class Module
     extends \Core\Model\AbstractModel
@@ -41,6 +42,7 @@ class Module
 
     protected $blockTypes = null;
     protected $contentTypes = null;
+    protected $activityTypes = null;
 
     public function __construct($sysname, $title='')
     {
@@ -79,6 +81,8 @@ class Module
             $this->blockTypes[] = $resource;
         } else if ($resource instanceof Core\Model\Module\ContentType) {
             $this->contentTypes[] = $resource;
+        } else if ($resource instanceof  Core\Model\Module\ActivityType) {
+            $this->activityTypes[] = $resource;
         }
         $this->resources[] = $resource;
     }
@@ -109,6 +113,19 @@ class Module
         return $this->contentTypes;
     }
 
+    public function getActivityTypes()
+    {
+        if (null === $this->activityTypes) {
+            $this->activityTypes = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($this->resources as $resource) {
+                if ($resource instanceof Module\ActivityType) {
+                    $this->activityTypes->add($resource);
+                }
+            }
+        }
+        return $this->contentTypes;
+    }
+
     public function getBlockType($name)
     {
         foreach ($this->getBlockTypes() as $resource) {
@@ -122,6 +139,16 @@ class Module
     public function getContentType($name)
     {
         foreach ($this->getContentTypes() as $resource) {
+            if ($resource->discriminator == $name) {
+                return $resource;
+            }
+        }
+        return null;
+    }
+
+    public function getActivityType($name)
+    {
+        foreach ($this->getActivityTypes() as $resource) {
             if ($resource->discriminator == $name) {
                 return $resource;
             }
@@ -143,6 +170,15 @@ class Module
         $map = array();
         foreach ($this->getContentTypes() AS $contentType) {
             $map[$contentType->discriminator] = $contentType->class;
+        }
+        return $map;
+    }
+
+    public function getActivityDiscriminatorMap()
+    {
+        $map = array();
+        foreach ($this->getActivityTypes() AS $activityType) {
+            $map[$activityType->discriminator] = $activityType->class;
         }
         return $map;
     }

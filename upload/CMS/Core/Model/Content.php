@@ -22,6 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property integer $id
  * @property \Core\Model\Block[] $blocks
  * @property \Core\Model\Page $dependentPage
+ * @property array $activities
  */
 abstract class Content 
     extends Model\AbstractModel
@@ -87,6 +88,11 @@ abstract class Content
      * @JoinColumn(name="page_id", referencedColumnName="id", nullable="true")
      */
     protected $dependentPage;
+
+    /**
+     * @OneToMany(targetEntity="Core\Model\Activity\ContentActivity", mappedBy="content", cascade={"delete"})
+     */
+    protected $activities;
 
     public function __construct()
     {

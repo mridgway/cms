@@ -83,4 +83,28 @@ abstract class AbstractStorage
         }
         return null;
     }
+
+    public function getActivityType($name)
+    {
+        foreach ($this->_modules AS $module) {
+            foreach ($module->activityTypes AS $activityType) {
+                if ($activityType->sysname == $name) {
+                    return $activityType;
+                }
+            }
+        }
+        return null;
+    }
+
+    public function getActivityTypeByClass($class)
+    {
+        foreach ($this->_modules AS $module) {
+            foreach ($module->activityTypes AS $activityType) {
+                if ($activityType->class == $class) {
+                    return $activityType;
+                }
+            }
+        }
+        return null;
+    }
 }

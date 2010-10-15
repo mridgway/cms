@@ -165,6 +165,11 @@ class Page extends \Core\Service\AbstractService
         return $page;
     }
 
+    /**
+     * Deletes a page.
+     *
+     * @param \Core\Model\Page $page
+     */
     public function deletePage($page)
     {
         $route = $page->getPageRoute()->getRoute();
