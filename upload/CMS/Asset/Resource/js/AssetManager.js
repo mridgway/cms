@@ -6,11 +6,11 @@ CMS.Use([], function (CMS) {
         url: '/direct/asset/manager/index',
 
         domElement: null,
+        modal: null,
         uploader: null,
 
         init: function (data) {
             $.extend(this, data);
-            this.modal = new CMS.Modal();
             self = this;
             this.domElement.click(function () {
                 self.open();
@@ -24,15 +24,21 @@ CMS.Use([], function (CMS) {
                 if (data.code.id <= 0) {
                     CMS.Use(['Asset/CMS.AssetList', 'Core/CMS.Modal', 'Asset/CMS.Uploader'], function () {
                         self.domElement = $(data.html);
-                        self.domElement.dialog({
+                        self.modal = new CMS.Modal(self.domElement, {
                             title: 'Asset Manager',
                             fixed: true,
                             width: 450,
                             resizable: false,
-                            modal: true,
-                            position: ['center']
-                        }).tabs();
-                        self._setupUploader();
+                            modal: true
+                        });
+                        self.domElement.tabs();
+                        self.uploader = new CMS.Uploader({
+                            domElement: $('#UploadButton'),
+                            assetList: new CMS.AssetList({
+                                domElement: $('#new-file-list')
+                            })
+                        });
+                        self.loaded = true;
                     });
                 }
             }, 'json');
@@ -51,13 +57,8 @@ CMS.Use([], function (CMS) {
         open: function () {
             if (!this.loaded) {
                 this.load();
+                return;
             }
-            
-            this.domElement.dialog('open');
-        },
-
-        close: function () {
-            this.domElement.dialog('close');
         }
 
     });
