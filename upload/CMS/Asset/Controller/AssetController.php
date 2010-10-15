@@ -132,7 +132,7 @@ class AssetController extends \Zend_Controller_Action
         $data = $this->getRequest()->getPost();
 
         /* @var $form \Asset\Form\Asset */
-        $form = Core\Service\Manager::get('Asset\Service\Asset')->getEditForm($this->_asset, $data);
+        $form = \Core\Service\Manager::get('Asset\Service\Asset')->getEditForm($this->_asset, $data);
 
         $frontend->html = $form->render();
 

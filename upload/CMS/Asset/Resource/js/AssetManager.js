@@ -1,4 +1,4 @@
-CMS.Use(['Asset/CMS.AssetList'], function (CMS) {
+CMS.Use([], function (CMS) {
 
     CMS.AssetManager = Class.extend({
 
@@ -22,7 +22,7 @@ CMS.Use(['Asset/CMS.AssetList'], function (CMS) {
             self = this;
             $.get(this.url, function (data) {
                 if (data.code.id <= 0) {
-                    CMS.Use(['Core/CMS.Modal', 'Asset/CMS.Uploader'], function () {
+                    CMS.Use(['Asset/CMS.AssetList', 'Core/CMS.Modal', 'Asset/CMS.Uploader'], function () {
                         self.domElement = $(data.html);
                         self.domElement.dialog({
                             title: 'Asset Manager',
@@ -30,18 +30,22 @@ CMS.Use(['Asset/CMS.AssetList'], function (CMS) {
                             width: 450,
                             resizable: false,
                             modal: true,
-                            position: ['center', 'center']
+                            position: ['center']
                         }).tabs();
-                        self.uploader = new CMS.Uploader({
-                            domElement: $('#UploadButton'),
-                            assetList: new CMS.AssetList({
-                                domElement: $('#new-file-list')
-                            })
-                        });
-                        self.loaded = true;
+                        self._setupUploader();
                     });
                 }
             }, 'json');
+        },
+
+        _setupUploader: function (html) {
+            self.uploader = new CMS.Uploader({
+                domElement: $('#UploadButton'),
+                assetList: new CMS.AssetList({
+                    domElement: $('#new-file-list')
+                })
+            });
+            self.loaded = true;
         },
 
         open: function () {

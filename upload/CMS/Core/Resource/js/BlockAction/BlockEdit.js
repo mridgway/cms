@@ -20,7 +20,6 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
         showEditForm: function () {
             var self = this;
-            console.log(this.editors);
             self.hideMenus();
             $.get(self.postback, {id: this.blockId}, function(data) {
                 if (data.code.id <= 0) {
@@ -100,13 +99,11 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         },
 
         destroyEditors: function () {
-            console.log(this.editors);
             var self = this;
             $.each(this.editors, function (index, value) {
                 self.editors[index].destroy();
             });
             this.editors = [];
-            console.log(this.editors);
         }
     });
 });
