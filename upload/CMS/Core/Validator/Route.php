@@ -2,6 +2,15 @@
 
 namespace Core\Validator;
 
+/**
+ * Checks database to make sure the given route does not conflict with an existing route.
+ *
+ * @package     CMS
+ * @subpackage  Core
+ * @category    Validator
+ * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
+ * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
+ */
 class Route extends \Zend_Validate_Abstract
 {
     CONST PATH = 'path';
@@ -25,7 +34,7 @@ class Route extends \Zend_Validate_Abstract
 
         $isValid = true;
 
-        if(!$this->correctFormat($value)) {
+        if(!$this->isCorrectFormat($value)) {
             $isValid = false;
         }
 
@@ -36,7 +45,7 @@ class Route extends \Zend_Validate_Abstract
         return $isValid;
     }
 
-    private function correctFormat($value)
+    private function isCorrectFormat($value)
     {
         $isValid = true;
 

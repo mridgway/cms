@@ -18,6 +18,8 @@ class Page extends \Core\Form\AbstractPage
         parent::init();
         $this->setName('pageForm');
 
+        $this->addElement(Factory\PageElementFactory::getPageRouteElement());
+
         $this->getElement('id')->setOrder(0);
         $this->getElement('title')->setOrder(1);
         $this->getElement('pageRoute')->setOrder(2);

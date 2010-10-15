@@ -106,8 +106,7 @@ class Page extends \Core\Service\AbstractService
      */
     public function addPage($data)
     {
-        $form = new \Core\Form\Page();
-        $form->populate($data);
+        $form = $this->getDefaultForm()->populate($data);
 
         if ($form->isValid($data)) {
 
@@ -133,5 +132,69 @@ class Page extends \Core\Service\AbstractService
         }
 
         return $page;
+    }
+
+    /**
+     * Applys page data edits.
+     *
+     * @param \Core\Model\Page $page
+     * @param array $data
+     * @return \Core\Model\Page $page
+     */
+    public function editPage($page, $data)
+    {
+        $form = $this->getDefaultForm()->populate($data);
+
+        // adds the current page route to the form for validation
+        $data['currentRoute'] = $this->_page->getPageRoute()->getRoute()->getTemplate();
+
+        if ($form->isValid($data)) {
+            $data = $form->getValues();
+
+            $page->setLayout($this->_em->getReference('Core\Model\Layout', $data['layout']));
+
+            unset($data['id']);
+            unset($data['layout']);
+            $page->setData($data);
+
+            $this->_em->flush();
+        } else {
+            throw FormException::invalidData($form);
+        }
+
+        return $page;
+    }
+
+    public function deletePage($page)
+    {
+        $route = $page->getPageRoute()->getRoute();
+
+        if(!$route->getSysname())
+        {
+            $this->_em->remove($route);
+        }
+
+        foreach($page->dependentContent as $content)
+        {
+            $staticBlocks = $this->_em->getRepository('Core\Model\Block\StaticBlock')->getContentStaticBlocks($content);
+            foreach($staticBlocks as $block)
+            {
+                $this->_em->remove($block);
+            }
+            $this->_em->remove($content);
+        }
+
+        $this->_em->remove($page);
+        $this->_em->flush();
+    }
+
+    /**
+     * Returns the default page form.
+     *
+     * @return \Core\Form\Page
+     */
+    public function getDefaultForm()
+    {
+        return new \Core\Form\Page();
     }
 }

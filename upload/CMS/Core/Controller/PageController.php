@@ -160,26 +160,22 @@ class PageController extends \Zend_Controller_Action
 
         $frontend = new \Core\Model\Frontend\Simple();
 
-        $form = new \Core\Form\Page();
-        $form->setAction('/direct/page/add');
+        $form = $this->_pageService->getDefaultForm();
 
         $page = null;
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
             try {
-                $page = $this->_pageService->addPage($this->getRequest()->getParams());
+                $page = $this->_pageService->addPage($this->getRequest()->getPost());
+                $form->setObject($page);
                 $frontend->success();
                 $frontend->data['url'] = $page->getURL();
             } catch (\Core\Exception\FormException $e) {
                 $form = $e->getForm();
-                $form->setAction('/direct/page/add');
                 $frontend->fail();
             }
         }
 
-        if ($page) {
-            $form->setObject($page);
-        }
+        $form->setAction('/direct/page/add');
         $frontend->html = (string)$form;
 
         $html = $this->getRequest()->getParam('html');
@@ -192,6 +188,9 @@ class PageController extends \Zend_Controller_Action
         }
     }
 
+    /**
+    * This function presents a form to edit a page or a template. Upon valid submission of the form, a new page is created.
+    */
     public function editAction()
     {
         if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
@@ -200,28 +199,21 @@ class PageController extends \Zend_Controller_Action
 
         $frontend = new \Core\Model\Frontend\Simple();
 
-        $form = ($this->_page instanceof \Core\Model\Page) ? new \Core\Form\Page()
-                                                          : new \Core\Form\AbstractPage();
-        $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
+        $form = $this->_pageService->getDefaultForm();
+        $form->setObject($this->_page);
 
         if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            $data['currentRoute'] = $this->_page->getPageRoute()->getRoute()->getTemplate();
-            if ($form->isValid($data)) {
-                unset($data['id']);
-
-                $this->_page->setLayout($this->_em->getReference('Core\Model\Layout', $data['layout']));
-                unset($data['layout']);
-
-                $this->_page->setData($data);
-                $this->_em->flush();
+            try {
+                $this->_pageService->editPage($this->_page, $this->getRequest()->getPost());
+                $form->setObject($this->_page);
                 $frontend->success();
-            } else {
+            } catch(\Core\Exception\FormException $e) {
+                $form = $e->getForm();
                 $frontend->fail();
             }
         }
 
-        $form->setObject($this->_page);
+        $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
         $frontend->html = (string)$form;
 
         $html = $this->getRequest()->getParam('html');
@@ -299,26 +291,7 @@ class PageController extends \Zend_Controller_Action
             throw new \Exception('Not allowed to delete page.');
         }
 
-        $page = $this->_page;
-        $route = $page->getPageRoute()->getRoute();
-
-        if(!$route->getSysname())
-        {
-            $this->_em->remove($route);
-        }
-
-        foreach($page->dependentContent as $content)
-        {
-            $staticBlocks = $this->_em->getRepository('Core\Model\Block\StaticBlock')->getContentStaticBlocks($content);
-            foreach($staticBlocks as $block)
-            {
-                $this->_em->remove($block);
-            }
-            $this->_em->remove($content);
-        }
-
-        $this->_em->remove($page);
-        $this->_em->flush();
+        $this->_pageService->deletePage($this->_page);
 
         echo new \Core\Model\Frontend\Simple(0, 'Page deleted successfully.');
     }
