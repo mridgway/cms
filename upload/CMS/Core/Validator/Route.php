@@ -26,13 +26,11 @@ class Route extends \Zend_Validate_Abstract
 
         $isValid = true;
 
-        if(!$this->correctFormat($value))
-        {
+        if(!$this->correctFormat($value)) {
             $isValid = false;
         }
 
-        if(!$this->isUnique($value, $context))
-        {
+        if(!$this->isUnique($value, $context)) {
             $isValid = false;
         }
 
@@ -43,8 +41,7 @@ class Route extends \Zend_Validate_Abstract
     {
         $isValid = true;
 
-        if(strlen(\preg_replace('/[\w-\/]/', '', $value)) != 0)
-        {
+        if(strlen(\preg_replace('/[\w-\/]/', '', $value)) != 0) {
             $isValid = false;
             $this->_error(self::PATH);
         }
@@ -56,18 +53,14 @@ class Route extends \Zend_Validate_Abstract
     {
         $isValid = true;
 
-        if(!\array_key_exists('currentRoute', $context))
-        {
-            throw new \Exception('&#60input type="hidden" name="currentRoute"&#62 is required in the form for unique route validation.');
-        }
-
-        if ($value == $context['currentRoute']) {
-            return $isValid;
+        if (\array_key_exists('currentRoute', $context)) {
+            if ($value == $context['currentRoute']) {
+                return $isValid;
+            }
         }
 
         $route = $this->_em->getRepository('Core\Model\Route')->findByTemplate($value);
-        if($route > 0)
-        {
+        if (count($route) > 0) {
             $isValid = false;
             $this->_error(self::UNIQUE);
         }

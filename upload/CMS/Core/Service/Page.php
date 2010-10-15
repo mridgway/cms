@@ -106,12 +106,12 @@ class Page extends \Core\Service\AbstractService
      */
     public function addPage($data)
     {
-        \xdebug_break();
         $form = new \Core\Form\Page();
         $form->populate($data);
 
         if ($form->isValid($data)) {
 
+            $data = $form->getValues();
             $route = new \Core\Model\Route($data['pageRoute']);
             $this->_em->persist($route);
 

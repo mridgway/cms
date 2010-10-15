@@ -206,6 +206,7 @@ class PageController extends \Zend_Controller_Action
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
+            $data['currentRoute'] = $this->_page->getPageRoute()->getRoute()->getTemplate();
             if ($form->isValid($data)) {
                 unset($data['id']);
 
