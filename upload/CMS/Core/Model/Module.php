@@ -123,7 +123,7 @@ class Module
                 }
             }
         }
-        return $this->contentTypes;
+        return $this->activityTypes;
     }
 
     public function getBlockType($name)

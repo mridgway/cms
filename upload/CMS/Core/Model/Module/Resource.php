@@ -17,7 +17,8 @@ namespace Core\Model\Module;
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({
  *      "ContentType"="Core\Model\Module\ContentType",
- *      "BlockType"="Core\Model\Module\BlockType"
+ *      "BlockType"="Core\Model\Module\BlockType",
+ *      "ActivityType"="Core\Model\Module\ActivityType"
  * })
  * @property int $id
  */

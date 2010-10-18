@@ -34,6 +34,13 @@ class Module extends \Core\Service\AbstractService
             }
         }
 
+        if ($config->activityTypes) {
+            foreach ($config->activityTypes AS $disc => $type) {
+                $activityType = new \Core\Model\Module\ActivityType($type->name, $disc, $type->class);
+                $module->addResource($activityType);
+            }
+        }
+
         return $module;
     }
 }

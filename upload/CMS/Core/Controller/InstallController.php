@@ -17,8 +17,12 @@ class InstallController extends AbstractInstallController
 
     protected $classes = array(
 
+        'Core\Model\AbstractActivity',
+        'Core\Model\Activity\ContentActivity',
+
         'Core\Model\Module',
         'Core\Model\Module\Resource',
+        'Core\Model\Module\ActivityType',
         'Core\Model\Module\BlockType',
         'Core\Model\Module\ContentType',
         'Core\Model\Module\View',
@@ -33,9 +37,6 @@ class InstallController extends AbstractInstallController
         'Core\Model\Block',
         'Core\Model\Block\Config\Value',
         'Core\Model\Content',
-
-        'Core\Model\AbstractActivity',
-        'Core\Model\Activity\ContentActivity',
 
         'Core\Model\Content\Placeholder',
         'Core\Model\Content\Text',
