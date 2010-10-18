@@ -84,7 +84,7 @@ class Page extends \Core\Service\AbstractService
                 }
             }
         }
-        
+
         return $page;
     }
 

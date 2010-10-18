@@ -19,6 +19,7 @@ class InstallController extends AbstractInstallController
 
         'Core\Model\AbstractActivity',
         'Core\Model\Activity\ContentActivity',
+        'Core\Model\Activity\PageActivity',
 
         'Core\Model\Module',
         'Core\Model\Module\Resource',

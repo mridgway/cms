@@ -25,4 +25,9 @@ class AbstractActivity extends AbstractModel
      * @Column(type="datetime")
      */
     protected $dateCreated;
+
+    public function __construct()
+    {
+        $this->dateCreated = new \DateTime();
+    }
 }
