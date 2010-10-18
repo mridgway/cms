@@ -1,10 +1,35 @@
-<li id="asset-{id}">
-    <img src="{thumb}" alt="" />
-    <h3 class="name">{name}</h3>
-    <h4 class="type">{type}</h4>
-    <h4 class="upload_date">{upload_date}</h4>
-    <ul id="actions">
-        {actions}
-    </ul>
-    <div class="action-box"></div>
+<li class="asset asset-${id}">
+    <div class="thumb">
+        <img src="${thumb}" alt="${name}" />
+    </div>
+    <h3 class="name">${name}</h3>
+    <p class="upload_date">${upload_date}</p>
+    <div class="actions actions-${id}">
+        <ul>
+        {{each(i, action) actions}}
+            <li><a class="asset-action ${action}" href="#${idPrefix}${action}-${id}">${action}</a></li>
+        {{/each}}
+        </ul>
+        <div id="${idPrefix}Insert-${id}" class="asset-insert Insert-${id}">
+            <form>
+                <label for="size">Choose a size:</label>
+                <select class='size' name="size">
+                    {{each(i, size) sizes}}
+                        <option value="${size.sysname}">${size.title}</option>
+                    {{/each}}
+                </select>
+
+                <input type="submit" name="submit" class="insert" id="submit" value="Insert" class="button">
+            </form>
+        </div>
+        <div id="${idPrefix}Edit-${id}" class="asset-edit Edit-${id}">
+            <?php echo $this->editForm; ?>
+        </div>
+        <div id="${idPrefix}Delete-${id}" class="asset-delete Delete-${id}">
+            <form action="/direct/asset/asset/delete?id=${id}&confirm=1">
+                Are you sure you want to delete this image?<br/>
+                <input class="submit" type="submit" value="Yes"/> <input class="cancel" type="submit" value="No"/>
+            </form>
+        </div>
+    </div>
 </li>

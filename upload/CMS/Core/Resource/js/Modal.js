@@ -3,12 +3,20 @@ CMS.Use([], function (CMS) {
 
         domElement: null,
 
-        init: function (data) {
-            this.domElement = $('<div>', {
-                class: 'jqmWindow'
-            });
-            $('body').append(this.domElement);
-            this.domElement.jqm(data);
+        init: function (element, options) {
+            options = $.extend({
+                destroyOnClose: true,
+                modal: true,
+                width: 450,
+                resizable: false
+            }, options);
+            this.domElement = $(element).dialog(options);
+            if (options.destroyOnClose) {
+                this.domElement.bind('dialogclose', function () {
+                    $(this).dialog('destroy');
+                    $(this).remove();
+                });
+            }
         },
 
         getDomElement: function () {
@@ -16,7 +24,7 @@ CMS.Use([], function (CMS) {
         },
 
         setOptions: function (options) {
-            this.domElement.jqm(options);
+            this.domElement.dialog('options', options);
         },
 
         setContent: function (content) {
@@ -24,21 +32,23 @@ CMS.Use([], function (CMS) {
         },
 
         showLoading: function () {
-            this.show();
+            this.open();
             this.setContent('<h1>Loading...</h1>');
         },
 
         show: function (options) {
             if (options) {
                 this.setOptions(options);
-                this.domElement.jqmShow();
-            } else {
-                this.domElement.jqmShow();
             }
+            this.domElement.dialog('open');
         },
 
         hide: function () {
-            this.domElement.jqmHide();
+            this.domElement.dialog('close');
+        },
+
+        destroy: function () {
+            this.domElement.dialog('destroy');
         }
 
     });

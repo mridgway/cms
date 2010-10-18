@@ -56,3 +56,34 @@ ul.block-actions {
         display: block;
 
     }
+
+
+.asset-list {
+    margin: .2em;
+}
+
+    .asset-list .asset {
+        list-style: none;
+        padding: .5em;
+        margin: .5em 0;
+        border: 1px solid #ddd;
+        background-color: #eee;
+    }
+
+    .asset-list .asset .thumb {
+        float: left;
+        margin-right: .3em;
+        width: 100px;
+    }
+
+    .asset-list .asset h3.name {
+        margin: 0;
+    }
+
+    .asset-list .asset p.upload_date {
+        margin: 0;
+    }
+
+    .asset-list .asset .actions {
+        clear: both;
+    }
