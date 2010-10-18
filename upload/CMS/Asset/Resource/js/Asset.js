@@ -15,6 +15,7 @@ CMS.Use([], function (CMS) {
 
         url_template: null,
         templates: {},
+        idPrefix: '',
 
         onDelete: $.noop,
 
@@ -25,7 +26,7 @@ CMS.Use([], function (CMS) {
 
         setupActions: function () {
             var self = this;
-            this.actionTabs = $('#actions-' + this.id, this.domElement).tabs({
+            this.actionTabs = $('.actions-' + this.id, this.domElement).tabs({
                 collapsible: true,
                 selected: -1
             });

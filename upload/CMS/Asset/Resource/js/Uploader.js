@@ -97,7 +97,7 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
                 $('#UploadMessage').html('<div class="notification positive">Asset uploaded successfully.</div>');
                 if (null !== this.customSettings['uploader'].assetlist) {
                     var uploader = this.customSettings['uploader'];
-                    data.data.assets[0].templates = data.templates;
+                    data.data.assets[0].idPrefix = 'new-';
                     uploader.assetList.addAsset(new CMS.Asset(data.data.assets[0]));
                 }
             } else {

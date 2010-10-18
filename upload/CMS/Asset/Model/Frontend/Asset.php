@@ -23,6 +23,13 @@ class Asset extends \stdClass
         $this->type = $asset->getMimeType()->getType()->getSysname();
         $this->upload_date = $asset->getUploadDate()->format('F j, Y, g:i a');
         $this->sizes = array();
+        $editForm = new \Asset\Form\Asset();
+        $editForm->getElement('id')->setValue('${id}');
+        $editForm->getElement('name')->setValue('${name}');
+        $editForm->getElement('caption')->setValue('${caption}');
+        $template = new \Core\Model\View('Asset', 'manager/templates/asset');
+        $template->assign('editForm', $editForm);
+        $this->templates['asset'] = $template->render($template->getFile());
         if ($asset->getMimeType()->getType()->getSysname() == 'image') {
             foreach($asset->getGroup()->getSizes() AS $size)
             {

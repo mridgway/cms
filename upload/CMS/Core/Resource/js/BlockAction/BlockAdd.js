@@ -99,9 +99,6 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             $.get(this.postback, sendData, function (data) {
                 if (data.code.id <= 0) {
-                    try {
-                        self.modal.show();
-                    } catch (e) {}
                     var html = $(data.html);
                     html.find('a').click(function () {
                         $.get($(this).attr('href'), function (data) {
@@ -111,7 +108,9 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                         }, 'json');
                         return false;
                     });
-                    self.modal.setContent(html);
+                    self.modal = new CMS.Modal(html, {
+                        title: 'Add Shared Block'
+                    });
                 }
             }, 'json')
         },
@@ -120,9 +119,6 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             $.get(this.postback, sendData, function (data) {
                 if (data.code.id <= 0) {
-                    try {
-                        self.modal.show();
-                    } catch (e) {}
                     var html = $(data.html);
                     html.find('a').click(function () {
                         $.get($(this).attr('href'), function (data) {
@@ -132,7 +128,9 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                         }, 'json');
                         return false;
                     });
-                    self.modal.setContent(html);
+                    self.modal = new CMS.Modal(html, {
+                        title: 'Add Dynamic Block'
+                    });
                 }
             }, 'json')
         },

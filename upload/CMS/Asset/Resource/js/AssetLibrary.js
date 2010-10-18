@@ -20,8 +20,11 @@ CMS.Use(['Asset/CMS.AssetList'], function (CMS) {
         },
 
         _setupForm: function () {
+            var self = this;
             this.form = $('form', this.domElement);
             this.form.submit(function () {
+                self.assetList.paginator.setPage(1);
+                self.load();
                 return false;
             });
         },

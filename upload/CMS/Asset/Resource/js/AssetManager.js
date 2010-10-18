@@ -20,7 +20,7 @@ CMS.Use([], function (CMS) {
         },
 
         load: function () {
-            self = this;
+            var self = this;
             $.get(this.url, function (data) {
                 if (data.code.id <= 0) {
                     CMS.Use(['Asset/CMS.AssetList', 'Core/CMS.Modal', 'Asset/CMS.Uploader', 'Asset/CMS.AssetLibrary'], function () {
@@ -30,7 +30,9 @@ CMS.Use([], function (CMS) {
                             fixed: true,
                             width: 450,
                             resizable: false,
-                            modal: true
+                            destroyOnClose: false,
+                            modal: true,
+                            autoOpen: false
                         });
                         self.domElement.tabs();
                         self.uploader = new CMS.Uploader({
@@ -44,10 +46,11 @@ CMS.Use([], function (CMS) {
                             assetListElement: $('#library-list', self.domElement)
                         });
                         self.domElement.bind('tabsselect', function (event, ui) {
-                            if (2 == ui.index) {
+                            if (2 == ui.index && $(ui.panel).is('.asset-tab')) {
                                 self.library.load();
                             }
                         });
+                        self.modal.show();
                         self.loaded = true;
                     });
                 }
@@ -68,6 +71,8 @@ CMS.Use([], function (CMS) {
             if (!this.loaded) {
                 this.load();
                 return;
+            } else {
+                this.modal.show();
             }
         }
 

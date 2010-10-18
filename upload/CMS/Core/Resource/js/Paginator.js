@@ -3,13 +3,15 @@ CMS.Use([], function (CMS) {
     CMS.Paginator = Class.extend({
 
         postback: null,
-        responseManipulator: null,
+        responseManipulator: $.noop,
         extraPostData: null,
 
         items: [],
         itemCount: 0,
         currentPage: 1,
         perPage: 0,
+
+        postLoad: $.noop,
 
         init: function (data) {
             $.extend(this, data);
@@ -29,12 +31,16 @@ CMS.Use([], function (CMS) {
                 page: this.currentPage,
                 perPage: this.perPage
             };
-            $.get(this.postback, $.merge(postData, extraData), function (results) {
+            if (extraData) {
+                $.extend(postData, extraData);
+            }
+            $.get(this.postback, postData, function (results) {
                 self.itemCount = results.data.rowCount;
                 self.items = [];
                 $.each(results.data.assets, function (index, value) {
                     self.items.push(self.responseManipulator(value));
                 });
+                self.postLoad(self);
             }, 'json');
 
             return this;

@@ -54,7 +54,9 @@ class Asset extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('a');
         if ($typeName != 'all') {
-            $qb->andWhere('a.mimeType.type.sysname = :type');
+            $qb->innerJoin('a.mimeType', 'mt');
+            $qb->innerJoin('mt.type', 't');
+            $qb->andWhere('t.sysname = :type');
             $qb->setParameter('type', $typeName);
         }
         if ($searchTerm != '') {
@@ -82,7 +84,9 @@ class Asset extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('a');
         $qb->select('count(a.id)');
         if ($typeName != 'all') {
-            $qb->andWhere('a.mimeType.type.sysname = :type');
+            $qb->innerJoin('a.mimeType', 'mt');
+            $qb->innerJoin('mt.type', 't');
+            $qb->andWhere('t.sysname = :type');
             $qb->setParameter('type', $typeName);
         }
         if ($searchTerm != '') {
