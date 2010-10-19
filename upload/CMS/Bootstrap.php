@@ -7,6 +7,11 @@
  * @category    Bootstrap
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
+ *
+ * User registry: Zend_Auth
+ * User registery: Zend_Acl
+ * Doctrine
+ *
  */
 class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 {
@@ -15,22 +20,39 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         \Zend_Loader_Autoloader::getInstance()->registerNamespace('Core');
     }
 
+    protected function setServiceContainer($options)
+    {
+        require_once $options['autoloaderpath'];
+        sfServiceContainerAutoloader::register();
+        $sc = new \sfServiceContainerBuilder();
+        $this->serviceContainer = $sc;
+        
+        $sc->setParameter('APPLICATION_ROOT', APPLICATION_ROOT);
+    }
+
+    protected function _initServiceContainer()
+    {
+        $this->serviceContainer->setService('pdoConnection', $this->getPluginResource('db')->getDbAdapter()->getConnection());
+        $this->serviceContainer->setService('cache', $this->_getCache());
+
+        $this->bootstrap('FrontController');
+        $files = array(APPLICATION_ROOT . '/CMS/container.xml');
+        $containerDirs = \Zend_Controller_Front::getInstance()->getDispatcher()->getControllerDirectory();
+        foreach ($containerDirs AS $containerDir) {
+            if ($containerPath = realpath($containerDir . '/../container.xml')) {
+                $files[] = $containerPath;
+            }
+        }
+
+        $loader = new \sfServiceContainerLoaderFileXml($this->serviceContainer);
+        $loader->load($files);
+
+        $dumper = new \sfServiceContainerDumperXml($this->serviceContainer);
+    }
+
     public function _initDoctrine()
     {
-        $cache = $this->_getCache();
-        $config = new \Doctrine\ORM\Configuration();
-        $config->setMetadataCacheImpl($cache);
-        $config->setQueryCacheImpl($cache);
-        $driverImpl = $config->newDefaultAnnotationDriver(array());
-        $config->setMetadataDriverImpl($driverImpl);
-        //$config->setSqlLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger);
-        $config->setSqlLogger(new \ZendX\Doctrine2\FirebugProfiler());
-        $config->setProxyDir(APPLICATION_ROOT . '/data/proxies');
-        $config->setProxyNamespace('Model\Proxy');
-        $connectionOptions = array(
-            'pdo' => $this->getPluginResource('db')->getDbAdapter()->getConnection()
-        );
-        $em = \Doctrine\ORM\EntityManager::create($connectionOptions, $config);
+        $em = $this->serviceContainer->getService('doctrine');
 
         \Zend_Registry::getInstance()->set('doctrine', $em);
 
