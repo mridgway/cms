@@ -48,11 +48,14 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $loader->load($files);
 
         $dumper = new \sfServiceContainerDumperXml($this->serviceContainer);
+
+        return $this->serviceContainer;
     }
 
     public function _initDoctrine()
     {
-        $em = $this->serviceContainer->getService('doctrine');
+        $this->bootstrap('serviceContainer');
+        $em = $this->getResource('serviceContainer')->getService('doctrine');
 
         \Zend_Registry::getInstance()->set('doctrine', $em);
 
