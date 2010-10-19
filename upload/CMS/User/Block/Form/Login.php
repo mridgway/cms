@@ -34,7 +34,7 @@ class Login extends \Core\Model\Block\Dynamic\Form
             $auth  = \Zend_Auth::getInstance();
             $authAdapter = new \Core\Auth\Adapter\Identity($this->getEntityManager());
             $authAdapter->setIdentity($data['identity'])
-                        ->setPassHash($data['passHash']);
+                        ->setPassword($data['password']);
 
             $authResult = $authAdapter->authenticate();
             if (!$authResult->isValid()) {

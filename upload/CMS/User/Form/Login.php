@@ -17,7 +17,7 @@ class Login extends \Core\Form\AbstractForm
     {
         $this->addElements(array(
             Factory\IdentityElementFactory::getIdentityElement(),
-            Factory\IdentityElementFactory::getPassHashElement()
+            Factory\IdentityElementFactory::getPasswordElement()
         ));
 
         $submit = new \Core\Form\Element\Submit('submit');
