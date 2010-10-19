@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony-project.org/2.0/container">
+    <services>
+        <service id="doctrineConfig" class="Doctrine\ORM\Configuration">
+            <call method="setMetadataCacheImpl">
+                <argument type="service" id="cache" />
+            </call>
+            <call method="setQueryCacheImpl">
+                <argument type="service" id="cache" />
+            </call>
+            <call method="setMetadataDriverImpl">
+                <argument type="service" id="annotationDriver" />
+            </call>
+            <call method="setSqlLogger">
+                <argument type="service" id="firebugSqlLogger" />
+            </call>
+            <call method="setProxyDir">
+                <argument>%APPLICATION_ROOT%/data/proxies</argument>
+            </call>
+            <call method="setProxyNamespace">
+                <argument>Model\Proxy</argument>
+            </call>
+        </service>
+        <service id="annotationDriver" class="Doctrine\ORM\Mapping\Driver\AnnotationDriver">
+            <argument type="service" id="annotationReader" />
+        </service>
+        <service id="annotationReader" class="Doctrine\Common\Annotations\AnnotationReader">
+            <call method="setDefaultAnnotationNamespace">
+                <argument>Doctrine\ORM\Mapping\</argument>
+            </call>
+        </service>
+        <service id="sqlLogger" class="Doctrine\DBAL\Logging\EchoSQLLogger" />
+        <service id="firebugSqlLogger" class="ZendX\Doctrine2\FirebugProfiler" />
+        <service id="doctrine" class="Doctrine\ORM\EntityManager" constructor="create">
+            <argument type="collection">
+                <argument key="pdo" type="service" id="pdoConnection" />
+            </argument>
+            <argument type="service" id="doctrineConfig" />
+        </service>
+    </services>
+</container>
