@@ -28,9 +28,9 @@ class IdentityElementFactory
         return $identity;
     }
 
-    public static function getPassHashElement()
+    public static function getPasswordElement()
     {
-        $passHash = new \Core\Form\Element\Password('passHash');
+        $passHash = new \Core\Form\Element\Password('password');
         $passHash->setLabel('Password:');
         $passHash->setAllowEmpty(false);
         $passHash->addValidator(new \Zend_Validate_StringLength(1, 128));

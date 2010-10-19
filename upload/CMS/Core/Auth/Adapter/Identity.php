@@ -30,7 +30,7 @@ class Identity implements \Zend_Auth_Adapter_Interface
     /**
      * @var string
      */
-    protected $_passHash = null;
+    protected $_password = null;
 
     /**
      * @param \Doctrine\ORM\EntityManager $em
@@ -61,7 +61,8 @@ class Identity implements \Zend_Auth_Adapter_Interface
         }
 
         // Identity requires password, check it
-        if ($this->_passHash != $result->getPassHash()) {
+        $hasher = new \Core\Auth\Hasher();
+        if (!$hasher->checkHash($this->_password, $result->getPassHash())) {
             return new \Zend_Auth_Result(\Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, null, array(self::AUTH_FAIL));
         }
 
@@ -86,26 +87,7 @@ class Identity implements \Zend_Auth_Adapter_Interface
      */
     public function setPassword($password)
     {
-        $this->setPassHash(self::hash($password));
+        $this->_password = $password;
         return $this;
-    }
-
-    /**
-     * @param string $passHash
-     * @return Identity
-     */
-    public function setPassHash($passHash)
-    {
-        $this->_passHash = $passHash;
-        return $this;
-    }
-
-    /**
-     * @param string $value
-     * @return string
-     */
-    public static function hash($value)
-    {
-        return hash_hmac('sha256', $value, substr($value, 0, $this->_keyLength));
     }
 }

@@ -80,16 +80,28 @@ class Identity extends \Core\Model\AbstractModel
     }
 
     /**
+     * Hashes a password and sets it as the pass hash
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $hasher = new \Core\Auth\Hasher();
+        $this->setPassHash($hasher->hash($password));
+        return $this;
+    }
+
+    /**
      *
      * @param string $passHash
      * @return Identity
      */
-    public function setPassHash($passHash = null)
+    protected function setPassHash($passHash = null)
     {
         if (null !== $passHash) {
-            $validator = new \Zend_Validate_StringLength(1, 128);
+            $validator = new \Zend_Validate_StringLength(32);
             if (!$validator->isValid($passHash)) {
-                throw new \Core\Model\Exception('Password must be between 1 and 128 charactrs');
+                throw new \Core\Model\Exception('PassHash is not properly hashed');
             }
         }
         $this->passHash = $passHash;

@@ -39,9 +39,17 @@ class IdentityTest extends \User\UserModuleTestCase {
         $this->identity->setType('');
     }
 
-    public function testSetPassHash() {
-        $this->identity->setPassHash('ssfdfsafsaf');
-        $this->assertEquals('ssfdfsafsaf', $this->identity->getPassHash());
+    public function testSetPassword() {
+        $hasher = new \Core\Auth\Hasher();
+        $hash = $hasher->hash('test123');
+        
+        $this->identity->setPassword('test123');
+        $this->assertEquals(strlen($hash), strlen($this->identity->getPassHash()));
+    }
+
+    public function testSetPasswordFailsOnEmpty() {
+        $this->setExpectedException('Core\Model\Exception');
+        $this->identity->setType('');
     }
 
     public function testSetPassHashFailsOnEmpty() {

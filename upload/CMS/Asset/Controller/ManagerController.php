@@ -25,8 +25,7 @@ class ManagerController extends \Zend_Controller_Action
         $frontend = new \Asset\Model\Frontend\Manager();
         
         // returns modal dialog frontend object
-        $viewModel = new \Core\Model\View('Asset', 'manager', 'manager');
-        $view = $viewModel->getInstance();
+        $view = new \Core\Model\View('Asset', 'manager/manager');
         $view->urlImageForm = new \Asset\Form\ImageFromUrl();
         $view->urlFlashForm = new \Asset\Form\FlashFromUrl();
 
@@ -35,7 +34,7 @@ class ManagerController extends \Zend_Controller_Action
         $libraryForm->setTypes($assetTypes);
         $view->libraryForm = $libraryForm;
 
-        $frontend->html = $view->render($viewModel->getFile());
+        $frontend->html = $view->render($view->getFile());
 
         $html = $this->getRequest()->getParam('html');
         if (isset($html)) {
@@ -81,20 +80,20 @@ class ManagerController extends \Zend_Controller_Action
 
         // make sure file doesn't already exist in database
         try {
-            $this->_em->getRepository('Asset\Model\Asset')->getAssetByGroupNameAndHash($groupName, $fileHash);
-            header("HTTP/1.1 409 Conflict");
-            $frontend = new \Asset\Model\Frontend\FailedUpload();
-            die($frontend->failFileExists());
+            $existingAsset = $this->_em->getRepository('Asset\Model\Asset')->getAssetByGroupNameAndHash($groupName, $fileHash);
+            $frontend = new \Asset\Model\Frontend\AssetList();
+            $frontend->addAsset($existingAsset);
+            die($frontend->success());
         } catch (\Doctrine\ORM\NoResultException $e) {}
         
         try {
             $adapter->receive();
         } catch (\Exception $e) {
+            // @todo error checking
             // this file does not exist in the database but could linger in the file system
             // (possibly from a previous asset that was deleted).  we still need to add this into
             // the database if this is the case, but we should also throw an error if the problem
             // is a permission error or something else
-            // @todo error checking
         }
         $this->_em->persist($asset);
         $this->_em->flush();

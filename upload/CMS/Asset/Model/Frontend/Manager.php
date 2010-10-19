@@ -19,8 +19,6 @@ class Manager extends \Core\Model\Frontend
      */
     public function success()
     {
-        $template = new \Core\Model\View('asset', 'manager', 'templates/asset');
-        $this->templates['asset'] = $template->getInstance()->render($template->getFile());
 
         return $this;
     }

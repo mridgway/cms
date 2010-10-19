@@ -1,62 +1,58 @@
-<div id="assetmanager">
+<div id="assetmanager" class="ui-tabs">
     <ul class="navigation">
-        <li><a href="#new">New Files</a></li>
-        <li><a href="#url">From URL</a></li>
-        <li><a href="#library">From Media Library</a></li>
+        <li><a href="#tabs-1">New Files</a></li>
+        <li><a href="#tabs-2">From URL</a></li>
+        <li><a href="#tabs-3">From Media Library</a></li>
     </ul>
 
-    <div>
-        <!-- start UPLOAD FILE TAB -->
-        <div class="asset-tab">
-            <h2>Insert New File</h2>
-            <p>Choose a file to upload to the Media Library</p>
-            <div>
-                <!-- CONTENT -->
-                <span id="UploadButton"><?php echo new \Asset\Form\Upload; ?></span>
-                <div id="UploadMessage"></div>
-            </div>
-            <ul id="new-file-list" class="asset-list"></ul>
+    <!-- start UPLOAD FILE TAB -->
+    <div id="tabs-1" class="asset-tab">
+        <h2>Insert New File</h2>
+        <p>Choose a file to upload to the Media Library</p>
+        <div>
+            <!-- CONTENT -->
+            <span id="UploadButton"><?php echo new \Asset\Form\Upload; ?></span>
+            <div id="UploadMessage"></div>
         </div>
-        <!-- end UPLOAD FILE TAB -->
-
-        <!-- start URL TAB -->
-        <div class="asset-tab">
-            <h2>Insert File from URL</h2>
-            <p>...</p>
-            <div id="from-url">
-                <?php /*
-                <ul class="navigation">
-                    <li class="tab selected"><a href="#" id="from-url-image-link">Image</a></li>
-                    <li class="tab"><a href="#" id="from-url-flash-link">Flash</a></li>
-                </ul>
-                
-                <div>
-                    <!-- CONTENT -->
-                    <div id="from-url-image" class="tab-content">
-                 *
-                 */ ?>
-                        <?php echo $this->urlImageForm; ?>
-                <?php /*
-                    </div>
-                    <div id="from-url-flash" class="tab-content">
-                        <?php echo $this->urlFlashForm; ?>
-                    </div>
-                </div> */ ?>
-            </div>
-        </div>
-        <!-- end URL TAB -->
-
-        <!-- start LIBRARY TAB -->
-        <div class="asset-tab">
-            <h2>Insert File from Media Library</h2>
-            <p>...</p>
-            <div>
-                <!-- CONTENT -->
-                <?php echo $this->libraryForm; ?>
-                <ul id="library-list" class="asset-list"></ul>
-                <div id="library-pagination"></div>
-            </div>
-        </div>
-        <!-- end LIBRARY TAB -->
+        <ul id="new-file-list" class="asset-list"></ul>
     </div>
+    <!-- end UPLOAD FILE TAB -->
+
+    <!-- start URL TAB -->
+    <div id="tabs-2" class="asset-tab">
+        <h2>Insert File from URL</h2>
+        <div id="from-url">
+            <?php /*
+            <ul class="navigation">
+                <li class="tab selected"><a href="#" id="from-url-image-link">Image</a></li>
+                <li class="tab"><a href="#" id="from-url-flash-link">Flash</a></li>
+            </ul>
+
+            <div>
+                <!-- CONTENT -->
+                <div id="from-url-image" class="tab-content">
+             *
+             */ ?>
+                    <?php echo $this->urlImageForm; ?>
+            <?php /*
+                </div>
+                <div id="from-url-flash" class="tab-content">
+                    <?php echo $this->urlFlashForm; ?>
+                </div>
+            </div> */ ?>
+        </div>
+    </div>
+    <!-- end URL TAB -->
+
+    <!-- start LIBRARY TAB -->
+    <div id="tabs-3" class="asset-tab">
+        <h2>Insert File from Media Library</h2>
+        <div>
+            <!-- CONTENT -->
+            <?php echo $this->libraryForm; ?>
+            <ul id="library-list" class="asset-list"></ul>
+            <div id="library-pagination"></div>
+        </div>
+    </div>
+    <!-- end LIBRARY TAB -->
 </div>
