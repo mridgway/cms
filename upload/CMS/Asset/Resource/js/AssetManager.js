@@ -10,13 +10,18 @@ CMS.Use([], function (CMS) {
         uploader: null,
         library: null,
 
+        onInsert: $.noop,
+
         init: function (data) {
             $.extend(this, data);
-            self = this;
-            this.domElement.click(function () {
-                self.open();
-                return false;
-            });
+            var self = this;
+            if (this.domElement) {
+                this.domElement.click(function () {
+                    self.open();
+                    return false;
+                });
+            }
+            this.loaded = false;
         },
 
         load: function () {
@@ -39,11 +44,13 @@ CMS.Use([], function (CMS) {
                             domElement: $('#UploadButton'),
                             assetList: new CMS.AssetList({
                                 domElement: $('#new-file-list')
-                            })
+                            }),
+                            onInsert: self.onInsert
                         });
                         self.library = new CMS.AssetLibrary({
                             domElement: $('#tabs-3', self.domElement),
-                            assetListElement: $('#library-list', self.domElement)
+                            assetListElement: $('#library-list', self.domElement),
+                            onInsert: self.onInsert
                         });
                         self.domElement.bind('tabsselect', function (event, ui) {
                             if (2 == ui.index && $(ui.panel).is('.asset-tab')) {
@@ -58,11 +65,13 @@ CMS.Use([], function (CMS) {
         },
 
         _setupUploader: function (html) {
+            var self = this;
             self.uploader = new CMS.Uploader({
                 domElement: $('#UploadButton'),
                 assetList: new CMS.AssetList({
                     domElement: $('#new-file-list')
-                })
+                }),
+                onInsert: self.onInsert
             });
             self.loaded = true;
         },
@@ -73,6 +82,20 @@ CMS.Use([], function (CMS) {
                 return;
             } else {
                 this.modal.show();
+            }
+        },
+
+        close: function () {
+            this.modal.hide();
+        },
+
+        setInsertFunction: function (func) {
+            this.onInsert = func;
+            if (this.uploader) {
+                this.uploader.setInsertFunction(func);
+            }
+            if (this.library) {
+                this.library.setInsertFunction(func);
             }
         }
 

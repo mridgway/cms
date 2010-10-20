@@ -14,9 +14,6 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
             pageDelete: {
                 plugin: 'PageDelete',
                 postback: '/direct/page/delete'
-            },
-            assetManager: {
-
             }
         },
 
@@ -53,11 +50,6 @@ CMS.Use(['Core/CMS.Modal'], function (CMS) {
                 self.actions.pageDelete.modal = self.modal;
                 self.actions.pageDelete.page = self.page;
                 self.actions.pageDelete = new CMS.PageAction.PageDelete(self.actions.pageDelete);
-            });
-
-            CMS.Use(['Asset/CMS.AssetManager'], function (CMS) {
-                self.actions.assetManager.domElement = $('.assetManager:first', self.domElement);
-                self.actions.assetManager = new CMS.AssetManager(self.actions.assetManager);
             });
         }
     });

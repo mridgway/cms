@@ -12,6 +12,8 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
 
         assetList: null,
 
+        onInsert: $.noop,
+
         init: function (data) {
             $.extend(this, data);
             this.swfSettings = {
@@ -98,6 +100,7 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
                 if (null !== this.customSettings['uploader'].assetlist) {
                     var uploader = this.customSettings['uploader'];
                     data.data.assets[0].idPrefix = 'new-';
+                    data.data.assets[0].onInsert = uploader.onInsert;
                     uploader.assetList.addAsset(new CMS.Asset(data.data.assets[0]));
                 }
             } else {
@@ -111,6 +114,14 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
 
         debug : function (message) {
             CMS.log(message, true);
+        },
+
+        setInsertFunction: function (func) {
+            this.onInsert = func;
+            this.assetList.setInsertFunction(func);
+            $.each(this.assetList.assets, function (index, value){
+                value.setInsertFunction(func);
+            });
         }
 
     });

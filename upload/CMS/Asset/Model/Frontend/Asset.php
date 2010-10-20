@@ -17,7 +17,7 @@ class Asset extends \stdClass
     {
         $this->id = $asset->getId();
         $this->thumb = $asset->getUrl('small');
-        $this->url_template = $asset->getUrl('{size}');
+        $this->url_template = $asset->getUrl('${size}');
         $this->name = $asset->getName();
         $this->caption = $asset->getCaption();
         $this->type = $asset->getMimeType()->getType()->getSysname();
