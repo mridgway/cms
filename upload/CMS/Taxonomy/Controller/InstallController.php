@@ -40,6 +40,16 @@ class InstallController extends \Core\Controller\AbstractInstallController
 
     public function _createBase()
     {
-        
+        $blogCategories = new \Taxonomy\Model\Vocabulary('Blog Categories', 'blog', 'cats');
+        $testOne = new \Taxonomy\Model\Term('test1', 'Test One', 'test');
+        $testOne->setVocabulary($blogCategories);
+        $testTwo = new \Taxonomy\Model\Term('test2', 'Test Two', 'test');
+        $testTwo->setVocabulary($blogCategories);
+
+        $this->_em->persist($blogCategories);
+        $this->_em->persist($testOne);
+        $this->_em->persist($testTwo);
+
+        $this->_em->flush();
     }
 }

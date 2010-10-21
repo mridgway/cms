@@ -17,24 +17,34 @@
 	  article, aside, details, figcaption, figure, footer, header,
 	  hgroup, menu, nav, section { display: block; }
 	</style>
-	<link href="/resources/vendor/js/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" media="screen" />
-	<link href="/resources/core/css/base.css" rel="stylesheet" type="text/css" media="screen" />
-	<link href="/resources/core/css/theme.css" rel="stylesheet" type="text/css" media="screen" />
-	<link href="/resources/core/css/page.css" rel="stylesheet" type="text/css" media="screen" />
-<?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
-	<link href="/resources/core/css/admin.css" rel="stylesheet" type="text/css" media="screen" />
-<?php endif; ?>
+
+<?php
+    $this->headLink()->appendStylesheet('/resources/vendor/js/jquery-ui/themes/base/jquery-ui.css');
+    $this->headLink()->appendStylesheet('/resources/core/css/base.css');
+    $this->headLink()->appendStylesheet('/resources/core/css/theme.css');
+    $this->headLink()->appendStylesheet('/resources/core/css/page.css');
+
+    //$this->headScript()->appendFile('/resources/vendor/js/jquery.min.js');
+    $this->headScript()->appendFile('/resources/vendor/js/jquery.tmpl.min.js');
+    //$this->headScript()->appendFile('/resources/vendor/js/jquery-ui/ui/minified/jquery-ui.min.js');
+
+
+    if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) {
+        $this->headScript()->appendFile('/resources/core/js/CMS.js');
+        $this->headLink()->appendStylesheet('/resources/core/css/admin.css');
+        $this->headScript()->appendFile('/resources/vendor/js/ckeditor/ckeditor.js');
+        $this->headScript()->appendFile('/resources/vendor/js/ckeditor/adapters/jquery.js');
+    }
+    echo $this->headLink();
+    echo $this->jQuery()->enable()->uiEnable()->setVersion('1.4.3')->setUiVersion('1.8.5');
+    echo $this->headScript();
+?>
+    
     <!--[if lt IE 8]>
 	<link href="/resources/core/css/ie.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
-    <script type="text/javascript" src="/resources/vendor/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/resources/vendor/js/jquery.tmpl.min.js"></script>
-    <script type="text/javascript" src="/resources/vendor/js/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/resources/core/js/CMS.js"></script>
 
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
-    <script type="text/javascript" src="/resources/vendor/js/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript" src="/resources/vendor/js/ckeditor/adapters/jquery.js"></script>
     <script type="text/javascript">
     var Page;
     CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
@@ -43,6 +53,7 @@
     });
     </script>
 <?php endif; ?>
+
 </head>
 
 <?php if (isset($this->layout()->page)) : ?>

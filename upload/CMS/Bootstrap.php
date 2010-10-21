@@ -144,10 +144,6 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
             $memcache = new \Memcache;
             if (@$memcache->connect('127.0.0.1')) {
                 $cache = new \Doctrine\Common\Cache\MemcacheCache();
-                $cache->setMemcache($memcache);
-                $cache->setNamespace('blog');
-
-                return $cache;
             }
         }
 
@@ -157,7 +153,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
             $cache = new \Doctrine\Common\Cache\ArrayCache();
         }
 
-        $cache->setNamespace('modocms');
+        $cache->setNamespace('cms');
         return $cache;
     }
 }

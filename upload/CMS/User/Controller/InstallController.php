@@ -53,7 +53,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
 
         // The standard permissions
         $customResources = array(
-            'Page2' => new \User\Model\Acl\Resource('Page.2', 'AllPages'),
+            'Page2' => new \User\Model\Acl\Resource('Page.3', 'AllPages'),
             'Content1' => new \User\Model\Acl\Resource('Content.1', 'Core.Content.Text'),
             'AdminMenu' => new \User\Model\Acl\Resource('AdminMenu')
         );

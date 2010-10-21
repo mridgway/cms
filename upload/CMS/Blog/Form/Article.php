@@ -18,6 +18,7 @@ class Article extends \Core\Form\AbstractForm
         $this->addElements(array(
             Factory\ArticleElementFactory::getIdElement(),
             Factory\ArticleElementFactory::getTitleElement(),
+            Factory\ArticleElementFactory::getCategoryElement(),
             Factory\ArticleElementFactory::getContentElement()
         ));
 
