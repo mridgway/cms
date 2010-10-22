@@ -29,33 +29,6 @@ class Page extends \Core\Service\AbstractService
      */
     protected $_defaultForm;
 
-    public function setBlockService($blockService)
-    {
-        $this->_blockService = $blockService;
-    }
-
-    public function setRouteService($routeService)
-    {
-        $this->_routeService = $routeService;
-    }
-
-    public function setDefaultForm($form)
-    {
-        if(\is_string($form) && \class_exists($form))
-        {
-            $this->_defaultForm = new $form();
-        }
-        else
-        {
-            $this->_defaultForm = $form;
-        }
-    }
-
-    public function getDefaultForm()
-    {
-        return $this->_defaultForm;
-    }
-
     /**
      * Gets a page.
      * 
@@ -194,8 +167,16 @@ class Page extends \Core\Service\AbstractService
 
             $page->setLayout($this->_em->getReference('Core\Model\Layout', $data['layout']));
 
-            $route = $this->_routeService->edit($page->pageRoute->route, $data['pageRoute']);
+            $this->_em->remove($page->pageRoute);
+            $this->_em->remove($page->pageRoute->route);
+
+            $route = $this->_routeService->create($data['pageRoute']);
             $this->_em->persist($route);
+
+            $pageRoute = $route->routeTo($page);
+            $this->_em->persist($pageRoute);
+
+            $page->pageRoute = $pageRoute;
 
             unset($data['id']);
             unset($data['layout']);
@@ -236,5 +217,32 @@ class Page extends \Core\Service\AbstractService
 
         $this->_em->remove($page);
         $this->_em->flush();
+    }
+
+    public function setBlockService($blockService)
+    {
+        $this->_blockService = $blockService;
+    }
+
+    public function setRouteService($routeService)
+    {
+        $this->_routeService = $routeService;
+    }
+
+    public function setDefaultForm($form)
+    {
+        if(\is_string($form) && \class_exists($form))
+        {
+            $this->_defaultForm = new $form();
+        }
+        else
+        {
+            $this->_defaultForm = $form;
+        }
+    }
+
+    public function getDefaultForm()
+    {
+        return $this->_defaultForm;
     }
 }

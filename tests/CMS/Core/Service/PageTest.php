@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+//require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -216,16 +216,20 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $newRoute = new \Core\Model\Route($data['pageRoute']);
 
         $routeServiceStub = m::mock();
-        $routeServiceStub->shouldReceive('edit')->with($page->pageRoute->route, $newData['pageRoute'])->once()->andReturn($newRoute);
+        $routeServiceStub->shouldReceive('create')->andReturn($newRoute);
 
         $formStub = m::mock();
-        $formStub->shouldReceive('populate')->with($newData)->andReturn($formStub);
+        $formStub->shouldReceive('populate')->andReturn($formStub);
         $formStub->shouldReceive('isValid')->andReturn(true);
         $formStub->shouldReceive('getValues')->andReturn($newData);
 
         $emStub = m::mock('Mock\EntityManager');
-        $emStub->shouldReceive('getReference')->with('Core\Model\Layout', $newData['layout'])->andReturn($newLayout);
-        $emStub->shouldReceive('persist')->with($newRoute)->once();
+        $emStub->shouldReceive('remove');
+        $emStub->shouldReceive('getReference')->andReturn($newLayout);
+        $emStub->shouldReceive('persist')->with(m::type('Core\Model\Route'));
+        $emStub->shouldReceive('persist')->with(m::type('Core\Model\PageRoute'));
+        $emStub->shouldReceive('remove')->with($route);
+        $emStub->shouldReceive('remove')->with($pageRoute);
         $emStub->shouldReceive('flush')->once();
 
         $pageService = new Page($emStub);
@@ -237,7 +241,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newData['title'], $editedPage->title);
         $this->assertEquals($newData['description'], $editedPage->description);
         $this->assertEquals($newLayout, $editedPage->layout);
-        $this->assertEquals($newRoute->template, $editedPage->pageRoute->route->template);
+        $this->assertEquals($newRoute, $editedPage->pageRoute->route);
+        $this->assertNotSame($pageRoute, $editedPage->pageRoute);
     }
 
     /**
@@ -254,6 +259,32 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $pageService = new Page($emStub);
         $pageService->setDefaultForm($formStub);
         $pageService->editPage($page, $data);
+    }
+
+    /**
+     * @dataProvider addProvider
+     */
+    public function testDeletePage($data, $layout, $formStub, $route, $page, $pageRoute)
+    {
+        $l1 = new \Core\Model\Layout\Location('location');
+        $v1 = new \Mock\View();
+        $d1 = new \Core\Model\Content\Text('title', 'content', false);
+        $b1 = new \Core\Model\Block\StaticBlock($d1, $v1);
+        $page->setDependentContent($d1);
+        $page->addBlock($b1, $l1);
+
+        $emStub = m::mock('Mock\EntityManager');
+        $emStub->shouldReceive('remove')->with($route)->once();
+        $emStub->shouldReceive('remove')->with($d1);
+        $emStub->shouldReceive('remove')->with($page);
+        $emStub->shouldReceive('getRepository')->andReturn(array($b1));
+        $emStub->shouldReceive('flush');
+
+        $pageService = new Page($emStub);
+        $pageService->deletePage($page, $data);
+
+        $route->setSysname('sysname');
+        $pageService->deletePage($page, $data);
     }
 
     public function addProvider()

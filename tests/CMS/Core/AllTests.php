@@ -57,6 +57,8 @@ class AllTests
 
         $suite->addTestSuite('Core\Model\Layout\LocationTest');
 
+        $suite->addTestSuite('Core\Service\PageTest');
+
         return $suite;
     }
 }
