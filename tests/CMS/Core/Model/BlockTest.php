@@ -37,14 +37,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
-    
-    public function testConfigure()
-    {
-        $this->block->configure();
-        $this->assertArrayHasKey('testParam', $this->block->configProperties);
-        $default = $this->block->getConfigProperty('testParam')->getDefault();
-        $this->assertEquals('test', $default);
-    }
 
     public function testAddConfigProperty()
     {
@@ -61,15 +53,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->block->addConfigProperties($properties);
         $this->assertArrayHasKey('test1', $this->block->configProperties);
         $this->assertArrayHasKey('test2', $this->block->configProperties);
-    }
-
-    public function testAddConfigValue()
-    {
-        $this->block->addConfigProperty(new Block\Config\Property('test', 'test'));
-        $this->assertEquals('test', $this->block->getConfigValue('test'));
-        
-        $this->block->addConfigValue(new Block\Config\Value('test', 'awesome'));
-        $this->assertEquals('awesome', $this->block->getConfigValue('test'));
     }
 
     public function testSetConfigValue()

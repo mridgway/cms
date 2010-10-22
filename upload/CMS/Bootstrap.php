@@ -36,7 +36,8 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $this->serviceContainer->setService('cache', $this->_getCache());
 
         $this->bootstrap('FrontController');
-        $files = array(APPLICATION_ROOT . '/CMS/container.xml');
+        $options = $this->getOption('serviceContainer');
+        $files = array($options['path']);
         $containerDirs = \Zend_Controller_Front::getInstance()->getDispatcher()->getControllerDirectory();
         foreach ($containerDirs AS $containerDir) {
             if ($containerPath = realpath($containerDir . '/../container.xml')) {

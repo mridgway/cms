@@ -28,11 +28,18 @@ class PageController extends \Zend_Controller_Action
      */
     protected $_page;
 
+    /**
+     * @var \sfServiceContainer
+     */
+    protected $_sf;
+
     public function init()
     {
-        $this->_em = \Zend_Registry::get('doctrine');
+        $this->_sf = $this->getInvokeArg('bootstrap')->serviceContainer;
 
-        $this->_pageService = new \Core\Service\Page(\Zend_Registry::get('doctrine'));
+        $this->_em = $this->_sf->getService('doctrine');
+
+        $this->_pageService = $this->_sf->getService('pageService');
 
         if ($this->getRequest()->getActionName() != 'add') {
             if (!$pageId = $this->getRequest()->getParam('id', false)) {

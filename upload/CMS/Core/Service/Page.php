@@ -15,6 +15,48 @@ use Core\Exception\FormException;
 class Page extends \Core\Service\AbstractService
 {
     /**
+     * @var Core\Service\Block
+     */
+    protected $_blockService;
+
+    /**
+     * @var Core\Service\Route
+     */
+    protected $_routeService;
+
+    /**
+     * @var Core\Form\Page
+     */
+    protected $_defaultForm;
+
+    public function setBlockService($blockService)
+    {
+        $this->_blockService = $blockService;
+    }
+
+    public function setRouteService($routeService)
+    {
+        $this->_routeService = $routeService;
+    }
+
+    public function setDefaultForm($form)
+    {
+        if(\is_string($form) && \class_exists($form))
+        {
+            $this->_defaultForm = new $form();
+        }
+        else
+        {
+            $this->_defaultForm = $form;
+        }
+    }
+
+    public function getDefaultForm()
+    {
+        return $this->_defaultForm;
+    }
+
+    /**
      * Gets a page.
      * 
      * @param integer $id
@@ -23,7 +65,7 @@ class Page extends \Core\Service\AbstractService
     public function getPage($id)
     {
         $page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($id);
-        
+
         if (!$page) {
             throw new \Exception('Page does not exist.');
         }
@@ -67,8 +109,7 @@ class Page extends \Core\Service\AbstractService
             }
             // Set block config
             foreach($block->getConfigValues() as $name => $value) {
-                $newValue = new \Core\Model\Block\Config\Value($value->getName(), $value->getValue(), $value->getInheritsFrom());
-                $newBlock->addConfigValue($newValue);
+                $newBlock->setConfigValue($value->getName(), $value->getValue(), $value->getInheritsFrom());
             }
             $page->addBlock($newBlock);
         }
@@ -91,7 +132,7 @@ class Page extends \Core\Service\AbstractService
     public function getPageVariables(\Core\Model\AbstractPage $page)
     {
         $vars = array();
-        $blockService = Manager::get('Block');
+        $blockService = $this->_blockService;
         foreach ($page->getBlocks() AS $key => $block){
             $vars = array_merge($vars, $blockService->getVariables($block));
         }
@@ -111,7 +152,7 @@ class Page extends \Core\Service\AbstractService
         if ($form->isValid($data)) {
 
             $data = $form->getValues();
-            $route = new \Core\Model\Route($data['pageRoute']);
+            $route = $this->_routeService->create($data['pageRoute']);
             $this->_em->persist($route);
 
             $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBy(array('sysname' => $data['layout']));
@@ -146,15 +187,19 @@ class Page extends \Core\Service\AbstractService
         $form = $this->getDefaultForm()->populate($data);
 
         // adds the current page route to the form for validation
-        $data['currentRoute'] = $this->_page->getPageRoute()->getRoute()->getTemplate();
+        $data['currentRoute'] = $page->getPageRoute()->getRoute()->getTemplate();
 
         if ($form->isValid($data)) {
             $data = $form->getValues();
 
             $page->setLayout($this->_em->getReference('Core\Model\Layout', $data['layout']));
 
+            $route = $this->_routeService->edit($page->pageRoute->route, $data['pageRoute']);
+            $this->_em->persist($route);
+
             unset($data['id']);
             unset($data['layout']);
+            unset($data['pageRoute']);
             $page->setData($data);
 
             $this->_em->flush();
@@ -191,15 +236,5 @@ class Page extends \Core\Service\AbstractService
 
         $this->_em->remove($page);
         $this->_em->flush();
-    }
-
-    /**
-     * Returns the default page form.
-     *
-     * @return \Core\Form\Page
-     */
-    public function getDefaultForm()
-    {
-        return new \Core\Form\Page();
     }
 }
