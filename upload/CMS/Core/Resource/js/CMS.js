@@ -669,7 +669,7 @@ CMS.alert = function (msg) {
 
 CMS.ckeditor = {
     getConfig : function () {
-        CMS.Use(['Asset/CMS.AssetManager'], function (CMS) {
+        CMS.Use(['Asset/CMS.AssetManager', '/resources/core/js/ckeditor/plugins/asset/plugin.js'], function (CMS) {
             
         });
         return {
@@ -678,9 +678,11 @@ CMS.ckeditor = {
                 ['Undo', 'Redo', '-', 'Anchor', 'Link', 'Unlink', '-', 'Table', '-', 'PasteText', 'RemoveFormat', 'PasteFromWord', '-', 'Source', '-', 'Asset']
             ],
             format_tags : 'p;h1;h2;h3;h4;h5;h6',
-            //extraPlugins : 'asset,unique,linkclass',
+            extraPlugins : 'asset',
             toolbarCanCollapse : false,
-            resize_enabled : false
+            resize_enabled : true,
+            resize_maxWidth: '100%',
+            skin: 'modo,/resources/core/js/ckeditor/skins/modo/'
         }
     }
 }

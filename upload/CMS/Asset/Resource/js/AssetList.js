@@ -9,6 +9,8 @@ CMS.Use([], function (CMS) {
 
         assets: [],
 
+        onInsert: $.noop,
+
         init: function (data) {
             $.extend(this, data);
             if (true === this.paginate) {
@@ -17,6 +19,7 @@ CMS.Use([], function (CMS) {
                     self.paginator = new CMS.Paginator({
                         postback: '/direct/asset/manager/list',
                         responseManipulator: function (result) {
+                            result.onInsert = self.onInsert;
                             return new CMS.Asset(result);
                         },
                         postLoad: function (paginator) {
@@ -121,6 +124,10 @@ CMS.Use([], function (CMS) {
                     text: 'No assets found matching your criteria.'
                 }).appendTo(this.domElement);
             }
+        },
+
+        setInsertFunction: function (func) {
+            this.onInsert = func;
         }
 
     });

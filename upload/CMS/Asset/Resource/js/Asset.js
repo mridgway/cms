@@ -18,10 +18,20 @@ CMS.Use([], function (CMS) {
         idPrefix: '',
 
         onDelete: $.noop,
+        onInsert: $.noop,
 
         init: function (data) {
             $.extend(this, data);
             this.domElement = $.tmpl(this.templates.asset, this);
+        },
+
+        getUrl: function (size) {
+            if (null === size) {
+                size = 'original';
+            }
+            return $.tmpl(this.url_template, {
+                'size': size
+            }).text();
         },
 
         setupActions: function () {
@@ -33,12 +43,21 @@ CMS.Use([], function (CMS) {
 
             // asset edit actions
             (function () {
-                $('.asset-insert form', this.domElement).submit(function () {
-                    // insert into ckeditor here
+                $('.asset-insert form', self.domElement).submit(function (e) {
+                    e.preventDefault();
+                    var data = $(this).serializeArray();
+                    var size = null;
+                    $.each(data, function (index, value) {
+                        if (value.name === 'size') {
+                            size = value.value;
+                            return false;
+                        }
+                    });
+                    self.onInsert(self, size);
                     return false;
                 });
 
-                $('.asset-edit form', this.domElement).submit(function(e) {
+                $('.asset-edit form', self.domElement).submit(function(e) {
                     e.preventDefault();
                     var postback = this.getAttribute('action');
                     $.post(postback, $(this).serialize(), function (data) {
@@ -63,7 +82,7 @@ CMS.Use([], function (CMS) {
                     return false;
                 });
                 
-                $('.asset-delete .submit', this.domElement).click(function() {
+                $('.asset-delete .submit', self.domElement).click(function() {
                     $.get($(this).parents('form:first').attr('action'), function (data) {
                         if (data.code.id <= 0) {
                             self.domElement.hide(500, function () {
@@ -75,7 +94,7 @@ CMS.Use([], function (CMS) {
                     return false;
                 });
 
-                $('.asset-delete .cancel', this.domElement).click(function() {
+                $('.asset-delete .cancel', self.domElement).click(function() {
                     self.actionTabs.tabs('select', -1);
                     return false;
                 });
@@ -83,11 +102,15 @@ CMS.Use([], function (CMS) {
 
             // from url action
             (function () {
-                $('.from-url form', this.domElement).submit(function () {
+                $('.from-url form', self.domElement).submit(function () {
                     // insert into ckeditor here
                     return false;
                 });
             })();
+        },
+
+        setInsertFunction: function (func) {
+            this.onInsert = func;
         }
 
     });

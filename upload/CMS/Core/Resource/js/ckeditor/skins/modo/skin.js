@@ -3,5 +3,266 @@ Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
-CKEDITOR.skins.add('modo',(function(){var a=[],b='cke_ui_color';if(CKEDITOR.env.ie&&CKEDITOR.env.version<7)a.push('icons.png','images/sprites_ie6.png','images/dialog_sides.gif');return{preload:a,editor:{css:['editor.css']},dialog:{css:['dialog.css']},templates:{css:['templates.css']},margins:[0,0,0,0],init:function(c){if(c.config.width&&!isNaN(c.config.width))c.config.width-=12;var d=[],e=/\$color/g,f='/* UI Color Support */.cke_skin_modo .cke_menuitem .cke_icon_wrapper{\tbackground-color: $color !important;\tborder-color: $color !important;}.cke_skin_modo .cke_menuitem a:hover .cke_icon_wrapper,.cke_skin_modo .cke_menuitem a:focus .cke_icon_wrapper,.cke_skin_modo .cke_menuitem a:active .cke_icon_wrapper{\tbackground-color: $color !important;\tborder-color: $color !important;}.cke_skin_modo .cke_menuitem a:hover .cke_label,.cke_skin_modo .cke_menuitem a:focus .cke_label,.cke_skin_modo .cke_menuitem a:active .cke_label{\tbackground-color: $color !important;}.cke_skin_modo .cke_menuitem a.cke_disabled:hover .cke_label,.cke_skin_modo .cke_menuitem a.cke_disabled:focus .cke_label,.cke_skin_modo .cke_menuitem a.cke_disabled:active .cke_label{\tbackground-color: transparent !important;}.cke_skin_modo .cke_menuitem a.cke_disabled:hover .cke_icon_wrapper,.cke_skin_modo .cke_menuitem a.cke_disabled:focus .cke_icon_wrapper,.cke_skin_modo .cke_menuitem a.cke_disabled:active .cke_icon_wrapper{\tbackground-color: $color !important;\tborder-color: $color !important;}.cke_skin_modo .cke_menuitem a.cke_disabled .cke_icon_wrapper{\tbackground-color: $color !important;\tborder-color: $color !important;}.cke_skin_modo .cke_menuseparator{\tbackground-color: $color !important;}.cke_skin_modo .cke_menuitem a:hover,.cke_skin_modo .cke_menuitem a:focus,.cke_skin_modo .cke_menuitem a:active{\tbackground-color: $color !important;}';if(CKEDITOR.env.webkit){f=f.split('}').slice(0,-1);for(var g=0;g<f.length;g++)f[g]=f[g].split('{');}function h(k){var l=k.getById(b);if(!l){l=k.getHead().append('style');l.setAttribute('id',b);l.setAttribute('type','text/css');}return l;};function i(k,l,m){var n,o,p;for(var q=0;q<k.length;q++){if(CKEDITOR.env.webkit)for(o=0;o<l.length;o++){p=l[o][1];for(n=0;n<m.length;n++)p=p.replace(m[n][0],m[n][1]);k[q].$.sheet.addRule(l[o][0],p);}else{p=l;for(n=0;n<m.length;n++)p=p.replace(m[n][0],m[n][1]);if(CKEDITOR.env.ie)k[q].$.styleSheet.cssText+=p;else k[q].$.innerHTML+=p;}}};var j=/\$color/g;CKEDITOR.tools.extend(c,{uiColor:null,getUiColor:function(){return this.uiColor;
-},setUiColor:function(k){var l,m=h(CKEDITOR.document),n='.cke_editor_'+CKEDITOR.tools.escapeCssSelector(c.name),o=[n+' .cke_wrapper',n+'_dialog .cke_dialog_contents',n+'_dialog a.cke_dialog_tab',n+'_dialog .cke_dialog_footer'].join(','),p='background-color: $color !important;';if(CKEDITOR.env.webkit)l=[[o,p]];else l=o+'{'+p+'}';return(this.setUiColor=function(q){var r=[[j,q]];c.uiColor=q;i([m],l,r);i(d,f,r);})(k);}});c.on('menuShow',function(k){var l=k.data[0],m=l.element.getElementsByTag('iframe').getItem(0).getFrameDocument();if(!m.getById('cke_ui_color')){var n=h(m);d.push(n);var o=c.getUiColor();if(o)i([n],f,[[j,o]]);}});if(c.config.uiColor)c.setUiColor(c.config.uiColor);}};})());(function(){CKEDITOR.dialog?a():CKEDITOR.on('dialogPluginReady',a);function a(){CKEDITOR.dialog.on('resize',function(b){var c=b.data,d=c.width,e=c.height,f=c.dialog,g=f.parts.contents;if(c.skin!='modo')return;g.setStyles({width:d+'px',height:e+'px'});setTimeout(function(){var h=f.parts.dialog.getChild([0,0,0]),i=h.getChild(0),j=h.getChild(2);j.setStyle('width',i.$.offsetWidth+'px');j=h.getChild(7);j.setStyle('width',i.$.offsetWidth-28+'px');j=h.getChild(4);j.setStyle('height',i.$.offsetHeight-31-14+'px');j=h.getChild(5);j.setStyle('height',i.$.offsetHeight-31-14+'px');},100);});};})();
+CKEDITOR.skins.add( 'modo', (function()
+{
+	var preload = [],
+		uiColorStylesheetId = 'cke_ui_color';
+
+	if ( CKEDITOR.env.ie && CKEDITOR.env.version < 7 )
+	{
+		// For IE6, we need to preload some images, otherwhise they will be
+		// downloaded several times (CSS background bug).
+		preload.push( 'icons.png', 'images/sprites_ie6.png', 'images/dialog_sides.gif' );
+	}
+
+	return {
+		preload		: preload,
+		editor		: { css : [ 'editor.css' ] },
+		dialog		: { css : [ 'dialog.css' ] },
+		templates	: { css : [ 'templates.css' ] },
+		margins		: [ 0, 0, 0, 0 ],
+		init : function( editor )
+		{
+			if ( editor.config.width && !isNaN( editor.config.width ) )
+				editor.config.width -= 12;
+
+			var uiColorMenus = [];
+			var uiColorRegex = /\$color/g;
+			var uiColorMenuCss = "/* UI Color Support */\
+.cke_skin_modo .cke_menuitem .cke_icon_wrapper\
+{\
+	background-color: $color !important;\
+	border-color: $color !important;\
+}\
+\
+.cke_skin_modo .cke_menuitem a:hover .cke_icon_wrapper,\
+.cke_skin_modo .cke_menuitem a:focus .cke_icon_wrapper,\
+.cke_skin_modo .cke_menuitem a:active .cke_icon_wrapper\
+{\
+	background-color: $color !important;\
+	border-color: $color !important;\
+}\
+\
+.cke_skin_modo .cke_menuitem a:hover .cke_label,\
+.cke_skin_modo .cke_menuitem a:focus .cke_label,\
+.cke_skin_modo .cke_menuitem a:active .cke_label\
+{\
+	background-color: $color !important;\
+}\
+\
+.cke_skin_modo .cke_menuitem a.cke_disabled:hover .cke_label,\
+.cke_skin_modo .cke_menuitem a.cke_disabled:focus .cke_label,\
+.cke_skin_modo .cke_menuitem a.cke_disabled:active .cke_label\
+{\
+	background-color: transparent !important;\
+}\
+\
+.cke_skin_modo .cke_menuitem a.cke_disabled:hover .cke_icon_wrapper,\
+.cke_skin_modo .cke_menuitem a.cke_disabled:focus .cke_icon_wrapper,\
+.cke_skin_modo .cke_menuitem a.cke_disabled:active .cke_icon_wrapper\
+{\
+	background-color: $color !important;\
+	border-color: $color !important;\
+}\
+\
+.cke_skin_modo .cke_menuitem a.cke_disabled .cke_icon_wrapper\
+{\
+	background-color: $color !important;\
+	border-color: $color !important;\
+}\
+\
+.cke_skin_modo .cke_menuseparator\
+{\
+	background-color: $color !important;\
+}\
+\
+.cke_skin_modo .cke_menuitem a:hover,\
+.cke_skin_modo .cke_menuitem a:focus,\
+.cke_skin_modo .cke_menuitem a:active\
+{\
+	background-color: $color !important;\
+}";
+			// We have to split CSS declarations for webkit.
+			if ( CKEDITOR.env.webkit )
+			{
+				uiColorMenuCss = uiColorMenuCss.split( '}' ).slice( 0, -1 );
+				for ( var i = 0 ; i < uiColorMenuCss.length ; i++ )
+					uiColorMenuCss[ i ] = uiColorMenuCss[ i ].split( '{' );
+			}
+
+			function getStylesheet( document )
+			{
+				var node = document.getById( uiColorStylesheetId );
+				if ( !node )
+				{
+					node = document.getHead().append( 'style' );
+					node.setAttribute( "id", uiColorStylesheetId );
+					node.setAttribute( "type", "text/css" );
+				}
+				return node;
+			}
+
+			function updateStylesheets( styleNodes, styleContent, replace )
+			{
+				var r, i, content;
+				for ( var id  = 0 ; id < styleNodes.length ; id++ )
+				{
+					if ( CKEDITOR.env.webkit )
+					{
+						for ( i = 0 ; i < styleContent.length ; i++ )
+						{
+							content = styleContent[ i ][ 1 ];
+							for ( r  = 0 ; r < replace.length ; r++ )
+								content = content.replace( replace[ r ][ 0 ], replace[ r ][ 1 ] );
+
+							styleNodes[ id ].$.sheet.addRule( styleContent[ i ][ 0 ], content );
+						}
+					}
+					else
+					{
+						content = styleContent;
+						for ( r  = 0 ; r < replace.length ; r++ )
+							content = content.replace( replace[ r ][ 0 ], replace[ r ][ 1 ] );
+
+						if ( CKEDITOR.env.ie )
+							styleNodes[ id ].$.styleSheet.cssText += content;
+						else
+							styleNodes[ id ].$.innerHTML += content;
+					}
+				}
+			}
+
+			var uiColorRegexp = /\$color/g;
+
+			CKEDITOR.tools.extend( editor,
+			{
+				uiColor: null,
+
+				getUiColor : function()
+				{
+					return this.uiColor;
+				},
+
+				setUiColor : function( color )
+				{
+					var cssContent,
+						uiStyle = getStylesheet( CKEDITOR.document ),
+						cssId = '.cke_editor_' + CKEDITOR.tools.escapeCssSelector( editor.name );
+
+					var cssSelectors =
+						[
+							cssId + " .cke_wrapper",
+							cssId + "_dialog .cke_dialog_contents",
+							cssId + "_dialog a.cke_dialog_tab",
+							cssId + "_dialog .cke_dialog_footer"
+						].join( ',' );
+					var cssProperties = "background-color: $color !important;";
+
+					if ( CKEDITOR.env.webkit )
+						cssContent = [ [ cssSelectors, cssProperties ] ];
+					else
+						cssContent = cssSelectors + '{' + cssProperties + '}';
+
+					return ( this.setUiColor =
+						function( color )
+						{
+							var replace = [ [ uiColorRegexp, color ] ];
+							editor.uiColor = color;
+
+							// Update general style.
+							updateStylesheets( [ uiStyle ], cssContent, replace );
+
+							// Update menu styles.
+							updateStylesheets( uiColorMenus, uiColorMenuCss, replace );
+						})( color );
+				}
+			});
+
+			editor.on( 'menuShow', function( event )
+			{
+				var panel = event.data[ 0 ];
+				var iframe = panel.element.getElementsByTag( 'iframe' ).getItem( 0 ).getFrameDocument();
+
+				// Add stylesheet if missing.
+				if ( !iframe.getById( 'cke_ui_color' ) )
+				{
+					var node = getStylesheet( iframe );
+					uiColorMenus.push( node );
+
+					var color = editor.getUiColor();
+					// Set uiColor for new menu.
+					if ( color )
+						updateStylesheets( [ node ], uiColorMenuCss, [ [ uiColorRegexp, color ] ] );
+				}
+			});
+
+			// Apply UI color if specified in config.
+			if ( editor.config.uiColor )
+				editor.setUiColor( editor.config.uiColor );
+		}
+	};
+})() );
+
+(function()
+{
+	CKEDITOR.dialog ? dialogSetup() : CKEDITOR.on( 'dialogPluginReady', dialogSetup );
+
+	function dialogSetup()
+	{
+		CKEDITOR.dialog.on( 'resize', function( evt )
+			{
+				var data = evt.data,
+					width = data.width,
+					height = data.height,
+					dialog = data.dialog,
+					contents = dialog.parts.contents;
+
+				if ( data.skin != 'modo' )
+					return;
+
+				contents.setStyles(
+					{
+						width : width + 'px',
+						height : height + 'px'
+					});
+
+				// Fix the size of the elements which have flexible lengths.
+				setTimeout( function()
+					{
+						var innerDialog = dialog.parts.dialog.getChild( [ 0, 0, 0 ] ),
+							body = innerDialog.getChild( 0 );
+
+						// tc
+						var el = innerDialog.getChild( 2 );
+						el.setStyle( 'width', ( body.$.offsetWidth ) + 'px' );
+
+						// bc
+						el = innerDialog.getChild( 7 );
+						el.setStyle( 'width', ( body.$.offsetWidth - 28 ) + 'px' );
+
+						// ml
+						el = innerDialog.getChild( 4 );
+						el.setStyle( 'height', ( body.$.offsetHeight - 31 - 14 ) + 'px' );
+
+						// mr
+						el = innerDialog.getChild( 5 );
+						el.setStyle( 'height', ( body.$.offsetHeight - 31 - 14 ) + 'px' );
+					},
+					100 );
+			});
+	}
+})();
+
+/**
+ * The base user interface color to be used by the editor. Not all skins are
+ * compatible with this setting.
+ * @name CKEDITOR.config.uiColor
+ * @type String
+ * @default '' (empty)
+ * @example
+ * // Using a color code.
+ * config.uiColor = '#AADC6E';
+ * @example
+ * // Using an HTML color name.
+ * config.uiColor = 'Gold';
+ */

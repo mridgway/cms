@@ -8,12 +8,15 @@ CMS.Use(['Asset/CMS.AssetList'], function (CMS) {
         assetList: null,
         assetListElement: null,
 
+        onInsert: $.noop,
+
         init: function (data) {
             $.extend(this, data);
             if (null != this.assetListElement) {
                 this.assetList = new CMS.AssetList({
                     domElement: this.assetListElement,
-                    paginate: true
+                    paginate: true,
+                    onInsert: this.onInsert
                 });
             }
             this._setupForm();
@@ -35,6 +38,14 @@ CMS.Use(['Asset/CMS.AssetList'], function (CMS) {
                 data[value.name] = value.value;
             });
             this.assetList.paginator.loadCurrentPage(data);
+        },
+
+        setInsertFunction: function (func) {
+            this.onInsert = func;
+            this.assetList.setInsertFunction(func);
+            $.each(this.assetList.assets, function (index, value){
+                value.setInsertFunction(func);
+            });
         }
 
     });
