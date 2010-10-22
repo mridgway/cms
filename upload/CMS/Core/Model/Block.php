@@ -116,6 +116,11 @@ abstract class Block
     protected $inheritedFrom;
 
     /**
+     * @var \sfContainer
+     */
+    private $serviceContainer;
+
+    /**
      *
      * @param Page $page
      * @param string $location
@@ -499,5 +504,21 @@ abstract class Block
     public function canMove($role)
     {
         return \Zend_Registry::get('acl')->isAllowed($role, $this, 'move');
+    }
+
+    /**
+     * @param \sfServiceContainer $serviceContainer
+     */
+    public function setServiceContainer(\sfServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+    }
+
+    /**
+     * @return \sfServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
     }
 }

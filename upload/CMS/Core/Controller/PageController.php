@@ -215,11 +215,6 @@ class PageController extends \Zend_Controller_Action
 
         $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
         $frontend->html = (string)$form;
-        $viewRenderer = \Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-        /**
-         * @var \ZendX\Application53\Controller\Action\Helper\ViewRenderer $viewRenderer
-         */
-        $viewRenderer;
         echo $frontend;
     }
 

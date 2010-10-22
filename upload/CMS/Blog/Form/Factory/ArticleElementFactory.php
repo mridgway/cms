@@ -40,7 +40,7 @@ class ArticleElementFactory
 
     public static function getCategoryElement()
     {
-        $category = \Taxonomy\Form\Term\ElementFactory::termAutocompleteElement('blog');
+        $category = \Taxonomy\Form\Factory\TermElementFactory::termSelectElement('blog');
         $category->setLabel('Category:');
         $category->setAllowEmpty(false);
 

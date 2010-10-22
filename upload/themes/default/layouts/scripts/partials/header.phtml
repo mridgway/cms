@@ -36,7 +36,12 @@
         $this->headScript()->appendFile('/resources/vendor/js/ckeditor/adapters/jquery.js');
     }
     echo $this->headLink();
-    echo $this->jQuery()->enable()->uiEnable()->setVersion('1.4.3')->setUiVersion('1.8.5');
+    echo $this->jQuery()
+            ->enable()
+            ->uiEnable()
+            ->setVersion('1.4.3')
+            ->setUiVersion('1.8.4')
+            ->addJavascriptFile('/resources/taxonomy/js/jquery.formtag.js');
     echo $this->headScript();
 ?>
     

@@ -1,5 +1,5 @@
 <?php
-namespace Core\Form\Element;
+namespace Taxonomy\Form\Element;
 
 /**
  * Autocomplete form element
@@ -12,6 +12,10 @@ namespace Core\Form\Element;
  */
 class MultiTag extends \ZendX_JQuery_Form_Element_AutoComplete
 {
+    public $helper = "multiTag";
+
+    protected $_isArray = true;
+
     /**
      * {@inheritdoc}
      *
