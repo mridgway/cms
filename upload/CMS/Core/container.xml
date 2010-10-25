@@ -1,4 +1,24 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony-project.org/2.0/container">
+    <services>
+        <service id="pageService" class="Core\Service\Page">
+            <argument type="service" id="doctrine" />
+            <call method="setBlockService">
+                <argument type="service" id="blockService" />
+            </call>
+            <call method="setDefaultForm">
+                <argument>Core\Form\Page</argument>
+            </call>
+            <call method="setRouteService">
+                <argument type="service" id="routeService" />
+            </call>
+        </service>
+        <service id="blockService" class="Core\Service\Block">
+            <argument type="service" id="doctrine" />
+        </service>
+        <service id="routeService" class="Core\Service\Route">
+            <argument type="service" id="doctrine" />
+        </service>
+    </services>
 </container>

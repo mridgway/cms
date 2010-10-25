@@ -1,0 +1,17 @@
+User:
+  zyne:
+    username: zYne-
+    password: changeme
+    Groups: [founder, lead, documentation]
+  jwage:
+    username: jwage
+    password: changeme
+    Groups: [lead, documentation]
+
+Group:
+  founder:
+    name: Founder
+  lead:
+    name: Lead
+  documentation:
+    name: Documentation

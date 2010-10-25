@@ -222,7 +222,7 @@ abstract class Block
      *
      * @param Value $value
      */
-    public function addConfigValue(\Core\Model\Block\Config\Value $value)
+    protected function addConfigValue(\Core\Model\Block\Config\Value $value)
     {
         $this->setCollectionKeys();
         $value->setBlock($this);
@@ -242,7 +242,7 @@ abstract class Block
     {
         $this->setCollectionKeys();
         if (!isset($this->configProperties[$name])) {
-            throw new \Exception('Config Property does not exist.');
+            throw new \Exception('Config Property "' . $name . '" on block ' . get_class($this) . ' does not exist.');
         }
 
         if (isset($this->configValues[$name])) {
@@ -274,7 +274,7 @@ abstract class Block
         throw new \Exception('Block with id ' . $this->id . ' does not have ' . $name);
     }
 
-    public function getConfigValues()
+    protected function getConfigValues()
     {
         $this->setCollectionKeys();
         return $this->configValues;
@@ -388,7 +388,7 @@ abstract class Block
      * @param array $values
      * @return Block
      */
-    public function setConfigValues($values = null)
+    protected function setConfigValues($values = null)
     {
         $this->setCollectionKeys();
         if (null !== $values) {
@@ -426,10 +426,11 @@ abstract class Block
     }
 
     /**
+     * @todo should this exist?
      * @param array $configuraiton
      * @return Block
      */
-    public function setConfiguration(array $configuration = null)
+    protected function setConfiguration(array $configuration = null)
     {
         $this->configuration = $configuration;
         $this->configure();

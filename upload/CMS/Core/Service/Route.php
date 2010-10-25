@@ -25,6 +25,11 @@ class Route extends \Core\Service\AbstractService
         return new \Core\Form\Route;
     }
 
+    public function create($routeName)
+    {
+        return new \Core\Model\Route($routeName);
+    }
+
     /**
      * Returns a form for editing a route. Takes in a route to prepopulate the fields and a dataset
      * to override the current values.
