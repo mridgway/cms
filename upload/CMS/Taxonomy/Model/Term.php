@@ -31,12 +31,6 @@ class Term
 
     /**
      * @var string
-     * @Column(type="string", unique="true", nullable="true")
-     */
-    protected $sysname;
-
-    /**
-     * @var string
      * @Column(type="string", nullable="false")
      */
     protected $name;
@@ -54,9 +48,8 @@ class Term
      */
     protected $vocabulary;
 
-    public function __construct($sysname, $name, $definition = '')
+    public function __construct($name, $definition = '')
     {
-        $this->setSysname($sysname);
         $this->setName($name);
         $this->setDefinition($definition);
     }
@@ -64,16 +57,6 @@ class Term
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getSysname()
-    {
-        return $this->sysname;
-    }
-
-    public function setSysname($sysname)
-    {
-        $this->sysname = $sysname;
     }
 
     public function getName()

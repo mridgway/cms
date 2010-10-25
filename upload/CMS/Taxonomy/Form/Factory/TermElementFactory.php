@@ -55,7 +55,7 @@ class TermElementFactory
 
         $options = array();
         foreach ($vocabulary->getTerms() AS $term) {
-            $options[$term->getSysname()] = $term->getName();
+            $options[$term->getId()] = $term->getName();
         }
 
         $element = new \Core\Form\Element\Select('term');
