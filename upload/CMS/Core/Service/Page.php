@@ -231,7 +231,7 @@ class Page extends \Core\Service\AbstractService
 
     public function setDefaultForm($form)
     {
-        if(\is_string($form) && \class_exists($form))
+        if(\is_string($form))
         {
             $this->_defaultForm = new $form();
         }
@@ -243,6 +243,11 @@ class Page extends \Core\Service\AbstractService
 
     public function getDefaultForm()
     {
+        if(null == $this->_defaultForm)
+        {
+            throw new \Exception(get_class($this) . ' does not have a default form set.  Make sure to inject a default form after initialization.');
+        }
+
         return $this->_defaultForm;
     }
 }

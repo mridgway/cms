@@ -63,14 +63,24 @@ class Block extends \Core\Service\AbstractService
      */
     public function dispatchBlockAction(\Core\Model\Block $block, $action, \Zend_Controller_Request_Http $request)
     {
-        $controllerName = $this->getBlockController($block);
-        if (null === $controllerName || !method_exists($controllerName, $action)) {
+        $controller = $this->getBlockControllerObject($block);
+        if (!method_exists($controller, $action)) {
             throw new \Exception('Block controller/action does not exist.');
         }
-        $controller = new $controllerName;
         $controller->setEntityManager($this->getEntityManager());
         $controller->setRequest($request);
         return $controller->$action($block);
+    }
+
+    public function getBlockControllerObject(\Core\Model\Block $block)
+    {
+        $controllerName = $this->getBlockController($block);
+
+        if(null === $controllerName) {
+            throw new Exception(get_class($block) . ' controller is not specified.  Check the module.ini file.');
+        }
+
+        return new $controllerName;
     }
 
     /**

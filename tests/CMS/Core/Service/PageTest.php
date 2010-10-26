@@ -26,26 +26,26 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $layout = new \Core\Model\Layout('default');
         $page = new \Core\Model\Page($layout);
 
-        $rStub = $this->getMock('Mock\EntityRepository');
-        $rStub  ->expects($this->any())
+        $repo = $this->getMock('Mock\EntityRepository');
+        $repo  ->expects($this->any())
                 ->method('getPageForRender')
                 ->will($this->returnValue($page));
 
-        $emStub = $this->getMock('Mock\EntityManager');
-        $emStub ->expects($this->any())
+        $em = $this->getMock('Mock\EntityManager');
+        $em ->expects($this->any())
                 ->method('getRepository')
                 ->with($this->equalTo('Core\Model\Page'))
-                ->will($this->returnValue($rStub));
+                ->will($this->returnValue($repo));
 
-        $pageService = new Page($emStub);
+        $pageService = new Page($em);
 
         $this->assertEquals($pageService->getPage(1), $page);
     }
 
     public function testCreatePageFromTemplate()
     {
-        $emStub = $this->getMock('Mock\EntityManager');
-        $pageService = new Page($emStub);
+        $em = $this->getMock('Mock\EntityManager');
+        $pageService = new Page($em);
 
         $content = new \Core\Model\Content\Text('title', 'content', false);
         $view = new \Mock\View();
@@ -117,15 +117,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $vars = array('property1' => 'value1', 'property2' => 'value2');
 
-        $blockServiceStub = $this->getMock('Core\Service\Block');
-        $blockServiceStub   ->expects($this->any())
+        $blockService = $this->getMock('Core\Service\Block');
+        $blockService   ->expects($this->any())
                             ->method('getVariables')
                             ->will($this->returnValue($vars));
 
-        $emStub = $this->getMock('Mock\EntityManager');
+        $em = $this->getMock('Mock\EntityManager');
 
-        $pageService = new Page($emStub);
-        $pageService->setBlockService($blockServiceStub);
+        $pageService = new Page($em);
+        $pageService->setBlockService($blockService);
 
         $this->assertEquals($vars, $pageService->getPageVariables($page));
     }
@@ -133,23 +133,23 @@ class PageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider addProvider
      */
-    public function testAddPage($data, $layout, $formStub, $route, $page, $pageRoute)
+    public function testAddPage($data, $layout, $form, $route, $page, $pageRoute)
     {
-        $rStub = m::mock();
-        $rStub->shouldReceive('findOneBy')->with(array('sysname' => $data['layout']))->once()->andReturn($layout);
+        $repo = m::mock();
+        $repo->shouldReceive('findOneBy')->with(array('sysname' => $data['layout']))->once()->andReturn($layout);
 
-        $routeServiceStub = m::mock();
-        $routeServiceStub->shouldReceive('create')->with($data['pageRoute'])->once()->andReturn($route);
+        $routeService = m::mock();
+        $routeService->shouldReceive('create')->with($data['pageRoute'])->once()->andReturn($route);
 
-        $emStub = $this->getMock('Mock\EntityManager');
-        $emStub ->expects($this->any())
+        $em = $this->getMock('Mock\EntityManager');
+        $em ->expects($this->any())
                 ->method('getRepository')
                 ->with($this->equalTo('Core\Model\Layout'))
-                ->will($this->returnValue($rStub));
+                ->will($this->returnValue($repo));
         
-        $pageService = new Page($emStub);
-        $pageService->setDefaultForm($formStub);
-        $pageService->setRouteService($routeServiceStub);
+        $pageService = new Page($em);
+        $pageService->setDefaultForm($form);
+        $pageService->setRouteService($routeService);
 
         $newPage = $pageService->addPage($data);
 
@@ -163,24 +163,24 @@ class PageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider addProvider
      */
-    public function testAddPage_EntityManagerCalls($data, $layout, $formStub, $route, $page, $pageRoute)
+    public function testAddPage_EntityManagerCalls($data, $layout, $form, $route, $page, $pageRoute)
     {
-        $rStub = m::mock();
-        $rStub->shouldReceive('findOneBy')->with(array('sysname' => $data['layout']))->once()->andReturn($layout);
+        $repo = m::mock();
+        $repo->shouldReceive('findOneBy')->with(array('sysname' => $data['layout']))->once()->andReturn($layout);
 
-        $routeServiceStub = m::mock();
-        $routeServiceStub->shouldReceive('create')->with($data['pageRoute'])->once()->andReturn($route);
+        $routeService = m::mock();
+        $routeService->shouldReceive('create')->with($data['pageRoute'])->once()->andReturn($route);
 
-        $emStub = m::mock('Mock\EntityManager');
-        $emStub->shouldReceive('getRepository')->with('Core\Model\Layout')->once()->andReturn($rStub)->ordered(1);
-        $emStub->shouldReceive('persist')->with($route)->once()->ordered(1);
-        $emStub->shouldReceive('persist')->with(m::type('Core\Model\Page'))->once()->ordered(1);
-        $emStub->shouldReceive('persist')->with(m::type('Core\Model\PageRoute'))->once()->ordered(1);
-        $emStub->shouldReceive('flush')->ordered();
+        $em = m::mock('Mock\EntityManager');
+        $em->shouldReceive('getRepository')->with('Core\Model\Layout')->once()->andReturn($repo)->ordered(1);
+        $em->shouldReceive('persist')->with($route)->once()->ordered(1);
+        $em->shouldReceive('persist')->with(m::type('Core\Model\Page'))->once()->ordered(1);
+        $em->shouldReceive('persist')->with(m::type('Core\Model\PageRoute'))->once()->ordered(1);
+        $em->shouldReceive('flush')->ordered();
 
-        $pageService = new Page($emStub);
-        $pageService->setDefaultForm($formStub);
-        $pageService->setRouteService($routeServiceStub);
+        $pageService = new Page($em);
+        $pageService->setDefaultForm($form);
+        $pageService->setRouteService($routeService);
 
         $newPage = $pageService->addPage($data);
     }
@@ -190,20 +190,20 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddPageException()
     {
-        $emStub = m::mock('Mock\EntityManager');
+        $em = m::mock('Mock\EntityManager');
 
-        $formStub = m::mock('Core\Form\Page');
-        $formStub->shouldReceive(array('populate' => $formStub, 'isValid' => false));
+        $form = m::mock('Core\Form\Page');
+        $form->shouldReceive(array('populate' => $form, 'isValid' => false));
 
-        $pageService = new Page($emStub);
-        $pageService->setDefaultForm($formStub);
+        $pageService = new Page($em);
+        $pageService->setDefaultForm($form);
         $pageService->addPage(array());
     }
 
     /**
      * @dataProvider addProvider
      */
-    public function testEditPage($data, $layout, $formStub, $route, $page, $pageRoute)
+    public function testEditPage($data, $layout, $form, $route, $page, $pageRoute)
     {
         $newData = array(
             'title' => 'newTitle',
@@ -215,26 +215,26 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $newLayout = new \Core\Model\Layout($data['layout']);
         $newRoute = new \Core\Model\Route($data['pageRoute']);
 
-        $routeServiceStub = m::mock();
-        $routeServiceStub->shouldReceive('create')->andReturn($newRoute);
+        $routeService = m::mock();
+        $routeService->shouldReceive('create')->andReturn($newRoute);
 
-        $formStub = m::mock();
-        $formStub->shouldReceive('populate')->andReturn($formStub);
-        $formStub->shouldReceive('isValid')->andReturn(true);
-        $formStub->shouldReceive('getValues')->andReturn($newData);
+        $form = m::mock();
+        $form->shouldReceive('populate')->andReturn($form);
+        $form->shouldReceive('isValid')->andReturn(true);
+        $form->shouldReceive('getValues')->andReturn($newData);
 
-        $emStub = m::mock('Mock\EntityManager');
-        $emStub->shouldReceive('remove');
-        $emStub->shouldReceive('getReference')->andReturn($newLayout);
-        $emStub->shouldReceive('persist')->with(m::type('Core\Model\Route'));
-        $emStub->shouldReceive('persist')->with(m::type('Core\Model\PageRoute'));
-        $emStub->shouldReceive('remove')->with($route);
-        $emStub->shouldReceive('remove')->with($pageRoute);
-        $emStub->shouldReceive('flush')->once();
+        $em = m::mock('Mock\EntityManager');
+        $em->shouldReceive('remove');
+        $em->shouldReceive('getReference')->andReturn($newLayout);
+        $em->shouldReceive('persist')->with(m::type('Core\Model\Route'));
+        $em->shouldReceive('persist')->with(m::type('Core\Model\PageRoute'));
+        $em->shouldReceive('remove')->with($route);
+        $em->shouldReceive('remove')->with($pageRoute);
+        $em->shouldReceive('flush')->once();
 
-        $pageService = new Page($emStub);
-        $pageService->setDefaultForm($formStub);
-        $pageService->setRouteService($routeServiceStub);
+        $pageService = new Page($em);
+        $pageService->setDefaultForm($form);
+        $pageService->setRouteService($routeService);
 
         $editedPage = $pageService->editPage($page, $newData);
 
@@ -249,22 +249,22 @@ class PageTest extends \PHPUnit_Framework_TestCase
      * @dataProvider addProvider
      * @expectedException Core\Exception\FormException
      */
-    public function testEditPageException($data, $layout, $formStub, $route, $page, $pageRoute)
+    public function testEditPageException($data, $layout, $form, $route, $page, $pageRoute)
     {
-        $emStub = m::mock('Mock\EntityManager');
+        $em = m::mock('Mock\EntityManager');
 
-        $formStub = m::mock('Core\Form\Page');
-        $formStub->shouldReceive(array('populate' => $formStub, 'isValid' => false));
+        $form = m::mock('Core\Form\Page');
+        $form->shouldReceive(array('populate' => $form, 'isValid' => false));
 
-        $pageService = new Page($emStub);
-        $pageService->setDefaultForm($formStub);
+        $pageService = new Page($em);
+        $pageService->setDefaultForm($form);
         $pageService->editPage($page, $data);
     }
 
     /**
      * @dataProvider addProvider
      */
-    public function testDeletePage($data, $layout, $formStub, $route, $page, $pageRoute)
+    public function testDeletePage($data, $layout, $form, $route, $page, $pageRoute)
     {
         $l1 = new \Core\Model\Layout\Location('location');
         $v1 = new \Mock\View();
@@ -273,14 +273,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $page->setDependentContent($d1);
         $page->addBlock($b1, $l1);
 
-        $emStub = m::mock('Mock\EntityManager');
-        $emStub->shouldReceive('remove')->with($route)->once();
-        $emStub->shouldReceive('remove')->with($d1);
-        $emStub->shouldReceive('remove')->with($page);
-        $emStub->shouldReceive('getRepository')->andReturn(array($b1));
-        $emStub->shouldReceive('flush');
+        $em = m::mock('Mock\EntityManager');
+        $em->shouldReceive('remove')->with($route)->once();
+        $em->shouldReceive('remove')->with($d1);
+        $em->shouldReceive('remove')->with($page);
+        $em->shouldReceive('getRepository')->andReturn(array($b1));
+        $em->shouldReceive('flush');
 
-        $pageService = new Page($emStub);
+        $pageService = new Page($em);
         $pageService->deletePage($page, $data);
 
         $route->setSysname('sysname');
@@ -298,7 +298,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $layout = new \Core\Model\Layout('main');
 
-        $formStub = new \Mock\Form\Page($data, true);
+        $form = new \Mock\Form\Page($data, true);
 
         $route = new \Core\Model\Route($data['pageRoute']);
 
@@ -308,7 +308,19 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $page->setPageRoute($pageRoute);
 
         return array(
-            array($data, $layout, $formStub, $route, $page, $pageRoute)
+            array($data, $layout, $form, $route, $page, $pageRoute)
         );
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGetDefaultForm()
+    {
+        $em = m::mock('Mock\EntityManager');
+        
+        $pageService = new Page($em);
+
+        $pageService->getDefaultForm();
     }
 }
