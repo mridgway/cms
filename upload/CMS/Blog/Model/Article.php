@@ -39,6 +39,12 @@ class Article extends \Core\Model\Content
      */
     protected $category;
 
+    /**
+     * @var Asset\Model\Asset
+     * @ManyToOne(targetEntity="Asset\Model\Asset")
+     */
+    protected $asset;
+
     public function __construct($title, $content)
     {
         parent::__construct();

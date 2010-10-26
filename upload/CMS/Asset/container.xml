@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony-project.org/2.0/container">
+    <services>
+        <service id="assetService" class="Asset\Service\Asset">
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine" />
+            </call>
+        </service>
+    </services>
+</container>

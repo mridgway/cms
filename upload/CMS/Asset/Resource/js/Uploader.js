@@ -2,7 +2,7 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
 
     CMS.Uploader = Class.extend({
 
-        postback: '/direct/asset/manager/upload',
+        postback: '/direct/asset/manager/upload?group=default',
 
         swfUrl: '/resources/vendor/swf/swfupload.swf',
         swfSettings: null,

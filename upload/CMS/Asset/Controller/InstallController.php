@@ -155,7 +155,8 @@ class InstallController extends \Core\Controller\AbstractInstallController
 
         // groups
         $groups = array(
-            'default' => new \Asset\Model\Group('default', 'Default')
+            'default' => new \Asset\Model\Group('default', 'Default'),
+            'tmp' => new \Asset\Model\Group('tmp', 'Temporary')
         );
         // group sizes (only for images)
         $groups['default']->addSize('small', new \Asset\Model\Size(100, 100))
@@ -164,6 +165,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
                           ->addSize('small-cropped', new \Asset\Model\Size(100, 100, true))
                           ->addSize('medium-cropped', new \Asset\Model\Size(250, 250, true))
                           ->addSize('large-cropped', new \Asset\Model\Size(500, 500, true));
+        $groups['tmp']->addSize('small', new \Asset\Model\Size(100, 100));
         foreach ($groups AS $group) {
             $this->_em->persist($group);
         }

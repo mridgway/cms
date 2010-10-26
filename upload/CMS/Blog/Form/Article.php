@@ -19,7 +19,8 @@ class Article extends \Core\Form\AbstractForm
             Factory\ArticleElementFactory::getIdElement(),
             Factory\ArticleElementFactory::getTitleElement(),
             Factory\ArticleElementFactory::getCategoryElement(),
-            Factory\ArticleElementFactory::getContentElement()
+            Factory\ArticleElementFactory::getContentElement(),
+            Factory\ArticleElementFactory::getAssetElement()
         ));
 
         $submit = new \Core\Form\Element\Submit('submit');
