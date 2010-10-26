@@ -90,47 +90,36 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function testDispatchBlockAction()
     {
         $em = m::mock(new \Mock\EntityManager());
-
         $block = m::mock('Core\Model\Block');
+        $action = 'actionName';
         $request = m::mock('Zend_Controller_Request_Http');
         $controller = m::mock(new MockBlockController);
         $controller->shouldReceive('setEntityManager')->with($em);
         $controller->shouldReceive('setRequest')->with($request);
-        
-        $blockService = new MockBlockService($em);
-        $blockService->setController($controller);
 
-        $blockService->dispatchBlockAction($block, 'actionName', $request);
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('dispatchBlockAction')));
+        $blockService->shouldReceive('getBlockControllerObject')->andReturn($controller);
+
+        $blockService->dispatchBlockAction($block, $action, $request);
+
+        $this->setExpectedException('Exception');
+        $blockService->dispatchBlockAction($block, 'thisActionDoesNotExist', $request);
     }
-
-    /**
-     * 
-     */
+    
     public function testGetBlockControllerObject()
     {
         $em = m::mock(new \Mock\EntityManager());
-        $blockService = new MockBlockService2($em);
         $block = m::mock('Core\Model\Block');
-        
-        $name = 'stdClass';
-        $blockService->setControllerName($name);
+
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('getBlockControllerObject')));
+        $blockService->shouldReceive('getBlockController')->with($block)->andReturn('stdClass');
 
         $this->assertEquals(new \stdClass(), $blockService->getBlockControllerObject($block));
 
-        $blockService->setControllerName($block);
-
-        /*
-         * public function getBlockControllerObject(\Core\Model\Block $block)
-            {
-                $controllerName = $this->getBlockController($block);
-
-                if(null === $controllerName) {
-                    throw new Exception(get_class($block) . ' controller is not specified.  Check the module.ini file.');
-                }
-
-                return new $controllerName;
-            }
-         */
+        $this->setExpectedException('Exception');
+        $blockService = m::mock(new \Core\Service\Block($em), array('getBlockControllerObject'));
+        $blockService->shouldReceive('getBlockController')->with($block)->andReturn(null);
+        $blockService->getBlockControllerObject($block);
     }
 }
 
@@ -139,46 +128,5 @@ class MockBlockController
     public function actionName()
     {
         
-    }
-}
-
-class MockBlockService extends \Core\Service\Block
-{
-    protected $controller;
-    protected $controllerName;
-
-    public function setController($controller)
-    {
-        $this->controller = $controller;
-    }
-
-    public function setControllerName($name)
-    {
-        $this->controllerName = $name;
-    }
-
-    public function getBlockController(\Core\Model\Block $block)
-    {
-        return $this->controllerName;
-    }
-
-    public function getBlockControllerObject(\Core\Model\Block $block)
-    {
-        return $this->controller;
-    }
-}
-
-class MockBlockService2 extends \Core\Service\Block
-{
-    protected $controllerName;
-
-    public function setControllerName($name)
-    {
-        $this->controllerName = $name;
-    }
-
-    public function getBlockController(\Core\Model\Block $block)
-    {
-        return $this->controllerName;
     }
 }
