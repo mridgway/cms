@@ -11,11 +11,10 @@ define('LIBRARY_PATH', realpath(dirname(__FILE__) . '/../upload/library'));
 define('TESTS_PATH', realpath(dirname(__FILE__) . '/CMS'));
 define('TEST_LIBRARY_PATH', realpath(dirname(__FILE__)) . '/library');
 define('TESTS_ROOT', realpath(dirname(__FILE__)));
-define('MOCKERY_PATH', TEST_LIBRARY_PATH . '/mockery/library');
 
 $_SERVER['SERVER_NAME'] = 'http://localhost';
 
-$includePaths = array(MOCKERY_PATH, TESTS_ROOT, TESTS_PATH, TEST_LIBRARY_PATH, APPLICATION_PATH, LIBRARY_PATH, get_include_path());
+$includePaths = array(TESTS_ROOT, TESTS_PATH, TEST_LIBRARY_PATH, APPLICATION_PATH, LIBRARY_PATH, get_include_path());
 set_include_path(implode(PATH_SEPARATOR, $includePaths));
 
 include('Zend/Loader/Autoloader.php');
@@ -37,6 +36,8 @@ require_once 'Mockery/Loader.php';
 $loader = new \Mockery\Loader;
 $loader->register();
 
+require_once LIBRARY_PATH . '/symfony/dependency-injection/lib/sfServiceContainerAutoloader.php';
+sfServiceContainerAutoloader::register();
 
 Zend_Session::$_unitTestEnabled = true;
 Zend_Session::start();

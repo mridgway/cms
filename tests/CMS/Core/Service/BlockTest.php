@@ -67,15 +67,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveConfigDependencies()
     {
-        $block = m::Mock('Core\Model\Block');
+        $block = m::mock('Core\Model\Block');
 
-        $inheritBlock = m::Mock('Core\Model\Block');
+        $inheritBlock = m::mock('Core\Model\Block');
         $value1 = new \Core\Model\Block\Config\Value('name', 'value', $inheritBlock);
 
-        $entity = m::Mock();
+        $entity = m::mock();
         $entity->shouldReceive('getDependentValues')->with($block)->andReturn(array($value1));
 
-        $em = m::Mock(new \Mock\EntityManager());
+        $em = m::mock(new \Mock\EntityManager());
         $em->shouldReceive('getRepository')->andReturn($entity);
 
         $blockService = new \Core\Service\Block($em);
@@ -89,11 +89,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchBlockAction()
     {
-        $em = m::Mock(new \Mock\EntityManager());
+        $em = m::mock(new \Mock\EntityManager());
 
-        $block = m::Mock('Core\Model\Block');
-        $request = m::Mock('Zend_Controller_Request_Http');
-        $controller = m::Mock(new MockBlockController);
+        $block = m::mock('Core\Model\Block');
+        $request = m::mock('Zend_Controller_Request_Http');
+        $controller = m::mock(new MockBlockController);
         $controller->shouldReceive('setEntityManager')->with($em);
         $controller->shouldReceive('setRequest')->with($request);
         
@@ -108,9 +108,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBlockControllerObject()
     {
-        $em = m::Mock(new \Mock\EntityManager());
+        $em = m::mock(new \Mock\EntityManager());
         $blockService = new MockBlockService2($em);
-        $block = m::Mock('Core\Model\Block');
+        $block = m::mock('Core\Model\Block');
         
         $name = 'stdClass';
         $blockService->setControllerName($name);
