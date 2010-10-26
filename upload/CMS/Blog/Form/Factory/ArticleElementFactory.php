@@ -37,4 +37,13 @@ class ArticleElementFactory
 
         return $content;
     }
+
+    public static function getCategoryElement()
+    {
+        $category = \Taxonomy\Form\Factory\TermElementFactory::termSelectElement('blog');
+        $category->setLabel('Category:');
+        $category->setAllowEmpty(false);
+
+        return $category;
+    }
 }

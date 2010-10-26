@@ -24,7 +24,7 @@ class Page extends \Doctrine\ORM\EntityRepository
         $qb->leftJoin('b.view', 'v');
         $qb->where('p.id = :id');
         $qb->setParameter('id', $id);
-
+        
         return $qb->getQuery()->getSingleResult();
     }
     

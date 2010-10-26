@@ -222,15 +222,7 @@ class PageController extends \Zend_Controller_Action
 
         $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
         $frontend->html = (string)$form;
-
-        $html = $this->getRequest()->getParam('html');
-        if (isset($html)) {
-            $this->_page->getLayout()->getLocation('main')->addContent($frontend->html);
-            $this->_page->getLayout()->assign('page', $this->_page);
-            echo $this->_page->getLayout()->render();
-        } else {
-            echo $frontend;
-        }
+        echo $frontend;
     }
 
     /**

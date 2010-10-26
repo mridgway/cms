@@ -59,6 +59,13 @@ class BlockController extends \Zend_Controller_Action
                         ->dispatchBlockAction($this->_block, 'editAction', $this->getRequest());
 
         $frontend->data[0] = array('id' => $this->_block->id);
+
+        // Attach jquery scripts
+        $view = new \Zend_View();
+        \ZendX_JQuery::enableView($view);
+        $frontend->html .= (string) $view->jQuery()
+            ->setRenderMode(\ZendX_JQuery::RENDER_JAVASCRIPT | \ZendX_JQuery::RENDER_JQUERY_ON_LOAD);
+        
         echo $frontend;
     }
 
