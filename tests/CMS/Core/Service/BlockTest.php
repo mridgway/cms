@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+//require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -117,9 +117,47 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new \stdClass(), $blockService->getBlockControllerObject($block));
 
         $this->setExpectedException('Exception');
-        $blockService = m::mock(new \Core\Service\Block($em), array('getBlockControllerObject'));
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('getBlockControllerObject')));
         $blockService->shouldReceive('getBlockController')->with($block)->andReturn(null);
         $blockService->getBlockControllerObject($block);
+    }
+
+    public function testGetBlockController()
+    {
+        $em = m::mock(new \Mock\EntityManager());
+
+        $module = new \Core\Model\Module('sysname', 'title');
+        $module->addResource(new \Core\Model\Module\ContentType('title', 'discriminator', 'Core\Service\MockContent', 'Core\Service\MockContentController'));
+
+        $storage = m::mock();
+        $storage->shouldReceive('getModules')->andReturn(array($module));
+        
+        $registry = m::mock('Core\Module\Registry');
+        $registry->shouldReceive('getDatabaseStorage')->andReturn($storage);
+
+        $content = new MockContent();
+        $view = new \Mock\View();
+        $block = new \Core\Model\Block\StaticBlock($content, $view);
+
+        $blockService = new \Core\Service\Block($em);
+        $blockService->setModuleRegistry($registry);
+
+        $this->assertEquals('Core\Service\MockContentController', $blockService->getBlockController($block));
+    }
+    
+    public function testDeleteBlock()
+    {
+        $block = m::mock('Core\Model\Block');
+        
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('remove')->with($block)->ordered();
+        $em->shouldReceive('flush')->ordered();
+
+
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('deleteBlock')));
+        $blockService->shouldReceive('removeConfigDependencies')->with($block);
+
+        $blockService->deleteBlock($block);
     }
 }
 
@@ -130,3 +168,7 @@ class MockBlockController
         
     }
 }
+
+class MockContent extends \Core\Model\Content {}
+
+class MockContentController {}

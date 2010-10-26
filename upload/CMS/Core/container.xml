@@ -16,9 +16,14 @@
         </service>
         <service id="blockService" class="Core\Service\Block">
             <argument type="service" id="doctrine" />
+            <call method="setModuleRegistry">
+                <argument type="service" id="moduleRegistry" />
+            </call>
         </service>
         <service id="routeService" class="Core\Service\Route">
             <argument type="service" id="doctrine" />
+        </service>
+        <service id="moduleRegistry" class="Core\Module\Registry">
         </service>
     </services>
 </container>

@@ -13,6 +13,7 @@ namespace Core\Service;
  */
 class Block extends \Core\Service\AbstractService
 {
+    protected $_moduleRegistry;
 
     /**
      * Gets all config values or content type properties for a given block
@@ -48,7 +49,7 @@ class Block extends \Core\Service\AbstractService
      */
     public function removeConfigDependencies(\Core\Model\Block $block)
     {
-        $results = $this->_em->getRepository('Core\Model\Block')->getDependentValues($block);
+        $results = $this->getEntityManager()->getRepository('Core\Model\Block')->getDependentValues($block);
         foreach ($results AS $value) {
             $value->setInheritsFrom(null);
         }
@@ -90,7 +91,7 @@ class Block extends \Core\Service\AbstractService
      */
     public function getBlockController(\Core\Model\Block $block)
     {
-        $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
+        $modules = $this->_moduleRegistry->getDatabaseStorage()->getModules();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
                 if ($type->class == get_class($block->content)) {
@@ -113,14 +114,13 @@ class Block extends \Core\Service\AbstractService
         // remove config dependencies on this block
         $this->removeConfigDependencies($block);
 
-        // remove block config values
-        foreach($block->getConfigValues() AS $value) {
-            $this->_em->remove($value);
-        }
-        $block->removeConfigValues();
+        $this->getEntityManager()->remove($block);
 
-        $this->_em->remove($block);
+        $this->getEntityManager()->flush();
+    }
 
-        $this->_em->flush();
+    public function setModuleRegistry(\Core\Module\Registry $registry)
+    {
+        $this->_moduleRegistry = $registry;
     }
 }
