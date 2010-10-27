@@ -14,6 +14,7 @@ namespace Core\Service;
 class Block extends \Core\Service\AbstractService
 {
     protected $_moduleRegistry;
+    protected $_auth;
 
     /**
      * Gets all config values or content type properties for a given block
@@ -122,5 +123,34 @@ class Block extends \Core\Service\AbstractService
     public function setModuleRegistry(\Core\Module\Registry $registry)
     {
         $this->_moduleRegistry = $registry;
+    }
+
+    public function initBlock(\Core\Model\Block $block, $request)
+    {
+        if ($block instanceof \Core\Model\Block\DynamicBlock) {
+            // Initialize the dynamic block
+            $block->setRequest($request);
+            $block->setEntityManager($this->getEntityManager());
+            $block->init();
+        }
+    }
+
+    public function canView(\Core\Model\Block $block)
+    {
+        return $block->canView($this->getAuth()->getIdentity());
+    }
+
+    public function getAuth()
+    {
+        if(null === $this->_auth)
+        {
+            $this->setAuth(\Core\Auth\Auth::getInstance());
+        }
+        return $this->_auth;
+    }
+
+    public function setAuth(\Zend_Auth $auth)
+    {
+        $this->_auth = $auth;
     }
 }

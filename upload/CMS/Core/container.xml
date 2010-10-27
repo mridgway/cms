@@ -25,5 +25,11 @@
         </service>
         <service id="moduleRegistry" class="Core\Module\Registry">
         </service>
+        <service id="pageRendererService" class="Core\Service\PageRenderer">
+            <argument type="service" id="doctrine" />
+            <call method="setBlockService">
+                <argument type="service" id="blockService" />
+            </call>
+        </service>
     </services>
 </container>

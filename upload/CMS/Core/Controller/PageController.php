@@ -55,7 +55,7 @@ class PageController extends \Zend_Controller_Action
             throw new \Exception('Not allowed to view page.');
         }
 
-        $pageRenderer = new \Core\Service\PageRenderer($this->_em);
+        $pageRenderer = $this->_sf->getService('pageRendererService');
         $content = $pageRenderer->renderPage($this->_page, $this->getRequest());
         $this->getResponse()->setBody($content);
     }

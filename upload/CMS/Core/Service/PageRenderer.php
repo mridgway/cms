@@ -13,6 +13,7 @@ namespace Core\Service;
  */
 class PageRenderer extends \Core\Service\AbstractService
 {
+    protected $_blockService;
 
     /**
      * Creates a page from a template replacing any placeholders with the appropriate objects.
@@ -27,19 +28,13 @@ class PageRenderer extends \Core\Service\AbstractService
         {
             // Initialize blocks
             foreach ($page->getBlocks() as $block) {
-                if ($block instanceof \Core\Model\Block\DynamicBlock) {
-                    // Initialize the dynamic block
-                    $block->setRequest($request);
-                    $block->setEntityManager($this->getEntityManager());
-                    $block->init();
-                }
+                $this->getBlockService()->initBlock($block, $request);
             }
 
             // Render blocks into block wrapper
-            $blockActions = array();
             foreach ($page->getBlocks() as $block) {
-                if ($block->canView(\Core\Auth\Auth::getInstance()->getIdentity())) {
-                    $view = new \Zend_View();
+                if ($this->getBlockService()->canView($block)) {
+                    $view = $this->getNewView();
                     $view->assign('content', $block->render());
                     $view->assign('block', $block);
                     $view->assign('page', $page);
@@ -54,5 +49,20 @@ class PageRenderer extends \Core\Service\AbstractService
         // Set the layout
         $page->getLayout()->assign('page', $page);
         return $page->getLayout()->render();
+    }
+
+    public function getBlockService()
+    {
+        return $this->_blockService;
+    }
+
+    public function setBlockService(\Core\Service\Block $service)
+    {
+        $this->_blockService = $service;
+    }
+
+    public function getNewView()
+    {
+        return new \Zend_View();
     }
 }

@@ -159,6 +159,39 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $blockService->deleteBlock($block);
     }
+    
+    public function testInitBlock()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $request = m::mock('Zend_Controller_Request_Http');
+
+        $block = m::mock('Core\Model\Block\DynamicBlock');
+        $block->shouldReceive('setRequest')->with($request);
+        $block->shouldReceive('setEntityManager')->with($em);
+        $block->shouldReceive('init');
+
+        $blockService = new \Core\Service\Block($em);
+        $blockService->initBlock($block, $request);
+
+        $block = m::mock('Core\Model\Block\StaticBlock');
+        $block->shouldReceive('init')->never();
+        $blockService->initBlock($block, $request);
+    }
+    
+    public function testCanView()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $auth = m::mock('Zend_Auth');
+        $auth->shouldReceive('getIdentity');
+
+        $block = m::mock('Core\Model\Block');
+        $block->shouldReceive('canView');
+
+        $blockService = new \Core\Service\Block($em);
+        $blockService->setAuth($auth);
+
+        $blockService->canView($block);
+    }
 }
 
 class MockBlockController
