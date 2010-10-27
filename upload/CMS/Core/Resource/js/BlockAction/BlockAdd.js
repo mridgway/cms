@@ -139,8 +139,19 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             // hook submit
             form.submit(function (e) {
-                data.title = $('#title', this).val();
-                data.content = $('#content', this).val();
+                var formData = $(this).serializeArray();
+                data.title = (function (formData) {
+                    for (var i in formData)
+                        if (formData[i].name=='title')
+                            return formData[i].value;
+                    return '';
+                })(formData);
+                data.content = (function (formData) {
+                    for (var i in formData)
+                        if (formData[i].name=='content')
+                            return formData[i].value;
+                    return '';
+                })(formData);
                 self.submitForm(data);
                 return false;
             });
