@@ -183,11 +183,16 @@ class Asset extends \Core\Model\AbstractModel
         return $this;
     }
 
-    public function getLocation($sizeName = 'original')
+    public function getFolder()
     {
         return $this->group->getLocation()
             . DIRECTORY_SEPARATOR . substr($this->getSysname(), 0, 2)
-            . DIRECTORY_SEPARATOR . $this->getSysname()
+            . DIRECTORY_SEPARATOR . $this->getSysname();
+    }
+
+    public function getLocation($sizeName = 'original')
+    {
+        return $this->getFolder()
             . DIRECTORY_SEPARATOR . $sizeName . '.' . $this->extension->sysname;
     }
 

@@ -51,9 +51,9 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
         // Updates block locations based on the current DOM
         updateBlockLocations: function (event, ui) {
             if (null != ui.sender) { // block changed locations
-                var movedBlockElement = $(event.originalTarget).is('.block-actions') ?
-                    $(event.originalTarget).siblings('.block:first') :
-                    $(event.originalTarget).parents('.block-actions:first').siblings('.block:first');
+                var movedBlockElement = $(event.originalEvent.target).is('.block-actions') ?
+                    $(event.originalEvent.target).siblings('.block:first') :
+                    $(event.originalEvent.target).parents('.block-actions:first').siblings('.block:first');
                 var movedBlockId = parseInt(movedBlockElement.attr('id').substring(6));
                 var originalLocation = this.locations[$(ui.sender).parent().attr('id')];
                 

@@ -53,6 +53,9 @@ class Asset extends \Doctrine\ORM\EntityRepository
                                         $limit = null)
     {
         $qb = $this->createQueryBuilder('a');
+        $qb->innerJoin('a.group', 'g');
+        $qb->andWhere('g.sysname = :group');
+        $qb->setParameter('group', 'default');
         if ($typeName != 'all') {
             $qb->innerJoin('a.mimeType', 'mt');
             $qb->innerJoin('mt.type', 't');
@@ -83,6 +86,9 @@ class Asset extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('a');
         $qb->select('count(a.id)');
+        $qb->innerJoin('a.group', 'g');
+        $qb->andWhere('g.sysname = :group');
+        $qb->setParameter('group', 'default');
         if ($typeName != 'all') {
             $qb->innerJoin('a.mimeType', 'mt');
             $qb->innerJoin('mt.type', 't');

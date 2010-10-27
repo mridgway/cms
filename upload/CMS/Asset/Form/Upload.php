@@ -22,9 +22,12 @@ class Upload extends \Core\Form\AbstractForm
         $file = new \Core\Form\Element\File('file');
         $file->setLabel('File');
 
+        $group = new \Core\Form\Element\Hidden('group');
+        $group->setValue('default');
+
         $submit = new \Core\Form\Element\Submit('submit');
         $submit->setLabel('Upload');
 
-        $this->addElements(array($file, $submit));
+        $this->addElements(array($file, $group, $submit));
     }
 }

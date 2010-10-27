@@ -13,6 +13,10 @@ namespace Asset\Service;
  */
 class Asset
 {
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $em = null;
 
     /**
      * @todo Use mediator instead of this in controller
@@ -40,5 +44,58 @@ class Asset
             $form->populate($data);
         }
         return $form;
+    }
+
+    /**
+     * Moves an image from one group to another. Old files are left in place,
+     * but will not be linked to from the database.
+     *
+     * @param \Asset\Model\Asset $asset
+     * @param \Asset\Model\Group $group
+     */
+    public function changeGroup($asset, $group)
+    {
+        if (!$asset instanceof \Asset\Model\Asset) {
+            $asset = $this->getEntityManager()
+                    ->getRepository('Asset\Model\Asset')
+                    ->find($asset);
+        }
+
+        if (!$group instanceof \Asset\Model\Group) {
+            $group = $this->getEntityManager()
+                    ->getRepository('Asset\Model\Group')
+                    ->find($group);
+        }
+
+        if ($asset->getGroup() != $group) {
+            $oldFile = $asset->getLocation();
+            $asset->setGroup($group);
+            if (!file_exists($asset->getLocation())) {
+                \mkdir($asset->getFolder(), 0777, true);
+                if (!\copy($oldFile, $asset->getLocation())) {
+                    throw \Exception('Copy failed');
+                }
+            }
+
+            $this->getEntityManager()->flush();
+        }
+
+        return $asset;
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     */
+    public function setEntityManager(\Doctrine\ORM\EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->em;
     }
 }

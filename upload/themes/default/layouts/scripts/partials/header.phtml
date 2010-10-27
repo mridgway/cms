@@ -41,7 +41,9 @@
             ->uiEnable()
             ->setVersion('1.4.3')
             ->setUiVersion('1.8.4')
-            ->addJavascriptFile('/resources/taxonomy/js/jquery.formtag.js');
+            ->addJavascriptFile('/resources/taxonomy/js/jquery.formtag.js')
+            ->addJavascriptFile('/resources/asset/js/jquery.formupload.js')
+            ->addJavascriptFile('/resources/vendor/js/swfupload.js');
     echo $this->headScript();
 ?>
     
@@ -51,10 +53,12 @@
 
 <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
     <script type="text/javascript">
-    var Page;
-    CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
-        Page = new CMS.Page(PAGE_INFO.data[0]);
-        var AdminMenu = new CMS.AdminMenu({page: Page});
+    $(document).ready(function () {
+        var Page;
+        CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
+            Page = new CMS.Page(PAGE_INFO.data[0]);
+            var AdminMenu = new CMS.AdminMenu({page: Page});
+        });
     });
     </script>
 <?php endif; ?>

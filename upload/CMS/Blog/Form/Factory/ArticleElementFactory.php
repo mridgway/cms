@@ -46,4 +46,13 @@ class ArticleElementFactory
 
         return $category;
     }
+
+    public static function getAssetElement()
+    {
+        $asset = new \Asset\Form\Element\Asset('asset');
+        $asset->setLabel('Asset:');
+        $asset->setGroup('tmp');
+
+        return $asset;
+    }
 }

@@ -71,7 +71,7 @@ class ManagerController extends \Zend_Controller_Action
 
         // create model
         $fileHash = $adapter->getHash('sha1');
-        $groupName = $this->getRequest()->getParam('group', 'default');
+        $groupName = $this->getRequest()->getParam('group', 'tmp');
         $group = $this->_em->getRepository('Asset\Model\Group')->find($groupName);
         $asset = new \Asset\Model\Asset($fileHash, $fileParts['filename'], $extension, $group, $mimeType);
 
