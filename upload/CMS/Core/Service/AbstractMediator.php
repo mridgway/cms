@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Service\Mediator;
+namespace Core\Service;
 
 /**
  * @package     CMS
