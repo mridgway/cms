@@ -9,7 +9,7 @@ namespace Core\Service\Mediator;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  */
-class ContentMediator extends AbstractMediator
+class ContentMediator extends \Core\Service\AbstractMediator
 {
     public function init()
     {
