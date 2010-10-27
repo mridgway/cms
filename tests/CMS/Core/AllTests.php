@@ -61,6 +61,7 @@ class AllTests
         $suite->addTestSuite('Core\Service\BlockTest');
         $suite->addTestSuite('Core\Service\ModuleTest');
         $suite->addTestSuite('Core\Service\PageRendererTest');
+        $suite->addTestSuite('Core\Service\RouteTest');
 
         return $suite;
     }

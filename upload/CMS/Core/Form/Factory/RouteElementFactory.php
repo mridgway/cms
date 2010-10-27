@@ -20,10 +20,10 @@ class RouteElementFactory
 
     public static function getTemplateElement()
     {
-        $template = new \Core\Form\Element('template');
+        $template = new \Core\Form\Element\Text('template');
         $template->setLabel('Route:');
         $template->setAllowEmpty(false);
-        $template->addValidator(new \Core\Validator\UniqueRoute($id->getName()));
+        $template->addValidator(new \Core\Validator\UniqueRoute());
 
         return $template;
     }
