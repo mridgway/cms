@@ -25,7 +25,6 @@
             settings = $.extend({}, $.formUpload.defaults, settings);
 
             var count = 1;
-            return;
 
             return this.each(function() {
                 var current = $(this);
@@ -41,7 +40,7 @@
                     $('#' + current.attr('id') + '-image').remove();
 
                     current.after(
-                        $('<img src="' + upload_url_prefix + settings.config.display_url + value + '" />')
+                        $('<img src="' + value + '" />')
                         .attr('id', current.attr('id') + '-image')
                     ).after(
                             $('<a href="#">Remove Image</a>').click(function () {
@@ -87,7 +86,7 @@
                         $('#' + current.attr('id') + '-link').remove();
                         $('#' + current.attr('id') + '-image').remove();
                         $('#' + swfu.movieName).after(
-                            $('<img src="' + upload_url_prefix + settings.config.display_url + serverData.data.sysname + '?' + Math.random() + '"/>')
+                            $('<img src="' + serverData.data.assets[0].thumb + '?' + Math.random() + '"/>')
                             .attr('id', current.attr('id') + '-image')
                         ).after(
                             $('<a href="#">Remove Image</a>').click(function () {
@@ -99,7 +98,7 @@
                             }).attr('id', current.attr('id') + '-link')
                         );
 
-                        $('#' + swfu.settings.button_placeholder_id).val(serverData.data.sysname + '?' + Math.random());
+                        $('#' + swfu.settings.button_placeholder_id).val(serverData.data.assets[0].thumb + '?' + Math.random());
                     },
                     upload_error_handler: function (oFile, errorCode, message) {
                         alert('errorCode ' + errorCode);
