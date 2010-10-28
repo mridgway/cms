@@ -20,7 +20,7 @@ class StaticBlock extends \Core\Model\Block
 
     /**
      * @var \Core\Model\Content
-     * @ManyToOne(targetEntity="Core\Model\Content")
+     * @ManyToOne(targetEntity="Core\Model\Content", cascade={"persist"})
      * @JoinColumn(name="content_id", referencedColumnName="id", nullable="true")
      */
     protected $content;

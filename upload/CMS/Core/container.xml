@@ -31,5 +31,22 @@
                 <argument type="service" id="blockService" />
             </call>
         </service>
+        <service id="moduleService" class="Core\Service\Module">
+            <argument type="service" id="doctrine" />
+            <call method="setModuleRegistry">
+                <argument type="service" id="moduleRegistry" />
+            </call>
+        </service>
+        <service id="staticBlockService" class="Core\Service\Block\StaticBlock">
+            <argument type="service" id="doctrine" />
+            <call method="setModuleService">
+                <argument type="service" id="moduleService" />
+            </call>
+        </service>
+        <service id="metadataLoader" class="Core\Model\MetadataLoader">
+            <call method="setRegistry">
+                <argument type="service" id="moduleRegistry" />
+            </call>
+        </service>
     </services>
 </container>

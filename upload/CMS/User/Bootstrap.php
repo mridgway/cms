@@ -21,8 +21,12 @@ class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
 
     public function _initAcl()
     {
+        $sf = $this->getApplication()->getResource('serviceContainer');
+
         $this->bootstrap('auth');
+        $moduleRegistry = $sf->getService('moduleRegistry');
         $acl = new \Core\Acl\Acl;
+        $acl->setModuleRegistry($moduleRegistry);
         /* @var $em EntityManager */
         $em = \Zend_Registry::get('doctrine');
 
@@ -39,7 +43,7 @@ class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
             // Set resources
             $acl->addResource('AllModules');
             $acl->addResource('AllPages');
-            $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
+            $modules = $moduleRegistry->getDatabaseStorage()->getModules();
             foreach ($modules AS $module) {
                 $acl->addResource($module, 'AllModules');
                 foreach ($module->getBlockTypes() AS $blockType) {

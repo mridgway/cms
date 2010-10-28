@@ -13,6 +13,11 @@ namespace Core\Service;
  */
 class Module extends \Core\Service\AbstractService
 {
+    /**
+     * @var \Core\Module\Registry
+     */
+    protected $_moduleRegistry;
+
     public static function createModuleFromConfig(\Zend_Config $config)
     {
         $module = new \Core\Model\Module($config->sysname, $config->title);
@@ -42,5 +47,20 @@ class Module extends \Core\Service\AbstractService
         }
 
         return $module;
+    }
+
+    public function getView($moduleName, $contentTypeName, $viewName)
+    {
+        return $this->getModuleRegistry()->getDatabaseStorage()->getModule($moduleName)->getContentType($contentTypeName)->getView($viewName);
+    }
+
+    public function setModuleRegistry(\Core\Module\Registry $moduleRegistry)
+    {
+        $this->_moduleRegistry = $moduleRegistry;
+    }
+
+    public function getModuleRegistry()
+    {
+        return $this->_moduleRegistry;
     }
 }

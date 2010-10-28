@@ -65,7 +65,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 
     public function _initMetadataLoader()
     {
-        $metadataLoader = new \Core\Model\MetadataLoader;
+        $metadataLoader = $this->serviceContainer->getService('metadataLoader');
 
         $evm = \Zend_Registry::get('doctrine')->getEventManager();
         $evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $metadataLoader);

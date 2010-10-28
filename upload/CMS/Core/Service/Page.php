@@ -250,4 +250,11 @@ class Page extends \Core\Service\AbstractService
 
         return $this->_defaultForm;
     }
+
+    public function addBlock(\Core\Model\Page $page, \Core\Model\Block $block, \Core\Model\Layout\Location $location)
+    {
+        $page->addBlock($block, $location);
+        $this->_em->persist($block);
+        $this->_em->flush();
+    }
 }

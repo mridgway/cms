@@ -31,15 +31,15 @@ class PageController extends \Zend_Controller_Action
     /**
      * @var \sfServiceContainer
      */
-    protected $_sf;
+    protected $_sc;
 
     public function init()
     {
-        $this->_sf = $this->getInvokeArg('bootstrap')->serviceContainer;
+        $this->_sc = $this->getInvokeArg('bootstrap')->serviceContainer;
 
-        $this->_em = $this->_sf->getService('doctrine');
+        $this->_em = $this->_sc->getService('doctrine');
 
-        $this->_pageService = $this->_sf->getService('pageService');
+        $this->_pageService = $this->_sc->getService('pageService');
 
         if ($this->getRequest()->getActionName() != 'add') {
             if (!$pageId = $this->getRequest()->getParam('id', false)) {
@@ -55,7 +55,7 @@ class PageController extends \Zend_Controller_Action
             throw new \Exception('Not allowed to view page.');
         }
 
-        $pageRenderer = $this->_sf->getService('pageRendererService');
+        $pageRenderer = $this->_sc->getService('pageRendererService');
         $content = $pageRenderer->renderPage($this->_page, $this->getRequest());
         $this->getResponse()->setBody($content);
     }
@@ -88,12 +88,11 @@ class PageController extends \Zend_Controller_Action
                 $block = null;
                 if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
                     $text = $frontend->html;
+
+                    $block = $this->_sc->getService('staticBlockService')->create($text);
+                    $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
+
                     $frontend = new \Core\Model\Frontend\BlockInfo();
-                    $view = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Core')->getContentType('Text')->getView('default');
-                    $block = new \Core\Model\Block\StaticBlock($text, $view);
-                    $this->_page->addBlock($block, $location);
-                    $this->_em->persist($block);
-                    $this->_em->flush();
                     $frontend->success($block);
                     $frontend->html = $block->render();
                 } else {

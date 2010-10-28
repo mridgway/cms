@@ -13,6 +13,7 @@ namespace Core\Model;
  */
 class MetadataLoader
 {
+    protected $_registry;
     
     /**
      * Hooks into the loadClassMetadata event of Doctrine to add discriminator mappings for content
@@ -51,9 +52,9 @@ class MetadataLoader
     public function getModules()
     {
         try {
-            return \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
+            return $this->getRegistry()->getDatabaseStorage()->getModules();
         } catch (\Exception $e) {
-            return \Core\Module\Registry::getInstance()->getConfigStorage()->getModules();
+            return $this->getRegistry()->getConfigStorage()->getModules();
         }
     }
 
@@ -82,5 +83,15 @@ class MetadataLoader
             $map[$activityType->discriminator] = $activityType->class;
         }
         return $map;
+    }
+
+    public function getRegistry()
+    {
+        return $this->_registry;
+    }
+
+    public function setRegistry($registry)
+    {
+        $this->_registry = $registry;
     }
 }

@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -322,5 +322,26 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $pageService = new Page($em);
 
         $pageService->getDefaultForm();
+    }
+
+    public function testAddBlock()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $pageService = new \Core\Service\Page($em);
+
+        $layout = new \Core\Model\Layout('1col');
+        $page = new \Core\Model\Page($layout);
+
+        $view = new \Mock\View();
+        $content = new \Core\Model\Content\Text('title', 'content', false);
+        $block = new \Core\Model\Block\StaticBlock($content, $view);
+
+        $location = new \Core\Model\Layout\Location('main');
+
+        $em->shouldReceive('persist')->with($block)->ordered();
+        $em->shouldReceive('flush')->ordered();
+        
+        $pageService->addBlock($page, $block, $location);
     }
 }

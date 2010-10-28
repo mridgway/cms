@@ -92,7 +92,7 @@ class Block extends \Core\Service\AbstractService
      */
     public function getBlockController(\Core\Model\Block $block)
     {
-        $modules = $this->_moduleRegistry->getDatabaseStorage()->getModules();
+        $modules = $this->getModuleRegistry()->getDatabaseStorage()->getModules();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
                 if ($type->class == get_class($block->content)) {
@@ -120,9 +120,14 @@ class Block extends \Core\Service\AbstractService
         $this->getEntityManager()->flush();
     }
 
-    public function setModuleRegistry(\Core\Module\Registry $registry)
+    public function getModuleRegistry()
     {
-        $this->_moduleRegistry = $registry;
+        return $this->_moduleRegistry;
+    }
+
+    public function setModuleRegistry(\Core\Module\Registry $moduleRegistry)
+    {
+        $this->_moduleRegistry = $moduleRegistry;
     }
 
     public function initBlock(\Core\Model\Block $block, $request)

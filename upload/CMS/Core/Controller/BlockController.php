@@ -19,6 +19,11 @@ class BlockController extends \Zend_Controller_Action
     protected $_em;
 
     /**
+     * @var sfServiceContainer
+     */
+    protected $_sc;
+
+    /**
      *
      * @var \Core\Model\Block
      */
@@ -26,6 +31,7 @@ class BlockController extends \Zend_Controller_Action
 
     public function init()
     {
+        $this->_sc = $this->getInvokeArg('bootstrap')->serviceContainer;
         $this->_em = \Zend_Registry::get('doctrine');
 
         if (!$blockId = $this->getRequest()->getParam('id', 0)) {
@@ -55,7 +61,7 @@ class BlockController extends \Zend_Controller_Action
             die(new \Core\Model\Frontend\Simple(1, 'Permission denied.'));
         }
         
-        $frontend = \Core\Service\Manager::get('Core\Service\Block')
+        $frontend = $this->_sc->getService('blockService')
                         ->dispatchBlockAction($this->_block, 'editAction', $this->getRequest());
 
         $frontend->data[0] = array('id' => $this->_block->id);
@@ -81,17 +87,16 @@ class BlockController extends \Zend_Controller_Action
 
         $frontend = new \Core\Model\Frontend\Simple();
 
-        $blockService = \Core\Service\Manager::get('Core\Service\Block');
+        $blockService = $this->_sc->getService('blockService');
 
         // dispatch to content controller
         if ($this->_block instanceof \Core\Model\Block\StaticBlock) {
             try {
-                \Core\Service\Manager::get('Core\Service\Block')
-                        ->dispatchBlockAction($this->_block, 'deleteAction', $this->getRequest());
+                $blockService->dispatchBlockAction($this->_block, 'deleteAction', $this->getRequest());
             } catch (\Exception $e) {}
         }
         
-        \Core\Service\Manager::get('Core\Service\Block')->deleteBlock($this->_block);
+        $blockService->deleteBlock($this->_block);
 
         $frontend->data[0] = array('id' => $this->_block->id);
         

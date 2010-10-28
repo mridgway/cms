@@ -40,8 +40,9 @@ abstract class AbstractInstallController extends \ZendX\Application53\Controller
 
     public function init()
     {
-        $this->_em = \Zend_Registry::getInstance()->get('doctrine');
-        $this->moduleRegistry = \Core\Module\Registry::getInstance();
+        $sc = $this->getInvokeArg('bootstrap')->serviceContainer;
+        $this->_em = $sc->getService('doctrine');
+        $this->moduleRegistry = $sc->getService('moduleRegistry');
     }
 
     public function indexAction()
