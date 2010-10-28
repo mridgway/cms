@@ -66,6 +66,7 @@ class AllTests
         $suite->addTestSuite('Core\Service\TextTest');
         $suite->addTestSuite('Core\Service\Block\StaticBlock');
         $suite->addTestSuite('Core\Service\Block\DynamicBlock');
+        $suite->addTestSuite('Core\Service\Mediator\ContentMediator');
 
         return $suite;
     }
