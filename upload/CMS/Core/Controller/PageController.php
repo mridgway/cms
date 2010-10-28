@@ -88,10 +88,8 @@ class PageController extends \Zend_Controller_Action
                 $block = null;
                 if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
                     $text = $frontend->html;
-
                     $block = $this->_sc->getService('staticBlockService')->create($text);
                     $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
-
                     $frontend = new \Core\Model\Frontend\BlockInfo();
                     $frontend->success($block);
                     $frontend->html = $block->render();
@@ -109,7 +107,7 @@ class PageController extends \Zend_Controller_Action
                 echo $frontend;
                 return;
             case 'shared':
-                $types = $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
+                $types = $this->_sc->getService('textService')->getShared();
                 $view = new \Core\Model\View('Core', 'Block/addShared');
                 $view->assign('types', $types);
                 $view->assign('type', $type);
@@ -118,19 +116,16 @@ class PageController extends \Zend_Controller_Action
                 $frontend = new \Core\Model\Frontend\Simple();
                 $frontend->html = $view->render();
                 if ($contentId = $this->getRequest()->getParam('content', null)) {
-                    $content = $this->_em->getReference('Core\Model\Content', $contentId);
-                    $view = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Core')->getContentType('Text')->getView('default');
-                    $block = new \Core\Model\Block\StaticBlock($content, $view);
-                    $this->_page->addBlock($block, $location);
-                    $this->_em->persist($block);
-                    $this->_em->flush();
+                    $content = $this->_sc->getService('contentService')->getContent($contentId);
+                    $block = $this->_sc->getService('staticBlockService')->create($content);
+                    $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
                     echo new \Core\Model\Frontend\Simple();
                     return;
                 }
                 echo $frontend;
                 return;
             case 'dynamic':
-                $types = $this->_em->getRepository('Core\Model\Module\BlockType')->findAddableBlockTypes();
+                $types = $this->_sc->getService('dynamicBlockService')->getAddableBlockTypes();
                 $view = new \Core\Model\View('Core', 'Block/addDynamic');
                 $view->assign('types', $types);
                 $view->assign('type', $type);
@@ -139,12 +134,8 @@ class PageController extends \Zend_Controller_Action
                 $frontend = new \Core\Model\Frontend\Simple();
                 $frontend->html = $view->render($view->getFile());
                 if ($blockId = $this->getRequest()->getParam('blockType', null)) {
-                    $blockType = $this->_em->find('Core\Model\Module\BlockType', $blockId);
-                    $view = $blockType->getView('default');
-                    $block = $blockType->createInstance(array($view));
-                    $this->_page->addBlock($block, $location);
-                    $this->_em->persist($block);
-                    $this->_em->flush();
+                    $block = $this->_sc->getService('dynamicBlockService')->create($blockId);
+                    $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
                     echo new \Core\Model\Frontend\Simple();
                     return;
                 }

@@ -62,6 +62,10 @@ class AllTests
         $suite->addTestSuite('Core\Service\ModuleTest');
         $suite->addTestSuite('Core\Service\PageRendererTest');
         $suite->addTestSuite('Core\Service\RouteTest');
+        $suite->addTestSuite('Core\Service\ContentTest');
+        $suite->addTestSuite('Core\Service\TextTest');
+        $suite->addTestSuite('Core\Service\Block\StaticBlock');
+        $suite->addTestSuite('Core\Service\Block\DynamicBlock');
 
         return $suite;
     }

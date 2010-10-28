@@ -11,7 +11,7 @@ namespace Core\Service;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  */
-class Text
+class Text extends \Core\Service\AbstractService
 {
 
     /**
@@ -38,5 +38,10 @@ class Text
             $form->populate($data);
         }
         return $form;
+    }
+
+    public function getShared()
+    {
+        return $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
     }
 }
