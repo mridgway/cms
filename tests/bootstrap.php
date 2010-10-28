@@ -27,6 +27,7 @@ Zend_Loader_Autoloader::getInstance()->registerNamespace('Core\\');
 Zend_Loader_Autoloader::getInstance()->registerNamespace('Asset\\');
 Zend_Loader_Autoloader::getInstance()->registerNamespace('User\\');
 Zend_Loader_Autoloader::getInstance()->registerNamespace('Blog\\');
+Zend_Loader_Autoloader::getInstance()->registerNamespace('Taxonomy\\');
 Zend_Loader_Autoloader::getInstance()->registerNamespace('CMS\\');
 
 require_once('CMSTestCase.php');

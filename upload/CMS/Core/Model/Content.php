@@ -102,6 +102,97 @@ abstract class Content
         $this->dependentPage = null;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
+
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
+    }
+
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    public function getModificationDate()
+    {
+        return $this->modificationDate;
+    }
+
+    public function setModificationDate($modificationDate)
+    {
+        $this->modificationDate = $modificationDate;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+    public function setActivities($activities)
+    {
+        $this->activities = $activities;
+    }
+
+    /**
+     * @return \Core\Model\Page
+     */
+    public function getDependentPage()
+    {
+        return $this->dependentPage;
+    }
+
+    /**
+     * @param Page $page
+     */
+    public function setDependentPage(\Core\Model\Page $page)
+    {
+        $this->dependentPage = $page;
+    }
+
     /**
      * Returns the primary page's URL
      *
@@ -113,14 +204,6 @@ abstract class Content
             return null;
         }
         return $this->dependentPage->getURL();
-    }
-
-    /**
-     * @param Page $page
-     */
-    public function setDependentPage(\Core\Model\Page $page)
-    {
-        $this->dependentPage = $page;
     }
 
     /**
