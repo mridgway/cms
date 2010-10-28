@@ -37,6 +37,10 @@ class Page extends \Core\Service\AbstractService
      */
     public function getPage($id)
     {
+        if(!$id) {
+            throw new \Exception('Page id not set.');
+        }
+
         $page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($id);
 
         if (!$page) {
@@ -167,16 +171,19 @@ class Page extends \Core\Service\AbstractService
 
             $page->setLayout($this->_em->getReference('Core\Model\Layout', $data['layout']));
 
-            $this->_em->remove($page->pageRoute);
-            $this->_em->remove($page->pageRoute->route);
+            if($page->pageRoute->route->template != $data['pageRoute'])
+            {
+                $this->_em->remove($page->pageRoute);
+                $this->_em->remove($page->pageRoute->route);
 
-            $route = $this->_routeService->create($data['pageRoute']);
-            $this->_em->persist($route);
+                $route = $this->_routeService->create($data['pageRoute']);
+                $this->_em->persist($route);
 
-            $pageRoute = $route->routeTo($page);
-            $this->_em->persist($pageRoute);
+                $pageRoute = $route->routeTo($page);
+                $this->_em->persist($pageRoute);
 
-            $page->pageRoute = $pageRoute;
+                $page->pageRoute = $pageRoute;
+            }
 
             unset($data['id']);
             unset($data['layout']);

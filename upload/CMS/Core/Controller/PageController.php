@@ -19,11 +19,6 @@ class PageController extends \Zend_Controller_Action
     protected $_em;
 
     /**
-     * @var \Core\Service\PageService
-     */
-    protected $_pageService;
-
-    /**
      * @var \Core\Model\Page
      */
     protected $_page;
@@ -40,23 +35,18 @@ class PageController extends \Zend_Controller_Action
         $this->_em = $this->_sc->getService('doctrine');
 
         $this->_pageService = $this->_sc->getService('pageService');
-
-        if ($this->getRequest()->getActionName() != 'add') {
-            if (!$pageId = $this->getRequest()->getParam('id', false)) {
-                throw new \Exception('Page not set.');
-            }
-            $this->_page = $this->_pageService->getPage($pageId);
-        }
     }
 
     public function viewAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'view')) {
+        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'view')) {
             throw new \Exception('Not allowed to view page.');
         }
 
         $pageRenderer = $this->_sc->getService('pageRendererService');
-        $content = $pageRenderer->renderPage($this->_page, $this->getRequest());
+        $content = $pageRenderer->renderPage($page, $this->getRequest());
         $this->getResponse()->setBody($content);
     }
 
@@ -65,7 +55,9 @@ class PageController extends \Zend_Controller_Action
      */
     public function addBlockAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
             throw new \Exception('Not allowed to edit page.');
         }
         if (!($location = $this->getRequest()->getParam('location'))){
@@ -89,7 +81,7 @@ class PageController extends \Zend_Controller_Action
                 if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
                     $text = $frontend->html;
                     $block = $this->_sc->getService('staticBlockService')->create($text);
-                    $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
+                    $this->_sc->getService('pageService')->addBlock($page, $block, $location);
                     $frontend = new \Core\Model\Frontend\BlockInfo();
                     $frontend->success($block);
                     $frontend->html = $block->render();
@@ -111,14 +103,14 @@ class PageController extends \Zend_Controller_Action
                 $view = new \Core\Model\View('Core', 'Block/addShared');
                 $view->assign('types', $types);
                 $view->assign('type', $type);
-                $view->assign('id', $this->_page->id);
+                $view->assign('id', $page->id);
                 $view->assign('location', $location->sysname);
                 $frontend = new \Core\Model\Frontend\Simple();
                 $frontend->html = $view->render();
                 if ($contentId = $this->getRequest()->getParam('content', null)) {
                     $content = $this->_sc->getService('contentService')->getContent($contentId);
                     $block = $this->_sc->getService('staticBlockService')->create($content);
-                    $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
+                    $this->_sc->getService('pageService')->addBlock($page, $block, $location);
                     echo new \Core\Model\Frontend\Simple();
                     return;
                 }
@@ -129,13 +121,13 @@ class PageController extends \Zend_Controller_Action
                 $view = new \Core\Model\View('Core', 'Block/addDynamic');
                 $view->assign('types', $types);
                 $view->assign('type', $type);
-                $view->assign('id', $this->_page->id);
+                $view->assign('id', $page->id);
                 $view->assign('location', $location->sysname);
                 $frontend = new \Core\Model\Frontend\Simple();
                 $frontend->html = $view->render($view->getFile());
                 if ($blockId = $this->getRequest()->getParam('blockType', null)) {
                     $block = $this->_sc->getService('dynamicBlockService')->create($blockId);
-                    $this->_sc->getService('pageService')->addBlock($this->_page, $block, $location);
+                    $this->_sc->getService('pageService')->addBlock($page, $block, $location);
                     echo new \Core\Model\Frontend\Simple();
                     return;
                 }
@@ -177,9 +169,10 @@ class PageController extends \Zend_Controller_Action
 
         $html = $this->getRequest()->getParam('html');
         if (isset($html)) {
-            $this->_page->getLayout()->getLocation('main')->addContent($frontend->html);
-            $this->_page->getLayout()->assign('page', $this->_page);
-            echo $this->_page->getLayout()->render();
+            $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+            $page->getLayout()->getLocation('main')->addContent($frontend->html);
+            $page->getLayout()->assign('page', $page);
+            echo $page->getLayout()->render();
         } else {
             echo $frontend;
         }
@@ -190,19 +183,21 @@ class PageController extends \Zend_Controller_Action
     */
     public function editAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+        
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
             throw new \Exception('Not allowed to edit page.');
         }
 
         $frontend = new \Core\Model\Frontend\Simple();
 
         $form = $this->_pageService->getDefaultForm();
-        $form->setObject($this->_page);
+        $form->setObject($page);
 
         if ($this->getRequest()->isPost()) {
             try {
-                $this->_pageService->editPage($this->_page, $this->getRequest()->getPost());
-                $form->setObject($this->_page);
+                $this->_pageService->editPage($page, $this->getRequest()->getPost());
+                $form->setObject($page);
                 $frontend->success();
             } catch(\Core\Exception\FormException $e) {
                 $form = $e->getForm();
@@ -210,7 +205,7 @@ class PageController extends \Zend_Controller_Action
             }
         }
 
-        $form->setAction('/direct/page/edit?id=' . $this->_page->getId());
+        $form->setAction('/direct/page/edit?id=' . $page->getId());
         $frontend->html = (string)$form;
         echo $frontend;
     }
@@ -220,7 +215,9 @@ class PageController extends \Zend_Controller_Action
      */
     public function rearrangeAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+        
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
             throw new \Exception('Not allowed to edit page.');
         }
 
@@ -234,10 +231,10 @@ class PageController extends \Zend_Controller_Action
             $receivedfrontendObject = \Zend_Json::decode($receivedfrontendObject, \Zend_Json::TYPE_OBJECT);
             foreach($receivedfrontendObject->data[0]->locations AS $frontendLocation) {
                 foreach ($frontendLocation->blocks AS $frontendKey => $frontendBlock) {
-                    foreach ($this->_page->blocks AS $key => $block) {
+                    foreach ($page->blocks AS $key => $block) {
                         if ($frontendBlock->id == $block->id) {
-                            $this->_page->blocks[$key]->location = $this->_em->getReference('Core\Model\Layout\Location', $frontendLocation->sysname);
-                            $this->_page->blocks[$key]->weight = $frontendKey;
+                            $page->blocks[$key]->location = $this->_em->getReference('Core\Model\Layout\Location', $frontendLocation->sysname);
+                            $page->blocks[$key]->weight = $frontendKey;
                         }
                     }
                 }
@@ -250,7 +247,7 @@ class PageController extends \Zend_Controller_Action
         $this->_em->flush();
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
-        echo $frontendObject->success($this->_page);
+        echo $frontendObject->success($page);
     }
 
     /**
@@ -258,13 +255,15 @@ class PageController extends \Zend_Controller_Action
      */
     public function infoAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'edit')) {
+        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+        
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
             throw new \Exception('Not allowed to edit page.');
         }
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
 
-        echo $frontendObject->success($this->_page);
+        echo $frontendObject->success($page);
     }
 
 
@@ -276,11 +275,13 @@ class PageController extends \Zend_Controller_Action
      */
     public function deleteAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($this->_page, 'delete')) {
+        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+        
+        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'delete')) {
             throw new \Exception('Not allowed to delete page.');
         }
 
-        $this->_pageService->deletePage($this->_page);
+        $this->_pageService->deletePage($page);
 
         echo new \Core\Model\Frontend\Simple(0, 'Page deleted successfully.');
     }

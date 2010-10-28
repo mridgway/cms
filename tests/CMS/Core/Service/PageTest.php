@@ -40,6 +40,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $pageService = new Page($em);
 
         $this->assertEquals($pageService->getPage(1), $page);
+
+        $this->setExpectedException('Exception');
+        $pageService->getPage(false);
     }
 
     public function testCreatePageFromTemplate()
