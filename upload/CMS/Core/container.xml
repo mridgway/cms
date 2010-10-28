@@ -48,5 +48,14 @@
                 <argument type="service" id="moduleRegistry" />
             </call>
         </service>
+        <service id="dynamicBlockService" class="Core\Service\Block\DynamicBlock">
+            <argument type="service" id="doctrine" />
+        </service>
+        <service id="textService" class="Core\Service\Text">
+            <argument type="service" id="doctrine" />
+        </service>
+        <service id="contentService" class="Core\Service\Content">
+            <argument type="service" id="doctrine" />
+        </service>
     </services>
 </container>
