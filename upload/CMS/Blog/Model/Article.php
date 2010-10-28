@@ -32,19 +32,6 @@ class Article extends \Core\Model\Content
      */
     protected $content;
 
-    /**
-     * @var Taxonomy\Model\Term
-     * @ManyToOne(targetEntity="Taxonomy\Model\Term")
-     * @JoinColumn(nullable="true")
-     */
-    protected $category;
-
-    /**
-     * @var Asset\Model\Asset
-     * @ManyToOne(targetEntity="Asset\Model\Asset")
-     */
-    protected $asset;
-
     public function __construct($title, $content)
     {
         parent::__construct();
