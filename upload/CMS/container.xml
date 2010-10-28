@@ -38,5 +38,6 @@
             </argument>
             <argument type="service" id="doctrineConfig" />
         </service>
+        <service id="auth" class="Core\Auth\Auth" constructor="getInstance" />
     </services>
 </container>
