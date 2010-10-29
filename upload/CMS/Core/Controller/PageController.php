@@ -127,9 +127,7 @@ class PageController extends \Zend_Controller_Action
     */
     public function addAction()
     {
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AllPages', 'add')) {
-            throw new \Exception('Not allowed to add page.');
-        }
+        $this->_pageService->isAllowed('AllPages', 'add');
 
         $frontend = new \Core\Model\Frontend\Simple();
 

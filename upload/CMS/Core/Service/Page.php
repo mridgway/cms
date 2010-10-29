@@ -59,11 +59,18 @@ class Page extends \Core\Service\AbstractService
     {
         $page = $this->getPage($id);
         
+        $this->isAllowed($page, $actionType);
+
+        return $page;
+    }
+
+    public function isAllowed($page, $actionType)
+    {
         if(!$this->getAuth()->getIdentity()->isAllowed($page, $actionType)) {
             throw new \Exception('Not allowed to ' . $actionType . ' page.');
         }
 
-        return $page;
+        return true;
     }
 
     /**
