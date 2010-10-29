@@ -33,6 +33,11 @@ abstract class AbstractController implements ControllerInterface
     protected $_em;
 
     /**
+     * @var sfServiceContainer
+     */
+    protected $_sc;
+
+    /**
      * Sets the request object
      *
      * @param Zend_Controller_Request_Http $request
@@ -90,5 +95,23 @@ abstract class AbstractController implements ControllerInterface
     public function getEntityManager()
     {
         return $this->_em;
+    }
+
+    /**
+     * Gets the service container
+     *
+     * @return \sfServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->_sc;
+    }
+
+    /**
+     * Sets the service container
+     */
+    public function setServiceContainer(\sfServiceContainer $serviceContainer)
+    {
+        $this->_sc = $serviceContainer;
     }
 }

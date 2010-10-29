@@ -14,11 +14,6 @@ namespace Core\Controller;
 class PageController extends \Zend_Controller_Action
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $_em;
-
-    /**
      * @var \Core\Model\Page
      */
     protected $_page;
@@ -31,7 +26,6 @@ class PageController extends \Zend_Controller_Action
     public function init()
     {
         $this->_sc = $this->getInvokeArg('bootstrap')->serviceContainer;
-        $this->_em = $this->_sc->getService('doctrine');
         $this->_pageService = $this->_sc->getService('pageService');
     }
 
@@ -55,7 +49,7 @@ class PageController extends \Zend_Controller_Action
         switch($type) {
             case 'standard':
                 $controller = new \Core\Controller\Content\Text();
-                $controller->setEntityManager($this->_em);
+                $controller->setServiceContainer($this->_sc);
                 $controller->setRequest($this->getRequest());
                 $controller->setResponse($this->getResponse());
 

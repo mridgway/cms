@@ -17,7 +17,7 @@ class Text extends \Core\Controller\Content\AbstractController
     {
         $frontend = new \Core\Model\Frontend\Simple();
 
-        $textService = \Core\Service\Manager::get('Core\Service\Text');
+        $textService = $this->getServiceContainer()->getService('textService');
         $data = $this->getRequest()->getPost();
 
         //@var $form \Zend_Form
@@ -30,9 +30,7 @@ class Text extends \Core\Controller\Content\AbstractController
             if ($form->isValid($data)) {
                 // update the article
                 $form->removeElement('id');
-                $text = new \Core\Model\Content\Text($data['title'], $data['content']);
-                $this->getEntityManager()->persist($text);
-                $this->getEntityManager()->flush();
+                $text = $this->_sc->getService('textService')->create($data['title'], $data['content']);
                 $frontend->html = $block ? $block->render() : $text;
             } else {
                 $frontend->html = $blockView->render();
