@@ -74,14 +74,35 @@ class Page extends \Core\Service\AbstractService
     }
 
     /**
+     * Ensures that a variable is a template or can be used to find a template
+     *
+     * @param Core\Model\Template|string|int $template
+     * @return Core\Model\Template
+     */
+    public function ensureTemplate($template)
+    {
+        if (!$template instanceof \Core\Model\Template) {
+            if (is_int($template)) {
+                $template = $this->getEntityManager()->find('Core\Model\Template', $template);
+            } else {
+                $template = $this->getEntityManager()->getRepository('Core\Model\Template')->findBySysname($template);
+            }
+        }
+
+        return $template;
+    }
+
+    /**
      * Creates a page from a template replacing any placeholders with the appropriate objects.
      * Placeholders should be string => Core\Model\Content
      *
      * @param \Core\Model\Template
      * @return \Core\Model\Page
      */
-    public function createPageFromTemplate(\Core\Model\Template $template, $placeholders = array())
+    public function createPageFromTemplate($template, $placeholders = array())
     {
+        $template = $this->ensureTemplate($template);
+
         // keeps track of new blocks that replaced placeholders
         $replacements = array();
 
