@@ -16,6 +16,7 @@ class Block extends \Core\Service\AbstractService
     protected $_moduleRegistry;
     protected $_auth;
     protected $_locationService;
+    protected $_sc;
     
     /**
      * Gets all config values or content type properties for a given block
@@ -71,6 +72,7 @@ class Block extends \Core\Service\AbstractService
             throw new \Exception('Block controller/action does not exist.');
         }
         $controller->setEntityManager($this->getEntityManager());
+        $controller->setServiceContainer($this->getServiceContainer());
         $controller->setRequest($request);
         return $controller->$action($block);
     }
@@ -189,5 +191,15 @@ class Block extends \Core\Service\AbstractService
     {
         $this->updateLocation($block, $blockObject->location);
         $this->updateWeight($block, $blockObject->weight);
+    }
+
+    public function getServiceContainer()
+    {
+        return $this->_sc;
+    }
+
+    public function setServiceContainer(\sfServiceContainer $serviceContainer)
+    {
+        $this->_sc = $serviceContainer;
     }
 }

@@ -49,4 +49,11 @@ class Text extends \Core\Service\AbstractService
     {
         return new \Core\Model\Content\Text($title, $content, $shared);
     }
+
+    public function update($text, $title, $content)
+    {
+        $text->setTitle($title);
+        $text->setContent($content);
+        $this->getEntityManager()->flush();
+    }
 }
