@@ -33,11 +33,34 @@ class ContentElementFactory
         return $authorName;
     }
 
+    public static function getCreationDateElement()
+    {
+        $creationDate = new \ZendX_JQuery_Form_Element_DatePicker('creationDate');
+        $creationDate->setLabel('Creation Date:');
+
+        return $creationDate;
+    }
+
+    public static function getModificationDateElement()
+    {
+        $modificationDate = new \ZendX_JQuery_Form_Element_DatePicker('modificationDate');
+        $modificationDate->setLabel('Modification Date:');
+
+        return $modificationDate;
+    }
+
     public static function getTagsElement()
     {
         $tags = \Taxonomy\Form\Factory\TermElementFactory::termMultiTagElement('contentTags');
         $tags->setLabel('Tags:');
 
         return $tags;
+    }
+
+    /**
+     * @todo implement this
+     */
+    public static function getStatusElement($workflow)
+    {
     }
 }
