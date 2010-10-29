@@ -249,6 +249,11 @@ class Page extends \Core\Service\AbstractService
         $this->_em->flush();
     }
 
+    public function getBlockService()
+    {
+        return $this->_blockService;
+    }
+
     public function setBlockService($blockService)
     {
         $this->_blockService = $blockService;
@@ -296,5 +301,17 @@ class Page extends \Core\Service\AbstractService
     public function setAuth($auth)
     {
         $this->_auth = $auth;
+    }
+
+    public function update(\Core\Model\Page $page, \stdClass $pageObject)
+    {
+        foreach($pageObject->layout->locations as $location)
+        {
+            foreach($location as $block)
+            {
+                $this->getBlockService()->update($page->getBlock($block->id), $block);
+            }
+        }
+        $this->_em->flush();
     }
 }

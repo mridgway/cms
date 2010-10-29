@@ -203,22 +203,18 @@ class PageController extends \Zend_Controller_Action
 
         try {
             $receivedfrontendObject = \Zend_Json::decode($receivedfrontendObject, \Zend_Json::TYPE_OBJECT);
+            $pageObject = new \stdClass();
+            $pageObject->layout = new \stdClass();
+            $pageObject->layout->locations = array();
             foreach($receivedfrontendObject->data[0]->locations AS $frontendLocation) {
-                foreach ($frontendLocation->blocks AS $frontendKey => $frontendBlock) {
-                    foreach ($page->blocks AS $key => $block) {
-                        if ($frontendBlock->id == $block->id) {
-                            $page->blocks[$key]->location = $this->_em->getReference('Core\Model\Layout\Location', $frontendLocation->sysname);
-                            $page->blocks[$key]->weight = $frontendKey;
-                        }
-                    }
-                }
+                $pageObject->layout->locations[] = $frontendLocation->blocks;
             }
+
+            $this->_pageService->update($page, $pageObject);
         } catch (\Exception $e) {
             $frontendObject = new \Core\Model\Frontend\Simple();
             die($frontendObject->fail('Page object not sent.'));
         }
-
-        $this->_em->flush();
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
         echo $frontendObject->success($page);

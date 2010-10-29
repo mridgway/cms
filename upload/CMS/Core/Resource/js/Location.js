@@ -53,6 +53,7 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
         updateBlocks: function () {
             for (i in this.blocks) {
                 this.blocks[i].weight = this.blocks[i].getPosition();
+                this.blocks[i].location = this.sysname;
             }
             this.blocks.sort(function (a, b) {
                 return a.weight - b.weight;
