@@ -2,6 +2,9 @@
 namespace Core\Model;
 
 require_once 'PHPUnit/Framework.php';
+//require_once '../../../bootstrap.php';
+
+use \Mockery as m;
 
 /**
  * Test class for Page.
@@ -61,6 +64,24 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $template = new Template('template', $this->page->getLayout());
         $this->page->setTemplate($template);
         $this->assertEquals($template, $this->page->getTemplate());
+    }
+
+    public function testGetBlock()
+    {
+        $view = new \Mock\View();
+        $content = new \Core\Model\Content\Text('title', 'content', false);
+        $block = m::mock(new \Core\Model\Block\StaticBlock($content, $view));
+        $block->shouldReceive('getId')->andReturn(1);
+
+        $location = new \Core\Model\Layout\Location('main');
+        $layout = new \Core\Model\Layout('main');
+        $page = new \Core\Model\Page($layout);
+        $page->addBlock($block, $location);
+
+        $this->assertEquals($block, $page->getBlock(1));
+
+        $this->setExpectedException('Exception');
+        $page->getBlock(2);
     }
 }
 ?>

@@ -22,6 +22,9 @@
             <call method="setModuleRegistry">
                 <argument type="service" id="moduleRegistry" />
             </call>
+            <call method="setLocationService">
+                <argument type="service" id="locationService" />
+            </call>
         </service>
         <service id="routeService" class="Core\Service\Route">
             <argument type="service" id="doctrine" />

@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -380,5 +380,47 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $em->shouldReceive('flush')->ordered();
         
         $pageService->addBlock($page, $block, $location);
+    }
+
+    public function testUpdate()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('flush')->once();
+
+        $layout = new \Core\Model\Layout('1col');
+        $page = m::mock(new \Core\Model\Page($layout));
+        $page->shouldReceive('getBlock')->with(1)->once()->andReturn('one');
+        $page->shouldReceive('getBlock')->with(2)->once()->andReturn('two');
+        $page->shouldReceive('getBlock')->with(3)->once()->andReturn('three');
+
+        $b1 = new \stdClass();
+        $b1->id = 1;
+        $b1->location = 'main';
+        $b1->weight = 2;
+
+        $b2 = new \stdClass();
+        $b2->id = 2;
+        $b2->location = 'left';
+        $b2->weight = 1;
+
+        $b3 = new \stdClass();
+        $b3->id = 3;
+        $b3->location = 'main';
+        $b3->weight = 1;
+
+        $pageObject = new \stdClass();
+        $pageObject->layout = new \stdClass();
+        $pageObject->layout->locations = array(array($b1, $b2, $b3));
+
+        $blockService = m::mock();
+        $blockService->shouldReceive('update')->with('one', $b1);
+        $blockService->shouldReceive('update')->with('two', $b2);
+        $blockService->shouldReceive('update')->with('three', $b3);
+
+        $pageService = m::mock(new \Core\Service\Page($em), array(m::BLOCKS => array('update', 'setEntityManager')));
+        $pageService->shouldReceive('getBlockService')->andReturn($blockService);
+        $pageService->setEntityManager($em);
+
+        $pageService->update($page, $pageObject);
     }
 }

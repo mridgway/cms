@@ -75,5 +75,16 @@ class Page extends AbstractPage
         $this->template = $template;
         return $this;
     }
+
+    public function getBlock($id)
+    {
+        foreach($this->blocks as $block) {
+            if($id == $block->getId()) {
+                return $block;
+            }
+        }
+
+        throw new \Exception('A block with id ' . $id . ' does not exist on this page.');
+    }
     
 }
