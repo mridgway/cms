@@ -28,6 +28,16 @@ class RouteElementFactory
         return $template;
     }
 
+    public static function getRouteVariableElement($name, $route)
+    {
+        $routeVariable = new \Core\Form\Element\Text($name);
+        $routeVariable->setLabel('Sysname:');
+        $routeVariable->setAllowEmpty(false);
+        $routeVariable->addValidator(new \Core\Validator\UniquePageRoute($route));
+
+        return $routeVariable;
+    }
+
     public static function getIsDirectElement()
     {
         $isDirect = new \Zend_Form_Element_Checkbox('isDirect');
