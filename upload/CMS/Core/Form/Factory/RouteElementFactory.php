@@ -30,10 +30,10 @@ class RouteElementFactory
 
     public static function getRouteVariableElement($name, $route)
     {
-        $routeVariable = new \Core\Form\Element\Text($name);
+        $routeVariable = new \Core\Form\Element\Text('routeVar:' . $name);
         $routeVariable->setLabel('Sysname:');
         $routeVariable->setAllowEmpty(false);
-        $routeVariable->addValidator(new \Core\Validator\UniquePageRoute($route));
+        $routeVariable->addValidator(new \Core\Validator\UniquePageRoute($name, $route));
 
         return $routeVariable;
     }
