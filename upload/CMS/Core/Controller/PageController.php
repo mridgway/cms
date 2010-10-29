@@ -31,20 +31,13 @@ class PageController extends \Zend_Controller_Action
     public function init()
     {
         $this->_sc = $this->getInvokeArg('bootstrap')->serviceContainer;
-
         $this->_em = $this->_sc->getService('doctrine');
-
         $this->_pageService = $this->_sc->getService('pageService');
     }
 
     public function viewAction()
     {
-        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
-
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'view')) {
-            throw new \Exception('Not allowed to view page.');
-        }
-
+        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'view');
         $pageRenderer = $this->_sc->getService('pageRendererService');
         $content = $pageRenderer->renderPage($page, $this->getRequest());
         $this->getResponse()->setBody($content);
@@ -55,11 +48,7 @@ class PageController extends \Zend_Controller_Action
      */
     public function addBlockAction()
     {
-        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
-
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
-            throw new \Exception('Not allowed to edit page.');
-        }
+        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
         if (!($location = $this->getRequest()->getParam('location'))){
             throw new \Exception('Invalid location.');
         }
@@ -183,11 +172,7 @@ class PageController extends \Zend_Controller_Action
     */
     public function editAction()
     {
-        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
-        
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
-            throw new \Exception('Not allowed to edit page.');
-        }
+        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
 
         $frontend = new \Core\Model\Frontend\Simple();
 
@@ -215,11 +200,7 @@ class PageController extends \Zend_Controller_Action
      */
     public function rearrangeAction()
     {
-        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
-        
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
-            throw new \Exception('Not allowed to edit page.');
-        }
+        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
 
         $receivedfrontendObject = $this->getRequest()->getParam('page', null);
         if (!isset($receivedfrontendObject)) {
@@ -255,11 +236,7 @@ class PageController extends \Zend_Controller_Action
      */
     public function infoAction()
     {
-        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
-        
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'edit')) {
-            throw new \Exception('Not allowed to edit page.');
-        }
+        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
 
@@ -275,11 +252,7 @@ class PageController extends \Zend_Controller_Action
      */
     public function deleteAction()
     {
-        $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
-        
-        if (!\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed($page, 'delete')) {
-            throw new \Exception('Not allowed to delete page.');
-        }
+        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'delete');
 
         $this->_pageService->deletePage($page);
 

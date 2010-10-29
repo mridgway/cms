@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -44,6 +44,48 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         $pageService->getPage(false);
     }
+
+    public function testGetPageIfAllowed()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $page = m::mock();
+        $identity = m::mock();
+        $identity->shouldReceive('isAllowed')->with($page, 'view')->andReturn(true);
+        $auth = m::mock();
+        $auth->shouldReceive('getIdentity')->andReturn($identity);
+
+        $pageService = m::mock(new \Core\Service\Page($em), array(m::BLOCKS => array('getPageIfAllowed')));
+        $pageService->shouldReceive('getPage')->with(1)->andReturn($page);
+        $pageService->shouldReceive('getAuth')->andReturn($auth);
+
+        $pageService->getPageIfAllowed(1, 'view');
+
+        $this->setExpectedException('Exception');
+        $page = m::mock();
+        $identity = m::mock();
+        $identity->shouldReceive('isAllowed')->with($page, 'view')->andReturn(false);
+        $auth = m::mock();
+        $auth->shouldReceive('getIdentity')->andReturn($identity);
+
+        $pageService = m::mock(new \Core\Service\Page($em), array(m::BLOCKS => array('getPageIfAllowed')));
+        $pageService->shouldReceive('getPage')->with(1)->andReturn($page);
+        $pageService->shouldReceive('getAuth')->andReturn($auth);
+        $pageService->getPageIfAllowed(1, 'view');
+    }
+
+    /*
+     public function getPageIfAllowed($id, $actionType)
+    {
+        $page = $this->getPage($id);
+
+        if(!$this->getAuth()->getIdentity()->isAllowed($page, $actionType)) {
+            throw new \Exception('Not allowed to ' . $actionType . ' page.');
+        }
+
+        return $page;
+    }
+     */
 
     public function testCreatePageFromTemplate()
     {

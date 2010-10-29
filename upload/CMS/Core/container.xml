@@ -13,6 +13,9 @@
             <call method="setRouteService">
                 <argument type="service" id="routeService" />
             </call>
+            <call method="setAuth">
+                <argument type="service" id="auth" />
+            </call>
         </service>
         <service id="blockService" class="Core\Service\Block">
             <argument type="service" id="doctrine" />

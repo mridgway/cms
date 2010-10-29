@@ -30,6 +30,11 @@ class Page extends \Core\Service\AbstractService
     protected $_defaultForm;
 
     /**
+     * @var Core\Auth\Auth
+     */
+    protected $_auth;
+
+    /**
      * Gets a page.
      * 
      * @param integer $id
@@ -45,6 +50,17 @@ class Page extends \Core\Service\AbstractService
 
         if (!$page) {
             throw new \Exception('Page does not exist.');
+        }
+
+        return $page;
+    }
+
+    public function getPageIfAllowed($id, $actionType)
+    {
+        $page = $this->getPage($id);
+        
+        if(!$this->getAuth()->getIdentity()->isAllowed($page, $actionType)) {
+            throw new \Exception('Not allowed to ' . $actionType . ' page.');
         }
 
         return $page;
@@ -263,5 +279,15 @@ class Page extends \Core\Service\AbstractService
         $page->addBlock($block, $location);
         $this->_em->persist($block);
         $this->_em->flush();
+    }
+
+    public function getAuth()
+    {
+        return $this->_auth;
+    }
+
+    public function setAuth($auth)
+    {
+        $this->_auth = $auth;
     }
 }
