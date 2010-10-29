@@ -30,6 +30,11 @@ class Page extends \Core\Service\AbstractService
     protected $_defaultForm;
 
     /**
+     * @var Core\Auth\Auth
+     */
+    protected $_auth;
+
+    /**
      * Gets a page.
      * 
      * @param integer $id
@@ -37,6 +42,10 @@ class Page extends \Core\Service\AbstractService
      */
     public function getPage($id)
     {
+        if(!$id) {
+            throw new \Exception('Page id not set.');
+        }
+
         $page = $this->_em->getRepository('Core\Model\Page')->getPageForRender($id);
 
         if (!$page) {
@@ -44,6 +53,24 @@ class Page extends \Core\Service\AbstractService
         }
 
         return $page;
+    }
+
+    public function getPageIfAllowed($id, $actionType)
+    {
+        $page = $this->getPage($id);
+        
+        $this->isAllowed($page, $actionType);
+
+        return $page;
+    }
+
+    public function isAllowed($page, $actionType)
+    {
+        if(!$this->getAuth()->getIdentity()->isAllowed($page, $actionType)) {
+            throw new \Exception('Not allowed to ' . $actionType . ' page.');
+        }
+
+        return true;
     }
 
     /**
@@ -167,16 +194,19 @@ class Page extends \Core\Service\AbstractService
 
             $page->setLayout($this->_em->getReference('Core\Model\Layout', $data['layout']));
 
-            $this->_em->remove($page->pageRoute);
-            $this->_em->remove($page->pageRoute->route);
+            if($page->pageRoute->route->template != $data['pageRoute'])
+            {
+                $this->_em->remove($page->pageRoute);
+                $this->_em->remove($page->pageRoute->route);
 
-            $route = $this->_routeService->create($data['pageRoute']);
-            $this->_em->persist($route);
+                $route = $this->_routeService->create($data['pageRoute']);
+                $this->_em->persist($route);
 
-            $pageRoute = $route->routeTo($page);
-            $this->_em->persist($pageRoute);
+                $pageRoute = $route->routeTo($page);
+                $this->_em->persist($pageRoute);
 
-            $page->pageRoute = $pageRoute;
+                $page->pageRoute = $pageRoute;
+            }
 
             unset($data['id']);
             unset($data['layout']);
@@ -219,6 +249,11 @@ class Page extends \Core\Service\AbstractService
         $this->_em->flush();
     }
 
+    public function getBlockService()
+    {
+        return $this->_blockService;
+    }
+
     public function setBlockService($blockService)
     {
         $this->_blockService = $blockService;
@@ -255,6 +290,28 @@ class Page extends \Core\Service\AbstractService
     {
         $page->addBlock($block, $location);
         $this->_em->persist($block);
+        $this->_em->flush();
+    }
+
+    public function getAuth()
+    {
+        return $this->_auth;
+    }
+
+    public function setAuth($auth)
+    {
+        $this->_auth = $auth;
+    }
+
+    public function update(\Core\Model\Page $page, \stdClass $pageObject)
+    {
+        foreach($pageObject->layout->locations as $location)
+        {
+            foreach($location as $block)
+            {
+                $this->getBlockService()->update($page->getBlock($block->id), $block);
+            }
+        }
         $this->_em->flush();
     }
 }

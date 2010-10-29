@@ -44,4 +44,9 @@ class Text extends \Core\Service\AbstractService
     {
         return $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
     }
+
+    public function create($title, $content, $shared = false)
+    {
+        return new \Core\Model\Content\Text($title, $content, $shared);
+    }
 }

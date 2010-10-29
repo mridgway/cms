@@ -25,6 +25,8 @@ class BlockInfo extends \Core\Model\Frontend
             $frontendBlock->id = $block->id;
             $frontendBlock->properties = \Core\Service\Manager::get('Core\Service\Block')->getVariables($block);
             $frontendBlock->actions = $this->_getBlockActions($block);
+            $frontendBlock->location = $block->location->sysname;
+            $frontendBlock->weight = $block->weight;
         }
         $this->data[] = $frontendBlock;
 

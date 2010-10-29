@@ -192,6 +192,61 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $blockService->canView($block);
     }
+
+    public function testUpdateLocation()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $view = new \Mock\View();
+        $content = m::mock('Core\Model\Content');
+        $block = new \Core\Model\Block\StaticBlock($content, $view);
+
+        $location = new \Core\Model\Layout\Location('left');
+
+        $locationService = m::mock();
+        $locationService->shouldReceive('getLocation')->andReturn($location);
+
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('updateLocation')));
+        $blockService->shouldReceive('getLocationService')->andReturn($locationService);
+
+        $newBlock = $blockService->updateLocation($block, 'left');
+        $this->assertEquals($location, $block->location);
+    }
+
+    public function testUpdateWeight()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $view = new \Mock\View();
+        $content = m::mock('Core\Model\Content');
+        $block = new \Core\Model\Block\StaticBlock($content, $view);
+
+        $blockService = new \Core\Service\Block($em);
+
+        $newBlock = $blockService->updateWeight($block, 2);
+        $this->assertEquals(2, $block->weight);
+
+        $this->setExpectedException('Exception');
+        $blockService->updateWeight($block, 'one');
+    }
+
+    public function testUpdate()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $block = m::mock('Core\Model\Block');
+
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('update')));
+        $blockService->shouldReceive('updateLocation')->with($block, 'main')->once();
+        $blockService->shouldReceive('updateWeight')->with($block, 1)->once();
+
+        $b1 = new \stdClass();
+        $b1->id = 1;
+        $b1->location = 'main';
+        $b1->weight = 1;
+
+        $blockService->update($block, $b1);
+    }
 }
 
 class MockBlockController

@@ -33,4 +33,21 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
         $textService->getShared();
     }
+
+    public function testCreate()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $textService = new \Core\Service\Text($em);
+
+        $text = new \Core\Model\Content\Text('title', 'content', false);
+
+        $newText = $textService->create('title', 'content', false);
+
+        $this->assertEquals($text, $newText);
+
+        $newText = $textService->create('title', 'content');
+
+        $this->assertEquals($text, $newText);
+    }
 }

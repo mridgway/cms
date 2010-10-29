@@ -13,11 +13,17 @@
             <call method="setRouteService">
                 <argument type="service" id="routeService" />
             </call>
+            <call method="setAuth">
+                <argument type="service" id="auth" />
+            </call>
         </service>
         <service id="blockService" class="Core\Service\Block">
             <argument type="service" id="doctrine" />
             <call method="setModuleRegistry">
                 <argument type="service" id="moduleRegistry" />
+            </call>
+            <call method="setLocationService">
+                <argument type="service" id="locationService" />
             </call>
         </service>
         <service id="routeService" class="Core\Service\Route">
@@ -55,6 +61,9 @@
             <argument type="service" id="doctrine" />
         </service>
         <service id="contentService" class="Core\Service\Content">
+            <argument type="service" id="doctrine" />
+        </service>
+        <service id="locationService" class="Core\Service\Layout\Location">
             <argument type="service" id="doctrine" />
         </service>
     </services>

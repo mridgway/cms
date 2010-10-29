@@ -4,6 +4,7 @@ CMS.Use([], function (CMS) {
         id: null,
         weight: null,
         actions: [],
+        location: null,
 
         domElement: null,
 

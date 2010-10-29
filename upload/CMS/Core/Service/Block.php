@@ -15,7 +15,8 @@ class Block extends \Core\Service\AbstractService
 {
     protected $_moduleRegistry;
     protected $_auth;
-
+    protected $_locationService;
+    
     /**
      * Gets all config values or content type properties for a given block
      *
@@ -145,6 +146,21 @@ class Block extends \Core\Service\AbstractService
         return $block->canView($this->getAuth()->getIdentity());
     }
 
+    public function updateLocation(\Core\Model\Block $block, $locationSysname)
+    {
+        $location = $this->getLocationService()->getLocation($locationSysname);
+        $block->location = $location;
+    }
+
+    public function updateWeight(\Core\Model\Block $block, $weight)
+    {
+        if(\is_numeric($weight)) {
+            $block->weight = $weight;
+        } else {
+            throw new \Exception('Weight must be numeric.');
+        }
+    }
+
     public function getAuth()
     {
         if(null === $this->_auth)
@@ -157,5 +173,21 @@ class Block extends \Core\Service\AbstractService
     public function setAuth(\Zend_Auth $auth)
     {
         $this->_auth = $auth;
+    }
+
+    public function getLocationService()
+    {
+        return $this->_locationService;
+    }
+
+    public function setLocationService($locationService)
+    {
+        $this->_locationService = $locationService;
+    }
+
+    public function update(\Core\Model\Block $block, $blockObject)
+    {
+        $this->updateLocation($block, $blockObject->location);
+        $this->updateWeight($block, $blockObject->weight);
     }
 }

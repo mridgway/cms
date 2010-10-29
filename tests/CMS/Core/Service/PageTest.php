@@ -7,7 +7,7 @@ require_once 'PHPUnit/Framework.php';
 use \Mockery as m;
 
 /**
- * Test class for Page.
+ * Test class for Page Service.
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,6 +40,43 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $pageService = new Page($em);
 
         $this->assertEquals($pageService->getPage(1), $page);
+
+        $this->setExpectedException('Exception');
+        $pageService->getPage(false);
+    }
+
+    public function testIsAllowed()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $identity = m::mock();
+        $identity->shouldReceive('isAllowed')->with('AllPages', 'view')->once()->andReturn(true);
+        $identity->shouldReceive('isAllowed')->with('AllPages', 'view')->once()->andReturn(false);
+
+        $auth = m::mock();
+        $auth->shouldReceive('getIdentity')->andReturn($identity);
+
+        $pageService = m::mock(new \Core\Service\Page($em), array(m::BLOCKS => array('isAllowed')));
+        $pageService->shouldReceive('getAuth')->andReturn($auth);
+
+        $this->assertEquals(true, $pageService->isAllowed('AllPages', 'view'));
+
+        $this->setExpectedException('Exception');
+        
+        $pageService->isAllowed('AllPages', 'view');
+    }
+
+    public function testGetPageIfAllowed()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $page = m::mock();
+
+        $pageService = m::mock(new \Core\Service\Page($em), array(m::BLOCKS => array('getPageIfAllowed')));
+        $pageService->shouldReceive('getPage')->with(1)->andReturn($page);
+        $pageService->shouldReceive('isAllowed')->with($page, 'view');
+
+        $this->assertEquals($page, $pageService->getPageIfAllowed(1, 'view'));
     }
 
     public function testCreatePageFromTemplate()
@@ -343,5 +380,47 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $em->shouldReceive('flush')->ordered();
         
         $pageService->addBlock($page, $block, $location);
+    }
+
+    public function testUpdate()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('flush')->once();
+
+        $layout = new \Core\Model\Layout('1col');
+        $page = m::mock(new \Core\Model\Page($layout));
+        $page->shouldReceive('getBlock')->with(1)->once()->andReturn('one');
+        $page->shouldReceive('getBlock')->with(2)->once()->andReturn('two');
+        $page->shouldReceive('getBlock')->with(3)->once()->andReturn('three');
+
+        $b1 = new \stdClass();
+        $b1->id = 1;
+        $b1->location = 'main';
+        $b1->weight = 2;
+
+        $b2 = new \stdClass();
+        $b2->id = 2;
+        $b2->location = 'left';
+        $b2->weight = 1;
+
+        $b3 = new \stdClass();
+        $b3->id = 3;
+        $b3->location = 'main';
+        $b3->weight = 1;
+
+        $pageObject = new \stdClass();
+        $pageObject->layout = new \stdClass();
+        $pageObject->layout->locations = array(array($b1, $b2, $b3));
+
+        $blockService = m::mock();
+        $blockService->shouldReceive('update')->with('one', $b1);
+        $blockService->shouldReceive('update')->with('two', $b2);
+        $blockService->shouldReceive('update')->with('three', $b3);
+
+        $pageService = m::mock(new \Core\Service\Page($em), array(m::BLOCKS => array('update', 'setEntityManager')));
+        $pageService->shouldReceive('getBlockService')->andReturn($blockService);
+        $pageService->setEntityManager($em);
+
+        $pageService->update($page, $pageObject);
     }
 }
