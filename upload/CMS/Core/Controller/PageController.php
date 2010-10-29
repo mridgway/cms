@@ -49,12 +49,7 @@ class PageController extends \Zend_Controller_Action
     public function addBlockAction()
     {
         $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
-        if (!($location = $this->getRequest()->getParam('location'))){
-            throw new \Exception('Invalid location.');
-        }
-        if (!($location = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname($location))) {
-            throw new \Exception('Invalid location.');
-        }
+        $location = $this->_sc->getService('locationService')->getLocation($this->getRequest()->getParam('location', false));
         $type = $this->getRequest()->getParam('type');
 
         switch($type) {

@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+//require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
