@@ -15,21 +15,16 @@ namespace Blog\Block\Form;
  */
 class Article extends \Core\Model\Block\Dynamic\Form
 {
-    protected $_blogService;
-
     public function init()
     {
-        if (!$this->_blogService) {
-            $this->_blogService = new \Blog\Service\Blog($this->getEntityManager());
-        }
         if (!$this->getForm()) {
-            $this->setForm($this->_blogService->getAddForm());
+            $this->setForm($this->getServiceContainer()->getService('blogService')->getAddForm());
         }
     }
 
     public function process()
     {
-        $blogService = new \Blog\Service\Blog($this->getEntityManager());
+        $blogService = $this->getServiceContainer()->getService('blogService');
         $data = $this->getRequest()->getPost();
 
         $this->_form = $blogService->getAddForm($data);

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony-project.org/2.0/container">
+    <services>
+        <service id="blogService" class="Blog\Service\Blog">
+            <argument type="service" id="doctrine" />
+            <call method="setModuleService">
+                <argument type="service" id="moduleService" />
+            </call>
+        </service>
+    </services>
+</container>

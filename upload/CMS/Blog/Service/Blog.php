@@ -6,7 +6,7 @@ namespace Blog\Service;
  * Service for blog articles
  *
  * @package     CMS
- * @subpackage  Asset
+ * @subpackage  Blog
  * @category    Service
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
@@ -15,6 +15,11 @@ class Blog extends \Core\Service\AbstractService
 {
 
     const ARTICLE_SYSNAME = 'blogArticle';
+
+    /**
+     * @var \Core\Service\Module
+     */
+    protected $_moduleService;
 
     public function createArticle($data)
     {
@@ -29,7 +34,7 @@ class Blog extends \Core\Service\AbstractService
         $placeholders = array(
             self::ARTICLE_SYSNAME => array(
                 'content' => $article,
-                'view' => \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Blog')->getContentType('BlogArticle')->getView('default')
+                'view' => $this->getModuleService()->getView('Blog', 'BlogArticle', 'default')
                 )
             );
         $page = $pageService->createPageFromTemplate($template, $placeholders);
@@ -89,5 +94,15 @@ class Blog extends \Core\Service\AbstractService
         return $this->getEntityManager()
                 ->getRepository('Core\Model\Route')
                 ->findOneBySysname(self::ARTICLE_SYSNAME);
+    }
+
+    public function setModuleService(\Core\Service\Module $moduleService)
+    {
+        $this->_moduleService = $moduleService;
+    }
+
+    public function getModuleService()
+    {
+        return $this->_moduleService;
     }
 }

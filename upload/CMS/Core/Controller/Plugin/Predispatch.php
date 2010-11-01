@@ -16,6 +16,18 @@ namespace Core\Controller\Plugin;
 class Predispatch extends \Zend_Controller_Plugin_Abstract
 {
     /**
+    * @var sfServiceContainer
+    */
+    protected $_serviceContainer = null;
+
+    public function __construct()
+    {
+       $this->setServiceContainer(\Zend_Controller_Front::getInstance()
+               ->getResource('bootstrap')
+               ->getResource('serviceContainer'));
+    }
+    
+    /**
      * @param Zend_Controller_Request_Abstract $request
      */
     public function dispatchLoopStartup(\Zend_Controller_Request_Abstract $request)
@@ -45,7 +57,18 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
         $block = $em->getRepository('Core\Model\Block')->find($blockId);
         $block->setRequest($request);
         $block->setEntityManager($em);
+        $block->setServiceContainer($sc);
         $block->process();
         $request->setParam('block_id', null);
+    }
+
+    public function getServiceContainer()
+    {
+        return $this->_serviceContainer;
+    }
+
+    public function setServiceContainer(\sfServiceContainer $serviceContainer)
+    {
+        $this->_serviceContainer = $serviceContainer;
     }
 }

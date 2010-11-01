@@ -18,5 +18,4 @@ interface ControllerInterface
     public function deleteAction(\Core\Model\Block $block);
 
     public function setRequest(\Zend_Controller_Request_Http $request);
-    public function setEntityManager(\Doctrine\ORM\EntityManager $em);
 }

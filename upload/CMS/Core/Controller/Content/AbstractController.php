@@ -27,12 +27,6 @@ abstract class AbstractController implements ControllerInterface
     protected $_response;
 
     /**
-     *
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $_em;
-
-    /**
      * @var sfServiceContainer
      */
     protected $_sc;
@@ -75,26 +69,6 @@ abstract class AbstractController implements ControllerInterface
     public function getResponse()
     {
         return $this->_response;
-    }
-
-    /**
-     * Sets the entity manager
-     *
-     * @param EntityManager $em
-     */
-    public function setEntityManager(\Doctrine\ORM\EntityManager $em)
-    {
-        $this->_em = $em;
-    }
-
-    /**
-     * Gets the entity manager
-     *
-     * @return \Doctrine\ORM\EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->_em;
     }
 
     /**
