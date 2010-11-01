@@ -32,7 +32,7 @@
         <service id="routeService" class="Core\Service\Route">
             <argument type="service" id="doctrine" />
         </service>
-        <service id="moduleRegistry" class="Core\Module\Registry">
+        <service id="moduleRegistry" class="Core\Module\Registry" constructor="getInstance">
         </service>
         <service id="pageRendererService" class="Core\Service\PageRenderer">
             <argument type="service" id="doctrine" />

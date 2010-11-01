@@ -22,9 +22,7 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
 
     public function __construct()
     {
-       $this->setServiceContainer(\Zend_Controller_Front::getInstance()
-               ->getResource('bootstrap')
-               ->getResource('serviceContainer'));
+        $this->setServiceContainer(\Zend_Registry::get('serviceContainer'));
     }
     
     /**
@@ -56,8 +54,7 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
         $em = \Zend_Registry::get('doctrine');
         $block = $em->getRepository('Core\Model\Block')->find($blockId);
         $block->setRequest($request);
-        $block->setEntityManager($em);
-        $block->setServiceContainer($sc);
+        $block->setServiceContainer($this->getServiceContainer());
         $block->process();
         $request->setParam('block_id', null);
     }

@@ -42,12 +42,5 @@ class DynamicBlockTest extends \PHPUnit_Framework_TestCase
         $this->block->setRequest($request);
         $this->assertEquals($request, $this->block->getRequest());
     }
-
-    public function testSetEntityManager()
-    {
-        $em = new \Mock\EntityManager();
-        $this->block->setEntityManager($em);
-        $this->assertEquals($em, $this->block->getEntityManager());
-    }
 }
 ?>

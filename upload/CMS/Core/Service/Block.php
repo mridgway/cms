@@ -71,7 +71,6 @@ class Block extends \Core\Service\AbstractService
         if (!method_exists($controller, $action)) {
             throw new \Exception('Block controller/action does not exist.');
         }
-        $controller->setEntityManager($this->getEntityManager());
         $controller->setServiceContainer($this->getServiceContainer());
         $controller->setRequest($request);
         return $controller->$action($block);

@@ -96,7 +96,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $action = 'actionName';
         $request = m::mock('Zend_Controller_Request_Http');
         $controller = m::mock(new MockBlockController);
-        $controller->shouldReceive('setEntityManager')->with($em);
         $controller->shouldReceive('setServiceContainer')->with($sc);
         $controller->shouldReceive('setRequest')->with($request);
 
@@ -168,13 +167,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     {
         $em = m::mock('Doctrine\ORM\EntityManager');
         $request = m::mock('Zend_Controller_Request_Http');
+        $sc = m::mock('sfServiceContainer');
 
         $block = m::mock('Core\Model\Block\DynamicBlock');
         $block->shouldReceive('setRequest')->with($request);
-        $block->shouldReceive('setEntityManager')->with($em);
+        $block->shouldReceive('setServiceContainer')->with($sc);
         $block->shouldReceive('init');
 
-        $blockService = new \Core\Service\Block($em);
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('initBlock')));
+        $blockService->shouldReceive('getServiceContainer')->andReturn($sc);
         $blockService->initBlock($block, $request);
 
         $block = m::mock('Core\Model\Block\StaticBlock');

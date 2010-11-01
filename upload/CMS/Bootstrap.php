@@ -28,6 +28,9 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $this->serviceContainer = $sc;
         
         $sc->setParameter('APPLICATION_ROOT', APPLICATION_ROOT);
+
+        // this is the only way to get the service container to Core\Controller\Plugin\Predispatch
+        \Zend_Registry::set('serviceContainer', $sc);
     }
 
     protected function _initServiceContainer()
