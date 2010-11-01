@@ -20,7 +20,7 @@ class Article extends \Core\Model\Block\Dynamic\Form
     public function init()
     {
         if (!$this->_blogService) {
-            $this->_blogService = new \Blog\Service\Blog($this->getEntityManager());
+            $this->_blogService = new \Blog\Service\Blog($this->getService('doctrine'));
         }
         if (!$this->getForm()) {
             $this->setForm($this->_blogService->getAddForm());

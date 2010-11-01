@@ -29,7 +29,11 @@ class Blog extends \Core\Service\AbstractService
         $placeholders = array(
             self::ARTICLE_SYSNAME => array(
                 'content' => $article,
-                'view' => \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModule('Blog')->getContentType('BlogArticle')->getView('default')
+                'view' => \Core\Module\Registry::getInstance()
+                            ->getDatabaseStorage()
+                            ->getModule('Blog')
+                            ->getContentType('BlogArticle')
+                            ->getView('default')
                 )
             );
         $page = $pageService->createPageFromTemplate($template, $placeholders);
