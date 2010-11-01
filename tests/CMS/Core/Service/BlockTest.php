@@ -89,16 +89,20 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchBlockAction()
     {
+        $sc = new \stdClass();
+
         $em = m::mock(new \Mock\EntityManager());
         $block = m::mock('Core\Model\Block');
         $action = 'actionName';
         $request = m::mock('Zend_Controller_Request_Http');
         $controller = m::mock(new MockBlockController);
         $controller->shouldReceive('setEntityManager')->with($em);
+        $controller->shouldReceive('setServiceContainer')->with($sc);
         $controller->shouldReceive('setRequest')->with($request);
 
         $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('dispatchBlockAction')));
         $blockService->shouldReceive('getBlockControllerObject')->andReturn($controller);
+        $blockService->shouldReceive('getServiceContainer')->andReturn($sc);
 
         $blockService->dispatchBlockAction($block, $action, $request);
 

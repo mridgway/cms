@@ -50,4 +50,19 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($text, $newText);
     }
+
+    public function testUpdate()
+    {
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('flush')->once();
+
+        $textService = m::mock(new \Core\Service\Text($em), array(m::BLOCKS => array('update')));
+        $textService->shouldReceive('getEntityManager')->andReturn($em);
+
+        $text = m::mock('Core\Model\Content\Text');
+        $text->shouldReceive('setTitle')->with('newTitle')->once();
+        $text->shouldReceive('setContent')->with('newContent')->once();
+
+        $textService->update($text, 'newTitle', 'newContent');
+    }
 }

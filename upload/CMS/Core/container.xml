@@ -25,6 +25,9 @@
             <call method="setLocationService">
                 <argument type="service" id="locationService" />
             </call>
+            <call method="setServiceContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
         <service id="routeService" class="Core\Service\Route">
             <argument type="service" id="doctrine" />
