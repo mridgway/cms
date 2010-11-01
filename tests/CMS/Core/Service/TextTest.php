@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -64,5 +64,20 @@ class TextTest extends \PHPUnit_Framework_TestCase
         $text->shouldReceive('setContent')->with('newContent')->once();
 
         $textService->update($text, 'newTitle', 'newContent');
+    }
+
+    public function testDelete()
+    {
+        $text = m::mock('Core\Model\Content\Text');
+        $text->shouldReceive('getShared')->once()->andReturn(false);
+        $text->shouldReceive('getShared')->once()->andReturn(true);
+
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('remove')->once()->with($text);
+
+        $textService = new \Core\Service\Text($em);
+
+        $textService->delete($text);
+        $textService->delete($text);
     }
 }

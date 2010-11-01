@@ -56,4 +56,12 @@ class Text extends \Core\Service\AbstractService
         $text->setContent($content);
         $this->getEntityManager()->flush();
     }
+
+    public function delete(\Core\Model\Content\Text $text)
+    {
+        if(!$text->getShared())
+        {
+            $this->getEntityManager()->remove($text);
+        }
+    }
 }

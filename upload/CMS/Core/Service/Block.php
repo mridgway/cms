@@ -17,6 +17,11 @@ class Block extends \Core\Service\AbstractService
     protected $_auth;
     protected $_locationService;
     protected $_sc;
+
+    /**
+     * @var \Core\Service\Block\StaticBlock
+     */
+    protected $_staticBlockService;
     
     /**
      * Gets all config values or content type properties for a given block
@@ -112,10 +117,15 @@ class Block extends \Core\Service\AbstractService
     /**
      * @param Block $block
      */
-    public function deleteBlock(\Core\Model\Block $block)
+    public function delete(\Core\Model\Block $block)
     {
         // remove config dependencies on this block
         $this->removeConfigDependencies($block);
+
+        if($block instanceof \Core\Model\Block\StaticBlock)
+        {
+            $this->getStaticBlockService()->delete($block);
+        }
 
         $this->getEntityManager()->remove($block);
 
@@ -200,5 +210,15 @@ class Block extends \Core\Service\AbstractService
     public function setServiceContainer(\sfServiceContainer $serviceContainer)
     {
         $this->_sc = $serviceContainer;
+    }
+
+    public function setStaticBlockService(\Core\Service\Block\StaticBlock $staticBlockService)
+    {
+        $this->_staticBlockService = $staticBlockService;
+    }
+
+    public function getStaticBlockService()
+    {
+        return $this->_staticBlockService;
     }
 }

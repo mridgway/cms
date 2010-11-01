@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -148,19 +148,22 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Core\Service\MockContentController', $blockService->getBlockController($block));
     }
     
-    public function testDeleteBlock()
+    public function testDelete()
     {
-        $block = m::mock('Core\Model\Block');
+        $block = m::mock('Core\Model\Block\StaticBlock');
         
         $em = m::mock('Doctrine\ORM\EntityManager');
         $em->shouldReceive('remove')->with($block)->ordered();
         $em->shouldReceive('flush')->ordered();
 
+        $staticBlockService = m::mock();
+        $staticBlockService->shouldReceive('delete')->with($block);
 
-        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('deleteBlock')));
+        $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('delete')));
         $blockService->shouldReceive('removeConfigDependencies')->with($block);
+        $blockService->shouldReceive('getStaticBlockService')->once()->andReturn($staticBlockService);
 
-        $blockService->deleteBlock($block);
+        $blockService->delete($block);
     }
     
     public function testInitBlock()

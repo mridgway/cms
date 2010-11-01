@@ -28,6 +28,9 @@
             <call method="setServiceContainer">
                 <argument type="service" id="service_container" />
             </call>
+            <call method="setStaticBlockService">
+                <argument type="service" id="staticBlockService" />
+            </call>
         </service>
         <service id="routeService" class="Core\Service\Route">
             <argument type="service" id="doctrine" />
@@ -50,6 +53,9 @@
             <argument type="service" id="doctrine" />
             <call method="setModuleService">
                 <argument type="service" id="moduleService" />
+            </call>
+            <call method="setTextService">
+                <argument type="service" id="textService" />
             </call>
         </service>
         <service id="metadataLoader" class="Core\Model\MetadataLoader">

@@ -2,7 +2,7 @@
 namespace Core\Service\Block;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../../bootstrap.php';
+require_once '../../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -46,5 +46,24 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
 
         $newBlock = $sbService->create($content, $view);
         $this->assertEquals($block, $newBlock);
+    }
+
+    public function testDelete()
+    {
+        $content = new \Core\Model\Content\Text('title', 'content', false);
+
+        $block = m::mock('Core\Model\Block\StaticBlock');
+        $block->shouldReceive('getContent')->once()->andReturn($content);
+
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('remove')->once()->with($block);
+
+        $textService = m::mock('Core\Service\Text');
+        $textService->shouldReceive('delete')->once()->with($content);
+
+        $s = m::mock(new \Core\Service\Block\StaticBlock($em), array(m::BLOCKS => array('delete')));
+        $s->shouldReceive('getTextService')->andReturn($textService);
+
+        $s->delete($block);
     }
 }

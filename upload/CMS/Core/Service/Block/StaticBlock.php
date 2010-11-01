@@ -19,6 +19,11 @@ class StaticBlock extends \Core\Service\AbstractService
      */
     protected $_moduleService;
 
+    /**
+     * @var \Core\Service\Text
+     */
+    protected $_textService;
+
     public function create(\Core\Model\Content $content = null, \Core\Model\Module\View $view = null)
     {
         if(null === $content) {
@@ -34,6 +39,18 @@ class StaticBlock extends \Core\Service\AbstractService
         return $block;
     }
 
+    public function delete(\Core\Model\Block $block)
+    {
+        $content = $block->getContent();
+
+        if($content instanceof \Core\Model\Content\Text)
+        {
+            $this->getTextService()->delete($content);
+        }
+
+        $this->getEntityManager()->remove($block);
+    }
+
     public function setModuleService(\Core\Service\Module $moduleService)
     {
         $this->_moduleService = $moduleService;
@@ -42,5 +59,15 @@ class StaticBlock extends \Core\Service\AbstractService
     public function getModuleService()
     {
         return $this->_moduleService;
+    }
+
+    public function setTextService(\Core\Service\Text $textService)
+    {
+        $this->_textService = $textService;
+    }
+
+    public function getTextService()
+    {
+        return $this->_textService;
     }
 }
