@@ -13,4 +13,9 @@ class PageControllerTest extends \Zend_Test_PHPUnit_ControllerTestCase
 
         parent::setUp();
     }
+
+    public function testTruth()
+    {
+        $this->assertEquals(true, true);
+    }
 }

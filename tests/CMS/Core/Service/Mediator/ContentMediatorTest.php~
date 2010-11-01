@@ -4,9 +4,9 @@ namespace Core\Service\Mediator;
 
 use \Mockery as m;
 
-//require_once(__DIR__ . '/../../../../bootstrap.php');
+require_once(__DIR__ . '/../../../../bootstrap.php');
 
-class ContentMediatorTest extends \PHPUnit_Framework_TestCase
+class ContentMediatorArticle extends \PHPUnit_Framework_TestCase
 {
 
     /**
