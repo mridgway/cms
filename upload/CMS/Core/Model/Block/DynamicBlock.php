@@ -58,23 +58,15 @@ abstract class DynamicBlock extends \Core\Model\Block
     }
 
     /**
-     * Sets the entity manager
-     *
-     * @param EntityManager $em
-     */
-    public function setEntityManager(\Doctrine\ORM\EntityManager $em)
-    {
-        $this->_em = $em;
-    }
-
-    /**
      * Gets the entity manager
+     *
+     * @todo remove this
      *
      * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
     {
-        return $this->_em;
+        return $this->getServiceContainer()->getService('doctrine');
     }
 
     public function canEdit($role)

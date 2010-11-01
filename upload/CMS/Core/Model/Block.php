@@ -522,4 +522,13 @@ abstract class Block
     {
         return $this->serviceContainer;
     }
+
+    /**
+     * @param string $serviceName
+     * @return mixed
+     */
+    public function getService($serviceName)
+    {
+        return $this->serviceContainer->getSErvice($serviceName);
+    }
 }

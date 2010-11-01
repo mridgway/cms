@@ -138,7 +138,7 @@ class Block extends \Core\Service\AbstractService
         if ($block instanceof \Core\Model\Block\DynamicBlock) {
             // Initialize the dynamic block
             $block->setRequest($request);
-            $block->setEntityManager($this->getEntityManager());
+            $block->setServiceContainer($this->getServiceContainer());
             $block->init();
         }
     }
