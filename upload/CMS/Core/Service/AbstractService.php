@@ -13,6 +13,10 @@ namespace Core\Service;
  */
 abstract class AbstractService
 {
+    /**
+     * @var Core\Auth\Auth
+     */
+    protected $_auth;
 
     /**
      * Entity manager
@@ -66,5 +70,15 @@ abstract class AbstractService
         $this->_em = $em;
 
         return $this;
+    }
+
+    public function getAuth()
+    {
+        return $this->_auth;
+    }
+
+    public function setAuth($auth)
+    {
+        $this->_auth = $auth;
     }
 }
