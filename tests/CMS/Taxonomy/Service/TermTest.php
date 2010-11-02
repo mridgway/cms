@@ -23,8 +23,6 @@ class TermTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTerm()
     {
-        $em = m::mock('Doctrine\ORM\EntityManager');
-
         $data = array(
             'name' => 'name',
             'definition' => 'definition'
@@ -34,11 +32,16 @@ class TermTest extends \PHPUnit_Framework_TestCase
         $term = new \Taxonomy\Model\Term('name', 'definition');
         $term->setVocabulary($vocabulary);
 
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('persist')->times(3);
+        $em->shouldReceive('flush')->times(3);
+
         $vocabularyService = m::mock();
         $vocabularyService->shouldReceive('getVocabulary')->andReturn($vocabulary);
 
         $termService = m::mock(new \Taxonomy\Service\Term($em), array(m::BLOCKS => array('createTerm')));
         $termService->shouldReceive('getVocabularyService')->andReturn($vocabularyService);
+        $termService->shouldReceive('getEntityManager')->andReturn($em);
 
         $newTerm = $termService->createTerm($vocabulary, $data);
         $this->assertEquals($term, $newTerm);

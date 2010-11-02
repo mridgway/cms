@@ -55,6 +55,9 @@ class Term extends \Core\Service\AbstractService
             $term->setDefinition($data['definition']);
         }
 
+        $this->getEntityManager()->persist($term);
+        $this->getEntityManager()->flush();
+
         return $term;
     }
 
