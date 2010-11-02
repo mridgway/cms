@@ -14,11 +14,22 @@ namespace Core\Service\Block;
 
 class DynamicBlock extends \Core\Service\AbstractService
 {
+    /**
+     * Finds addable block types.
+     *
+     * @return array
+     */
     public function getAddableBlockTypes()
     {
         return $this->_em->getRepository('Core\Model\Module\BlockType')->findAddableBlockTypes();
     }
 
+    /**
+     * Creates a new instance of a block.
+     * 
+     * @param integer $id
+     * @return \Core\Model\Block\DynamicBlock
+     */
     public function create($id)
     {
         $blockType = $this->_em->find('Core\Model\Module\BlockType', $id);

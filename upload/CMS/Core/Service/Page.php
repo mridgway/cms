@@ -55,6 +55,13 @@ class Page extends \Core\Service\AbstractService
         return $page;
     }
 
+    /**
+     * Gets a page if the user has the permission specified by $actionType.
+     *
+     * @param integer $id
+     * @param string $actionType
+     * @return \Core\Model\Page
+     */
     public function getPageIfAllowed($id, $actionType)
     {
         $page = $this->getPage($id);
@@ -64,6 +71,13 @@ class Page extends \Core\Service\AbstractService
         return $page;
     }
 
+    /**
+     * Determines if the user has permission to do $actionType for $page.
+     *
+     * @param \Core\Model\Page $page
+     * @param string $actionType
+     * @return boolean
+     */
     public function isAllowed($page, $actionType)
     {
         if(!$this->getAuth()->getIdentity()->isAllowed($page, $actionType)) {
@@ -150,6 +164,12 @@ class Page extends \Core\Service\AbstractService
         return $page;
     }
 
+    /**
+     * Gets all config values or content type properties for all blocks on a page.
+     * 
+     * @param \Core\Model\AbstractPage $page
+     * @return array
+     */
     public function getPageVariables(\Core\Model\AbstractPage $page)
     {
         $vars = array();
@@ -307,6 +327,13 @@ class Page extends \Core\Service\AbstractService
         return $this->_defaultForm;
     }
 
+    /**
+     * Adds a block to a page.
+     * 
+     * @param \Core\Model\Page $page
+     * @param \Core\Model\Block $block
+     * @param \Core\Model\Layout\Location $location
+     */
     public function addBlock(\Core\Model\Page $page, \Core\Model\Block $block, \Core\Model\Layout\Location $location)
     {
         $page->addBlock($block, $location);
@@ -324,6 +351,12 @@ class Page extends \Core\Service\AbstractService
         $this->_auth = $auth;
     }
 
+    /**
+     * Updates all blocks on a page with the values specified in $pageObject.  The $pageObject structure must match the \Core\Model\Page structure.
+     *
+     * @param \Core\Model\Page $page
+     * @param \stdClass $pageObject
+     */
     public function update(\Core\Model\Page $page, \stdClass $pageObject)
     {
         foreach($pageObject->layout->locations as $location)

@@ -24,6 +24,13 @@ class StaticBlock extends \Core\Service\AbstractService
      */
     protected $_textService;
 
+    /**
+     * Creates a new block.
+     * 
+     * @param \Core\Model\Content $content
+     * @param \Core\Model\Module\View $view
+     * @return \Core\Model\Block\StaticBlock
+     */
     public function create(\Core\Model\Content $content = null, \Core\Model\Module\View $view = null)
     {
         if(null === $content) {
@@ -39,6 +46,11 @@ class StaticBlock extends \Core\Service\AbstractService
         return $block;
     }
 
+    /**
+     * Deletes a block.
+     *
+     * @param \Core\Model\Block $block
+     */
     public function delete(\Core\Model\Block $block)
     {
         $content = $block->getContent();

@@ -61,6 +61,11 @@ class PageRenderer extends \Core\Service\AbstractService
         $this->_blockService = $service;
     }
 
+    /**
+     * Creates a new view object.
+     *
+     * @return \Zend_View
+     */
     public function getNewView()
     {
         return new \Zend_View();

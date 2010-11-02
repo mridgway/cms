@@ -13,6 +13,12 @@ namespace Core\Service\Layout;
  */
 class Location extends \Core\Service\AbstractService
 {
+    /**
+     * Finds a location with name $sysname.
+     * 
+     * @param <type> $sysname
+     * @return \Core\Model\Layout\Location
+     */
     public function getLocation($sysname)
     {
         if(!$sysname) {

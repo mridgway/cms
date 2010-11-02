@@ -40,16 +40,36 @@ class Text extends \Core\Service\AbstractService
         return $form;
     }
 
+    /**
+     * Find all shared content.
+     *
+     * @return array
+     */
     public function getShared()
     {
         return $this->_em->getRepository('Core\Model\Content\Text')->findSharedText();
     }
 
+    /**
+     * Create a new Text object.
+     *
+     * @param string $title
+     * @param string $content
+     * @param boolean $shared
+     * @return \Core\Model\Content\Text
+     */
     public function create($title, $content, $shared = false)
     {
         return new \Core\Model\Content\Text($title, $content, $shared);
     }
 
+    /**
+     * Modifies attributes of $text.
+     *
+     * @param \Core\Model\Content\Text $text
+     * @param string $title
+     * @param string $content
+     */
     public function update($text, $title, $content)
     {
         $text->setTitle($title);
@@ -57,6 +77,11 @@ class Text extends \Core\Service\AbstractService
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Deletes $text if unshared.
+     * 
+     * @param \Core\Model\Content\Text $text
+     */
     public function delete(\Core\Model\Content\Text $text)
     {
         if(!$text->getShared())

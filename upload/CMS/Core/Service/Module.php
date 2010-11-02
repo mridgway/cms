@@ -18,6 +18,12 @@ class Module extends \Core\Service\AbstractService
      */
     protected $_moduleRegistry;
 
+    /**
+     * Creates a new module.
+     * 
+     * @param \Zend_Config $config
+     * @return \Core\Model\Module
+     */
     public static function createModuleFromConfig(\Zend_Config $config)
     {
         $module = new \Core\Model\Module($config->sysname, $config->title);
@@ -49,6 +55,14 @@ class Module extends \Core\Service\AbstractService
         return $module;
     }
 
+    /**
+     * Helper function to easily get a view.
+     * 
+     * @param string $moduleName
+     * @param string $contentTypeName
+     * @param string $viewName
+     * @return \Core\Model\Module\View
+     */
     public function getView($moduleName, $contentTypeName, $viewName)
     {
         return $this->getModuleRegistry()->getDatabaseStorage()->getModule($moduleName)->getContentType($contentTypeName)->getView($viewName);

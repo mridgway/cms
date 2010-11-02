@@ -25,7 +25,7 @@ class PageRendererTest extends \PHPUnit_Framework_TestCase
     {
         $em = m::mock('Doctrine\ORM\EntityManager');
         
-        $request = m::mock();
+        $request = m::mock('\Zend_Controller_Request_Http');
         $request->shouldIgnoreMissing();
         
         $location = m::mock('Core\Model\Layout\Location');

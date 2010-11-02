@@ -13,9 +13,24 @@ namespace Core\Service;
  */
 class Block extends \Core\Service\AbstractService
 {
+    /**
+     * @var \Core\Module\Registry
+     */
     protected $_moduleRegistry;
+
+    /**
+     * @var \Core\Auth\Auth
+     */
     protected $_auth;
+
+    /**
+     * @var \Core\Service\Layout\Location
+     */
     protected $_locationService;
+
+    /**
+     * @var \sfServiceContainer
+     */
     protected $_sc;
 
     /**
@@ -115,6 +130,8 @@ class Block extends \Core\Service\AbstractService
     }
 
     /**
+     * Deletes a block, deletes unshared content, and removes config dependencies.
+     *
      * @param Block $block
      */
     public function delete(\Core\Model\Block $block)
@@ -132,17 +149,13 @@ class Block extends \Core\Service\AbstractService
         $this->getEntityManager()->flush();
     }
 
-    public function getModuleRegistry()
-    {
-        return $this->_moduleRegistry;
-    }
-
-    public function setModuleRegistry(\Core\Module\Registry $moduleRegistry)
-    {
-        $this->_moduleRegistry = $moduleRegistry;
-    }
-
-    public function initBlock(\Core\Model\Block $block, $request)
+    /**
+     * Initializes a block.
+     * 
+     * @param \Core\Model\Block $block
+     * @param  \Zend_Controller_Request_Http $request
+     */
+    public function initBlock(\Core\Model\Block $block, \Zend_Controller_Request_Http $request)
     {
         if ($block instanceof \Core\Model\Block\DynamicBlock) {
             // Initialize the dynamic block
@@ -152,17 +165,35 @@ class Block extends \Core\Service\AbstractService
         }
     }
 
+    /**
+     * Checks whether the current user has permission to view $block.
+     *
+     * @param \Core\Model\Block $block
+     * @return boolean
+     */
     public function canView(\Core\Model\Block $block)
     {
         return $block->canView($this->getAuth()->getIdentity());
     }
 
+    /**
+     * Modifies $block location attribute.
+     *
+     * @param \Core\Model\Block $block
+     * @param string $locationSysname
+     */
     public function updateLocation(\Core\Model\Block $block, $locationSysname)
     {
         $location = $this->getLocationService()->getLocation($locationSysname);
         $block->location = $location;
     }
 
+    /**
+     * Modifies $block weight attribute.
+     * 
+     * @param \Core\Model\Block $block
+     * @param integer $weight
+     */
     public function updateWeight(\Core\Model\Block $block, $weight)
     {
         if(\is_numeric($weight)) {
@@ -170,6 +201,28 @@ class Block extends \Core\Service\AbstractService
         } else {
             throw new \Exception('Weight must be numeric.');
         }
+    }
+
+    /**
+     * Modifies $block attributes.  The structure of $blockObject must match \Core\Model\Block.
+     * 
+     * @param \Core\Model\Block $block
+     * @param \stdClass $blockObject
+     */
+    public function update(\Core\Model\Block $block, \stdClass $blockObject)
+    {
+        $this->updateLocation($block, $blockObject->location);
+        $this->updateWeight($block, $blockObject->weight);
+    }
+
+    public function getModuleRegistry()
+    {
+        return $this->_moduleRegistry;
+    }
+
+    public function setModuleRegistry(\Core\Module\Registry $moduleRegistry)
+    {
+        $this->_moduleRegistry = $moduleRegistry;
     }
 
     public function getAuth()
@@ -191,15 +244,9 @@ class Block extends \Core\Service\AbstractService
         return $this->_locationService;
     }
 
-    public function setLocationService($locationService)
+    public function setLocationService(\Core\Service\Layout\Location $locationService)
     {
         $this->_locationService = $locationService;
-    }
-
-    public function update(\Core\Model\Block $block, $blockObject)
-    {
-        $this->updateLocation($block, $blockObject->location);
-        $this->updateWeight($block, $blockObject->weight);
     }
 
     public function getServiceContainer()
