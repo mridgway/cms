@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony-project.org/2.0/container">
+    <services>
+        <service id="vocabularyService" class="Taxonomy\Service\Vocabulary">
+            <argument type="service" id="doctrine" />
+        </service>
+    </services>
+</container>
