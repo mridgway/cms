@@ -29,4 +29,25 @@ class Vocabulary extends \Core\Service\AbstractService
 
         return $vocabulary;
     }
+
+    /**
+     * Find a vocabulary by id or sysname.
+     *
+     * @param integer|string $vocabulary
+     * @return \Taxonomy\Model\Vocabulary
+     */
+    public function getVocabulary($vocabulary)
+    {
+        $repository = $this->_em->getRepository('Taxonomy\Model\Vocabulary');
+        
+        if(\is_string($vocabulary)) {
+            $result = $repository->findOneBySysname($vocabulary);
+        } elseif (\is_numeric($vocabulary)) {
+            $result = $repository->find($vocabulary);
+        } else {
+            throw new Exception('Argument must be a string or an integer.');
+        }
+
+        return $result;
+    }
 }

@@ -14,6 +14,12 @@ namespace Taxonomy\Service;
 class Term extends \Core\Service\AbstractService
 {
     /**
+     * @var \Taxonomy\Service\Vocabulary
+     */
+    protected $_vocabularyService;
+
+
+    /**
      * @param string $termName
      */
     public function getOrCreateTerm($termName, $vocabularySysname)
@@ -31,18 +37,15 @@ class Term extends \Core\Service\AbstractService
     }
 
     /**
+     * Creates a new term.
+     * 
      * @param \Taxonomy\Model\Vocabulary|string|integer $vocabulary
      * @param array $data
      */
     public function createTerm($vocabulary, $data)
     {
         if (!$vocabulary instanceof \Taxonomy\Model\Vocabulary) {
-            $repository = $this->getEntityManager()->getRepository('Taxonomy\Model\Vocabulary');
-            if (is_int($vocabulary)) {
-                $vocabulary = $repository->find($vocabulary);
-            } else {
-                $vocabulary = $repository->findBySysname($vocabulary);
-            }
+            $vocabulary = $this->getVocabularyService()->getVocabulary($vocabulary);
         }
 
         $term = new \Taxonomy\Model\Term($data['name']);
@@ -53,5 +56,15 @@ class Term extends \Core\Service\AbstractService
         }
 
         return $term;
+    }
+
+    public function setVocabularyService(\Taxonomy\Service\Vocabulary $vocabularyService)
+    {
+        $this->_vocabularyService = $vocabularyService;
+    }
+
+    public function getVocabularyService()
+    {
+        return $this->_vocabularyService;
     }
 }

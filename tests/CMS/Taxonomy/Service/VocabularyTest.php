@@ -35,4 +35,24 @@ class VocabularyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($vocabulary, $newVocab);
     }
+
+    public function testGetVocabulary()
+    {
+        $vocabulary = new \Taxonomy\Model\Vocabulary('name', 'sysname', 'description');
+
+        $repository = m::mock();
+        $repository->shouldReceive('find')->with(1)->once()->andReturn($vocabulary);
+        $repository->shouldReceive('findOneBySysname')->with('howto:category')->once()->andReturn($vocabulary);
+
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('getRepository')->with('Taxonomy\Model\Vocabulary')->twice()->andReturn($repository);
+
+        $vocabularyService = new \Taxonomy\Service\Vocabulary($em);
+
+        $newVocabulary = $vocabularyService->getVocabulary(1);
+        $this->assertEquals($vocabulary, $newVocabulary);
+
+        $newVocabulary = $vocabularyService->getVocabulary('howto:category');
+        $this->assertEquals($vocabulary, $newVocabulary);
+    }
 }

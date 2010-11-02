@@ -20,6 +20,7 @@ class AllTests
         $suite = new \CMSTestSuite('Taxonomy Tests');
 
         $suite->addTestSuite('Taxonomy\Service\VocabularyTest');
+        $suite->addTestSuite('Taxonomy\Service\TermTest');
 
         return $suite;
     }

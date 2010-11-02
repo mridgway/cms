@@ -5,5 +5,11 @@
         <service id="vocabularyService" class="Taxonomy\Service\Vocabulary">
             <argument type="service" id="doctrine" />
         </service>
+        <service id="termService" class="Taxonomy\Service\Term">
+            <argument type="service" id="doctrine" />
+            <call method="setVocabularyService">
+                <argument type="service" id="vocabularyService" />
+            </call>
+        </service>
     </services>
 </container>
