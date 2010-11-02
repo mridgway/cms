@@ -217,7 +217,7 @@ class Page extends \Core\Service\AbstractService
     }
 
     /**
-     * Applys page data edits.
+     * Applies page data edits.
      *
      * @param \Core\Model\Page $page
      * @param array $data
@@ -290,6 +290,48 @@ class Page extends \Core\Service\AbstractService
         $this->_em->flush();
     }
 
+    /**
+     * Adds a block to a page.
+     * 
+     * @param \Core\Model\Page $page
+     * @param \Core\Model\Block $block
+     * @param \Core\Model\Layout\Location $location
+     */
+    public function addBlock(\Core\Model\Page $page, \Core\Model\Block $block, \Core\Model\Layout\Location $location)
+    {
+        $page->addBlock($block, $location);
+        $this->_em->persist($block);
+        $this->_em->flush();
+    }
+
+    /**
+     * Updates all blocks on a page with the values specified in $pageObject.  The $pageObject structure must match the \Core\Model\Page structure.
+     *
+     * @param \Core\Model\Page $page
+     * @param \stdClass $pageObject
+     */
+    public function update(\Core\Model\Page $page, \stdClass $pageObject)
+    {
+        foreach($pageObject->layout->locations as $location)
+        {
+            foreach($location as $block)
+            {
+                $this->getBlockService()->update($page->getBlock($block->id), $block);
+            }
+        }
+        $this->_em->flush();
+    }
+
+    public function getAuth()
+    {
+        return $this->_auth;
+    }
+
+    public function setAuth($auth)
+    {
+        $this->_auth = $auth;
+    }
+
     public function getBlockService()
     {
         return $this->_blockService;
@@ -325,47 +367,5 @@ class Page extends \Core\Service\AbstractService
         }
 
         return $this->_defaultForm;
-    }
-
-    /**
-     * Adds a block to a page.
-     * 
-     * @param \Core\Model\Page $page
-     * @param \Core\Model\Block $block
-     * @param \Core\Model\Layout\Location $location
-     */
-    public function addBlock(\Core\Model\Page $page, \Core\Model\Block $block, \Core\Model\Layout\Location $location)
-    {
-        $page->addBlock($block, $location);
-        $this->_em->persist($block);
-        $this->_em->flush();
-    }
-
-    public function getAuth()
-    {
-        return $this->_auth;
-    }
-
-    public function setAuth($auth)
-    {
-        $this->_auth = $auth;
-    }
-
-    /**
-     * Updates all blocks on a page with the values specified in $pageObject.  The $pageObject structure must match the \Core\Model\Page structure.
-     *
-     * @param \Core\Model\Page $page
-     * @param \stdClass $pageObject
-     */
-    public function update(\Core\Model\Page $page, \stdClass $pageObject)
-    {
-        foreach($pageObject->layout->locations as $location)
-        {
-            foreach($location as $block)
-            {
-                $this->getBlockService()->update($page->getBlock($block->id), $block);
-            }
-        }
-        $this->_em->flush();
     }
 }

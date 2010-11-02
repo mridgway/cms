@@ -20,6 +20,7 @@ class CMSAllTests
         $suite->addTest(Asset\AllTests::suite());
         $suite->addTest(Core\AllTests::suite());
         $suite->addTest(User\AllTests::suite());
+        $suite->addTest(Taxonomy\AllTests::suite());
 
         return $suite;
     }
