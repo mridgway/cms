@@ -81,4 +81,20 @@ abstract class AbstractService
     {
         $this->_auth = $auth;
     }
+
+    /**
+     * @param \Zend_Mail_Transport_Abstract $mailTransport
+     */
+    public function setMailTransport(\Zend_Mail_Transport_Abstract $mailTransport)
+    {
+        $this->_mailTransport = $mail;
+    }
+
+    /**
+     * @return Zend_Mail_Transport_Abstract
+     */
+    public function getMailTransport()
+    {
+        return $this->_mailTransport;
+    }
 }
