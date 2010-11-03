@@ -87,7 +87,7 @@ abstract class AbstractService
      */
     public function setMailTransport(\Zend_Mail_Transport_Abstract $mailTransport)
     {
-        $this->_mailTransport = $mail;
+        $this->_mailTransport = $mailTransport;
     }
 
     /**
