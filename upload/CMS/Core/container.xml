@@ -31,6 +31,9 @@
             <call method="setStaticBlockService">
                 <argument type="service" id="staticBlockService" />
             </call>
+            <call method="setAuth">
+                <argument type="service" id="auth" />
+            </call>
         </service>
         <service id="routeService" class="Core\Service\Route">
             <argument type="service" id="doctrine" />
