@@ -14,6 +14,20 @@ namespace Asset\Service;
 class Asset
 {
     /**
+     * @var Asset\Service\Extension
+     */
+    protected $_extensionService;
+
+    /**
+     * @var Asset\Service\Group
+     */
+    protected $_groupService;
+
+    /**
+     * @var Asset\Service\MimeType
+     */
+    protected $_mimeTypeService;
+    /**
      * @var Doctrine\ORM\EntityManager
      */
     protected $em = null;
@@ -84,6 +98,25 @@ class Asset
     }
 
     /**
+     * Creates a new Asset.
+     *
+     * @param string $sysname
+     * @param string $name
+     * @param string $extension
+     * @param string $group
+     * @param string $mimeType
+     * @return \Asset\Model\Asset
+     */
+    public function create($sysname, $name, $extension, $group, $mimeType)
+    {
+        $extension = $this->getExtensionService()->getExtension($extension);
+        $group = $this->getGroupService()->getGroup($group);
+        $mimeType = $this->getMimeTypeService()->getMimeType($mimeType);
+
+        return new \Asset\Model\Asset($sysname, $name, $extension, $group, $mimeType);
+    }
+
+    /**
      * @param \Doctrine\ORM\EntityManager $em
      */
     public function setEntityManager(\Doctrine\ORM\EntityManager $em)
@@ -97,5 +130,35 @@ class Asset
     public function getEntityManager()
     {
         return $this->em;
+    }
+
+    public function setExtensionService($extensionService)
+    {
+        $this->_extensionService = $extensionService;
+    }
+
+    public function getExtensionService()
+    {
+        return $this->_extensionService;
+    }
+
+    public function setGroupService($groupService)
+    {
+        $this->_groupService = $groupService;
+    }
+
+    public function getGroupService()
+    {
+        return $this->_groupService;
+    }
+
+    public function setMimeTypeService($mimeTypeService)
+    {
+        $this->_mimeTypeService = $mimeTypeService;
+    }
+
+    public function getMimeTypeService()
+    {
+        return $this->_mimeTypeService;
     }
 }

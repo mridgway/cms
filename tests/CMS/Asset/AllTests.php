@@ -26,6 +26,11 @@ class AllTests
         $suite->addTestSuite('Asset\Model\SizeTest');
         $suite->addTestSuite('Asset\Model\TypeTest');
 
+        $suite->addTestSuite('Asset\Service\AssetTest');
+        $suite->addTestSuite('Asset\Service\ExtensionTest');
+        $suite->addTestSuite('Asset\Service\GroupTest');
+        $suite->addTestSuite('Asset\Service\MimeTypeTest');
+
         return $suite;
     }
 }
