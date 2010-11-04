@@ -181,7 +181,11 @@ class FormMediator
         $instance = $this->getInstance();
 
         $values = $this->_form->getValues($suppressArrayNotation);
-        $this->setData($values);
+        if($this->_form->isArray()) {
+            $this->setData($values[$this->_form->getName()]);
+        } else {
+            $this->setData($values);
+        }
 
         return $this->_instance;
     }
