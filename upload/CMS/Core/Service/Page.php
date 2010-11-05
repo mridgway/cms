@@ -30,11 +30,6 @@ class Page extends \Core\Service\AbstractService
     protected $_defaultForm;
 
     /**
-     * @var Core\Auth\Auth
-     */
-    protected $_auth;
-
-    /**
      * Gets a page.
      * 
      * @param integer $id
@@ -320,16 +315,6 @@ class Page extends \Core\Service\AbstractService
             }
         }
         $this->_em->flush();
-    }
-
-    public function getAuth()
-    {
-        return $this->_auth;
-    }
-
-    public function setAuth($auth)
-    {
-        $this->_auth = $auth;
     }
 
     public function getBlockService()

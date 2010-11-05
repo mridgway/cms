@@ -19,11 +19,6 @@ class Block extends \Core\Service\AbstractService
     protected $_moduleRegistry;
 
     /**
-     * @var \Core\Auth\Auth
-     */
-    protected $_auth;
-
-    /**
      * @var \Core\Service\Layout\Location
      */
     protected $_locationService;
@@ -223,20 +218,6 @@ class Block extends \Core\Service\AbstractService
     public function setModuleRegistry(\Core\Module\Registry $moduleRegistry)
     {
         $this->_moduleRegistry = $moduleRegistry;
-    }
-
-    public function getAuth()
-    {
-        if(null === $this->_auth)
-        {
-            $this->setAuth(\Core\Auth\Auth::getInstance());
-        }
-        return $this->_auth;
-    }
-
-    public function setAuth(\Zend_Auth $auth)
-    {
-        $this->_auth = $auth;
     }
 
     public function getLocationService()

@@ -68,6 +68,7 @@ class AllTests
         $suite->addTestSuite('Core\Service\Block\DynamicBlockTest');
         $suite->addTestSuite('Core\Service\Mediator\ContentMediatorTest');
         $suite->addTestSuite('Core\Service\Layout\LocationTest');
+        $suite->addTestSuite('Core\Service\AddressTest');
 
         return $suite;
     }

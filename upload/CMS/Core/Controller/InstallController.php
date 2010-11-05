@@ -38,6 +38,7 @@ class InstallController extends AbstractInstallController
         'Core\Model\Block',
         'Core\Model\Block\Config\Value',
         'Core\Model\Content',
+        'Core\Model\Address',
 
         'Core\Model\Content\Placeholder',
         'Core\Model\Content\Text',
