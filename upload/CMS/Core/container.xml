@@ -78,5 +78,8 @@
         <service id="locationService" class="Core\Service\Layout\Location">
             <argument type="service" id="doctrine" />
         </service>
+        <service id="addressService" class="Core\Service\Address">
+            <argument type="service" id="doctrine" />
+        </service>
     </services>
 </container>
