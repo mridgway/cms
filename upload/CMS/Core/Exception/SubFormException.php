@@ -12,7 +12,7 @@ class SubFormException extends \Exception
     public static function invalidData(\Zend_Form_SubForm $form)
     {
         $exception = new self('subform data is invalid');
-        $exception->add($form);
+        $exception->addSubForm($form);
         return $exception;
     }
 

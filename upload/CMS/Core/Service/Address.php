@@ -26,7 +26,7 @@ class Address extends \Core\Service\AbstractService
         $mediator = $this->getMediator($form);
 
         if(!$mediator->isValid($data)) {
-            throw new \Core\Exception\SubFormException($form);
+            throw \Core\Exception\SubFormException::invalidData($form);
         }
 
         $address = new \Core\Model\Address();
