@@ -179,13 +179,17 @@ class FormMediator
     public function transferValues($suppressArrayNotation = false)
     {
         $instance = $this->getInstance();
-
+        
         $values = $this->_form->getValues($suppressArrayNotation);
         if($this->_form->isArray()) {
-            $this->setData($values[$this->_form->getName()]);
-        } else {
-            $this->setData($values);
+            $values = $values[$this->_form->getName()];
         }
+        foreach($values AS $key => $value) {
+            if (!in_array($key, $this->_dataKeysPassed)) {
+                unset($values[$key]);
+            }
+        }
+        $this->setData($values);
 
         return $this->_instance;
     }
