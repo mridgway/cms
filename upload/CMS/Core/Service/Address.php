@@ -36,6 +36,21 @@ class Address extends \Core\Service\AbstractService
         return $address;
     }
 
+    /**
+     * Only need validated SubForm for form errors.
+     * 
+     * @param array $data
+     * @return \Core\Form\SubForm\Address
+     */
+    public function getValidatedSubForm($data)
+    {
+        $form = $this->getSubForm();
+        $mediator = $this->getMediator($form);
+        $mediator->isValid($data);
+
+        return $form;
+    }
+
     public function getSubForm()
     {
         return new \Core\Form\SubForm\Address();
