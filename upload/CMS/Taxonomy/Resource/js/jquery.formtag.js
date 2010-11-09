@@ -19,9 +19,14 @@
 (function($){
 
     $.fn.formTag = function(){
+        $(this).wrap($('<div>', {
+            class: 'taxonomy-formtag-container'
+        }));
         $(this).data('name', $(this).attr('name'));
         $(this).removeAttr('name');
-        var b = $('<button type="button">Add</button>').addClass('tagAdd')
+        // add a hidden field with empty value to allow submitting with now tags
+        $(this).before($('<input type="hidden" value="" />').attr('name',$(this).data('name').replace(/([^a-zA-Z0-9\s\-\_])|^\s|\s$/g, '')));
+        var b = $('<button type="button">Add</button>').addClass('taxonomy-formtag-button')
             .click(function(){
                 var tagger = $(this).data('tagger');
                 $(tagger).addTag( $(tagger).val() );
@@ -29,7 +34,7 @@
                 $(tagger).stop();
             })
             .data('tagger', this);
-        var l = $('<ul />').addClass('tagList');
+        var l = $('<ul />').addClass('taxonomy-formtag-list');
         $(this).data('list', l);
         $(this).after(l).after(b);
         $(this).bind('keypress', function(e){
@@ -61,12 +66,18 @@
             if (found) return false;
 			var fn = $(this).data('name');
 			var i = $('<input type="hidden" />').attr('name',fn).val(n);
-			var t = $('<li />').text(n).addClass('tagName')
+			var t = $('<li />', {
+                html : $('<span>', {
+                    html : $('<a>').text('remove').click(function(e){e.preventDefault();})
+                }).append(n)
+            })
 				.click(function(){
 					// remove
 					var hidden = $(this).data('hidden');
 					$(hidden).remove();
-					$(this).remove();
+					$(this).hide(200, function () {
+                        $(this).remove();
+                    });
 				})
 				.data('hidden',i);
 			$(l).append(t).append(i);

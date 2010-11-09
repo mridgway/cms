@@ -26,9 +26,9 @@ class Term extends \Core\Service\AbstractService
     {
         $term = $this->getEntityManager()
                 ->getRepository('Taxonomy\Model\Term')
-                ->findByVocabularySysnameAndName($vocabularySysname, $termName);
+                ->findOneByVocabularySysnameAndName($vocabularySysname, $termName);
         if (!$term) {
-            $term = $this->createTerm(array(
+            $term = $this->createTerm($vocabularySysname, array(
                 'name' => $termName
             ));
         }

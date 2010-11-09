@@ -135,23 +135,20 @@ class Page extends \Core\Service\AbstractService
                     && array_key_exists($block->getContent()->getSysname(), $placeholders)) {
                 $newBlock->setContent($placeholders[$block->getContent()->getSysname()]['content']);
                 $newBlock->setView($placeholders[$block->getContent()->getSysname()]['view']);
-                $replacements[$block->getId()] = $newBlock;
             }
             // Set block config
             foreach($block->getConfigValues() as $name => $value) {
                 $newBlock->setConfigValue($value->getName(), $value->getValue(), $value->getInheritsFrom());
             }
             $page->addBlock($newBlock);
+            $replacements[spl_object_hash($block)] = $newBlock;
         }
 
-        // Fix any config inheritance that may be pointing to placeholders
+        // Fix config inheritance to point to the new blocks
         foreach ($page->getBlocks() AS $newBlock) {
             foreach ($newBlock->getConfigValues() as $name => $value) {
-                if ($value->getInheritsFrom()
-                        && $newBlock->getConfigProperty($name)->getInheritable()
-                        && $value->getInheritsFrom() instanceof \Core\Model\Block\StaticBlock
-                        && $newBlock->getConfigProperty($name)->getInheritableFrom() != 'Core\Model\Block') {
-                    $value->setInheritsFrom($replacements[$value->getInheritsFrom()->getId()]);
+                if ($value->getInheritsFrom()) {
+                    $value->setInheritsFrom($replacements[spl_object_hash($value->getInheritsFrom())]);
                 }
             }
         }

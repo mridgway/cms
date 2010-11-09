@@ -1,8 +1,7 @@
 <?php
 namespace Core\Service;
 
-require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 use \Mockery as m;
 

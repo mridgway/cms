@@ -17,34 +17,39 @@ class ContentElementFactory
     {
         return new \Core\Form\Element\Hidden('id');
     }
-    
+
     public static function getAuthorElement()
     {
-        $author = new \Core\Form\Element\Autocomplete('author');
+        $author = new \Core\Form\Element\Hidden('author');
 
         return $author;
     }
     
     public static function getAuthorNameElement()
     {
-        $authorName = new \Core\Form\Element\Text('authorName');
-        $authorName->setLabel('Author Name:');
+        $author = new \Core\Form\Element\AutocompleteHidden('authorName');
+        $author->setLabel('Author');
+        $author->setDescription('Type a name and select from the autocomplete dropdown to select a site user. If the author is not a user delete the contents of the field and type a name.');
+        $author->setJQueryParam('source', '/direct/content/author');
+        $author->setJQueryParam('hiddenFieldName', 'author');
 
-        return $authorName;
+        return $author;
     }
 
     public static function getCreationDateElement()
     {
-        $creationDate = new \ZendX_JQuery_Form_Element_DatePicker('creationDate');
+        $creationDate = new \Core\Form\Element\DatePicker('creationDate');
         $creationDate->setLabel('Creation Date:');
+        $creationDate->setJQueryParam('dateFormat', 'mm-dd-yy');
 
         return $creationDate;
     }
 
     public static function getModificationDateElement()
     {
-        $modificationDate = new \ZendX_JQuery_Form_Element_DatePicker('modificationDate');
+        $modificationDate = new \Core\Form\Element\DatePicker('modificationDate');
         $modificationDate->setLabel('Modification Date:');
+        $modificationDate->setJQueryParam('dateFormat', 'mm-dd-yy');
 
         return $modificationDate;
     }

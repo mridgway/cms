@@ -43,15 +43,14 @@ class ContentMediator extends \Core\Service\AbstractMediator
                         $instance->setAuthor($value);
                     }
                 ),
-                'authorName' => array(
-                ),
+                'authorName' => array(),
                 'creationDate' => array(
                     'getMethod' => function ($instance) {
                         return $instance->getCreationDate()->format('m-d-Y');
                     },
                     'filterMethod' => function ($instance, $value) {
                         try {
-                            return $value ? \date_create_from_format('m-d-Y', $value) : \DateTime();
+                            return $value ? \DateTime::createFromFormat('m-d-Y', $value) : new \DateTime();
                         } catch (\Exception $e) {
                             throw new \Exception(sprintf('Invalid date passed: %s', $value));
                         }
@@ -63,7 +62,7 @@ class ContentMediator extends \Core\Service\AbstractMediator
                     },
                     'filterMethod' => function ($instance, $value) {
                         try {
-                            return $value ? \date_create_from_format('m-d-Y', $value) : \DateTime();
+                            return $value ? \DateTime::createFromFormat('m-d-Y', $value) : new \DateTime();
                         } catch (\Exception $e) {
                             throw new \Exception(sprintf('Invalid date passed: %s', $value));
                         }
@@ -79,12 +78,15 @@ class ContentMediator extends \Core\Service\AbstractMediator
                     },
                     'setMethod' => function ($instance, $values) use ($self) {
                         $tags = array();
-                        foreach ($values AS $tagName) {
-                            $tags[] = $self->getTermService()->getOrCreateTerm($tagName, 'contentTags');
+                        if ($values) {
+                            foreach ($values AS $tagName) {
+                                $tags[] = $self->getTermService()->getOrCreateTerm($tagName, 'contentTags');
+                            }
                         }
                         $instance->setTags($tags);
                     }
-                )
+                ),
+                'isFeatured' => array()
             )
         );
     }

@@ -621,6 +621,10 @@ CMS.Use = function (scripts, callback) {
         }
         CMS._callbackQueue = futureCallbacks;
     }
+    if (scriptsToLoad.length == 0) {
+        completionCallback(scriptsToLoad);
+        return;
+    }
     return new CMS.ScriptQueue(scriptsToLoad, completionCallback);
 }
 
