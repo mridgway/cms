@@ -2,7 +2,7 @@
 
 namespace Core\Service;
 
-class MiddleMan
+class MiddleMan extends \Core\Service\AbstractService
 {
     protected $_objects = array();
 
