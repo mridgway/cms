@@ -81,5 +81,7 @@
         <service id="addressService" class="Core\Service\Address">
             <argument type="service" id="doctrine" />
         </service>
+        <service id="middleManService" class="Core\Service\MiddleMan">
+        </service>
     </services>
 </container>
