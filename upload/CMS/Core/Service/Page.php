@@ -88,17 +88,21 @@ class Page extends \Core\Service\AbstractService
      * @param Core\Model\Template|string|int $template
      * @return Core\Model\Template
      */
-    public function ensureTemplate($template)
+    public function ensureTemplate(&$template)
     {
-        if (!$template instanceof \Core\Model\Template) {
+        if (!($template instanceof \Core\Model\Template)) {
             if (is_int($template)) {
                 $template = $this->getEntityManager()->find('Core\Model\Template', $template);
             } else {
-                $template = $this->getEntityManager()->getRepository('Core\Model\Template')->findBySysname($template);
+                $template = $this->getEntityManager()->getRepository('Core\Model\Template')->findOneBySysname($template);
             }
         }
 
-        return $template;
+        if (!($template instanceof \Core\Model\Template)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -110,7 +114,9 @@ class Page extends \Core\Service\AbstractService
      */
     public function createPageFromTemplate($template, $placeholders = array())
     {
-        $template = $this->ensureTemplate($template);
+        if (!$this->ensureTemplate($template)) {
+            throw new \Exception('Invalid template provided.');
+        }
 
         // keeps track of new blocks that replaced placeholders
         $replacements = array();

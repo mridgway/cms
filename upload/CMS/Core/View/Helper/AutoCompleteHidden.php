@@ -53,8 +53,8 @@ class ZendX_JQuery_View_Helper_AutoCompleteHidden extends ZendX_JQuery_View_Help
             $hiddenFieldName
         ));
 
-        $changeCallback = new Zend_Json_Expr(sprintf('function (event, ui) {
-            if ("" == $(this).val()) {
+        $changeCallback = new Zend_Json_Expr(sprintf('function () {
+            if ($(this).val().length < 2) {
                 %s("#%s").val("");
             }
         }',
@@ -63,14 +63,14 @@ class ZendX_JQuery_View_Helper_AutoCompleteHidden extends ZendX_JQuery_View_Help
         ));
 
         $params['select'] = $selectCallback;
-        $params['change'] = $changeCallback;
 
         $params = ZendX_JQuery::encodeJson($params);
 
-        $js = sprintf('%s("#%s").autocomplete(%s);',
+        $js = sprintf('%s("#%s").autocomplete(%s).keypress(%s);',
                 ZendX_JQuery_View_Helper_JQuery::getJQueryHandler(),
                 $attribs['id'],
-                $params
+                $params,
+                $changeCallback
         );
 
         $this->jquery->addOnLoad($js);

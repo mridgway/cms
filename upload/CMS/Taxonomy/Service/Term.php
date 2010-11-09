@@ -24,10 +24,11 @@ class Term extends \Core\Service\AbstractService
      */
     public function getOrCreateTerm($termName, $vocabularySysname)
     {
-        $term = $this->getEntityManager()
+        try {
+            $term = $this->getEntityManager()
                 ->getRepository('Taxonomy\Model\Term')
                 ->findOneByVocabularySysnameAndName($vocabularySysname, $termName);
-        if (!$term) {
+        } catch (\Doctrine\ORM\NoResultException $e) {
             $term = $this->createTerm($vocabularySysname, array(
                 'name' => $termName
             ));
