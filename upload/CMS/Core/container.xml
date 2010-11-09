@@ -82,6 +82,7 @@
             <argument type="service" id="doctrine" />
         </service>
         <service id="middleManService" class="Core\Service\MiddleMan">
+            <argument type="service" id="doctrine" />
         </service>
     </services>
 </container>
