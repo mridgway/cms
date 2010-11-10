@@ -2,7 +2,7 @@
 
 namespace Core\Exception;
 
-class SubFormException extends \Exception
+class ValidationException extends \Exception
 {
     /**
      * @var array
