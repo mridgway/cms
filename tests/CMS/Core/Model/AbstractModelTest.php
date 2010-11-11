@@ -2,7 +2,7 @@
 namespace Core\Model;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once '../../../bootstrap.php';
 
 /**
  * Test class for Entity.
@@ -126,14 +126,38 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($data, $newData);
 
     }
+
+    public function testSetIfSet()
+    {
+        $data = array(
+            'test' => 1
+        );
+
+        $model = new \Core\Model\ConcreteAbstractModel($em);
+        $model->setIf('test', $data);
+        $this->assertEquals($data['test'], $model->test);
+        $this->assertEquals(false, $model->setIf('one', $data));
+    }
 }
 
 
 class ConcreteAbstractModel extends AbstractModel
 {
+    public $test;
+    
     public function getCollectionAsArray($collection, $options = null)
     {
         return  parent::_getCollectionAsArray($collection, $options);
+    }
+
+    public function setIf($key, $array)
+    {
+        $this->setIfSet($key, $array);
+    }
+
+    public function setTest($value)
+    {
+        $this->test = $value;
     }
 }
 

@@ -50,6 +50,29 @@ class Address extends \Core\Model\AbstractModel
      */
     protected $zip;
 
+    public function toArray($includes = null)
+    {
+        $data = array();
+
+        $data['id'] = $this->getId();
+        $data['addressLine1'] = $this->getAddressLine1();
+        $data['addressLine2'] = $this->getAddressLine2();
+        $data['city'] = $this->getCity();
+        $data['state'] = $this->getState();
+        $data['zip'] = $this->getZip();
+
+        return $data;
+    }
+
+    public function fromArray($data)
+    {
+        $this->setIfSet('addressLine1', $data);
+        $this->setIfSet('addressLine2', $data);
+        $this->setIfSet('city', $data);
+        $this->setIfSet('state', $data);
+        $this->setIfSet('zip', $data);
+    }
+
     public function getId()
     {
         return $this->id;

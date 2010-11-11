@@ -121,4 +121,15 @@ abstract class AbstractModel
         }
         return $data;
     }
+
+    protected function setIfSet($key, $array)
+    {
+        if (!array_key_exists($key, $array)) {
+            return false;
+        }
+
+        $method = 'set' . \ucfirst($key);
+        $this->$method($array[$key]);
+        return true;
+    }
 }
