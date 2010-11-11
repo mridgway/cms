@@ -2,12 +2,12 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+//require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
 /**
- * Test class for AbstractService.
+ * Test class for Abstract Model Service.
  */
 class AbstractModelTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,13 +24,9 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultClassName()
     {
         $className = 'Mock\Model\TestAbstractModel';
-
         $em = m::mock('Doctrine\ORM\EntityManager');
-
         $amService = new \Mock\Service\TestAbstractModel($em);
-
         $newClassName = $amService->getDefaultClassName();
-
         $this->assertEquals($className, $newClassName);
     }
 
@@ -51,7 +47,33 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($className, $newClassName);
     }
 
-    /*public function testCreate()
+    public function testGetDefaultValidationClassName()
+    {
+        $className = 'Mock\Service\Validation\TestAbstractModel';
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $amService = new \Mock\Service\TestAbstractModel($em);
+        $newClassName = $amService->getDefaultValidationClassName();
+        $this->assertEquals($className, $newClassName);
+    }
+
+    public function testGetValidationClassName()
+    {
+        $className = 'Mock\Service\Validation\Test\TestAbstractModel';
+
+        $em = m::mock('Doctrine\ORM\EntityManager');
+
+        $amService = new \Mock\Service\TestAbstractModel($em);
+        $amService->setValidationClassName($className);
+        $newClassName = $amService->getValidationClassName();
+        $this->assertEquals($className, $newClassName);
+
+        $amService->setClassName(null);
+        $className = 'Mock\Service\Validation\TestAbstractModel';
+        $newClassName = $amService->getDefaultValidationClassName();
+        $this->assertEquals($className, $newClassName);
+    }
+
+    public function testCreate()
     {
         $data = array(
             'name' => 'name',
@@ -59,11 +81,33 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         );
 
         $model = new \Mock\Model\TestAbstractModel();
+        $model->fromArray($data);
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $amService = new \Mock\Service\TestAbstractModel($em);
+        $newModel = $amService->create($data);
+        $this->assertEquals($model, $newModel);
+
+        $this->setExpectedException('Core\Exception\ValidationException');
+        $data['phone'] = '123';
+        $newModel = $amService->create($data);
+    }
+
+    public function testRetrieveArray()
+    {
+        $object = new \Mock\Model\TestAbstractModel();
+        $object->name = 'name';
+        $object->phone = '1231231234';
+
+        $repo = m::mock();
+        $repo->shouldReceive('find')->andReturn($object);
 
         $em = m::mock('Doctrine\ORM\EntityManager');
+        $em->shouldReceive('getRepository')->andReturn($repo);
 
-        $amService = new TestAbstractModel($em);
+        $amService = new \Mock\Service\TestAbstractModel($em);
 
-        $model = $amService->create($data);
-    }*/
+        $newData = $amService->retrieveArray(1);
+
+        $this->assertEquals($object->toArray(), $newData);
+    }
 }

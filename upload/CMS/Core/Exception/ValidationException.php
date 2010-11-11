@@ -7,22 +7,22 @@ class ValidationException extends \Exception
     /**
      * @var array
      */
-    protected $_subForms = array();
+    protected $_messages = array();
 
-    public static function invalidData(\Zend_Form_SubForm $form)
+    public static function invalidData($array)
     {
-        $exception = new self('subform data is invalid');
-        $exception->addSubForm($form);
+        $exception = new self('data is invalid');
+        $exception->addMessages($array);
         return $exception;
     }
 
-    public function getSubForms()
+    public function getMessages()
     {
-        return $this->_subForms;
+        return $this->_messages;
     }
 
-    public function addSubForm(\Zend_Form_SubForm $form)
+    public function addMessages($array)
     {
-        $this->_subForms[] = $form;
+        $this->_messages = \array_merge($array, $this->getMessages());
     }
 }

@@ -69,6 +69,7 @@ class AllTests
         $suite->addTestSuite('Core\Service\Mediator\ContentMediatorTest');
         $suite->addTestSuite('Core\Service\Layout\LocationTest');
         $suite->addTestSuite('Core\Service\AddressTest');
+        $suite->addTestSuite('Core\Service\AbstractModelTest');
 
         return $suite;
     }

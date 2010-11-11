@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Form\Subform;
+namespace Core\Service\Validation;
 
 /**
  * Form for address model

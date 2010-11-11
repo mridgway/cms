@@ -14,33 +14,36 @@ namespace Core\Service;
 abstract class AbstractModel extends AbstractService
 {
     protected $_className;
+    protected $_validationClassName;
 
     public function _create ($data)
     {
-        $formName = $this->getValidationClass();
-        $form = new $formName();
+        $class = $this->getValidationClassName();
+        $validation = new $class();
 
-        if(!$form->isValid($data)) {
-            $exception = ValidationException::invalidData($form->getErrorMessages());
+        if(!$validation->isValid($data)) {
+            throw \Core\Exception\ValidationException::invalidData($validation->getErrorMessages());
         }
 
-        $class = $this->getClass();
+        $class = $this->getClassName();
         $object = new $class();
-        $objects->fromArray();
+        $object->fromArray($validation->getValues());
 
         return $object;
     }
 
-    protected function _retrieve($id, $objectName, $propertyArray)
+    protected function _retrieve($id)
     {
-        $this->_objects = $propertyArray;
+        $object = $this->getEntityManager()->getRepository($this->getClassName())->find($id);
 
-        $data = array();
+        return $object;
+    }
 
-        $object = $this->getEntityManager()->getRepository($this->getClass($objectName))->find($id);
-        $data[$objectName] = $this->getProperties($object);
+    protected function _retrieveArray($id, $includes = null)
+    {
+        $object = $this->_retrieve($id);
 
-        return $data;
+        return $object->toArray($includes);
     }
 
     public function getClassName()
@@ -60,6 +63,26 @@ abstract class AbstractModel extends AbstractService
     {
         $nameArray = explode('\\', \get_class($this));
         $nameArray[1] = 'Model';
+        return implode('\\', $nameArray);
+    }
+
+    public function getValidationClassName()
+    {
+        if(\is_null($this->_validationClassName)) {
+            $this->setValidationClassName($this->_getDefaultValidationClassName());
+        }
+        return $this->_validationClassName;
+    }
+
+    public function setValidationClassName($className)
+    {
+        $this->_validationClassName = $className;
+    }
+
+    protected function _getDefaultValidationClassName()
+    {
+        $nameArray = explode('\\', \get_class($this));
+        \array_splice($nameArray, 2, 0, 'Validation');
         return implode('\\', $nameArray);
     }
 }
