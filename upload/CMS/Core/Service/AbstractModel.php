@@ -49,7 +49,7 @@ abstract class AbstractModel extends AbstractService
     public function getClassName()
     {
         if(\is_null($this->_className)) {
-            $this->setClassName($this->getDefaultClassName());
+            $this->setClassName($this->_getDefaultClassName());
         }
         return $this->_className;
     }
