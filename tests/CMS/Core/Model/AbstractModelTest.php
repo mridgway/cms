@@ -2,6 +2,7 @@
 namespace Core\Model;
 
 require_once 'PHPUnit/Framework.php';
+//require_once '../../../bootstrap.php';
 
 /**
  * Test class for Entity.
@@ -86,5 +87,66 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase {
         $this->setExpectedException('\Core\Model\Exception');
         $this->model->setId(2);
     }
+
+    public function testGetCollectionAsArray()
+    {
+        $collection = array(
+            new TestObject(),
+            new TestObject()
+        );
+
+        $data = array(
+            array(
+                'one' => 1,
+                'two' => 2
+            ),
+            array(
+                'one' => 1,
+                'two' => 2
+            )
+        );
+
+        $model = new ConcreteAbstractModel();
+        $newData = $model->getCollectionAsArray($collection);
+        $this->assertEquals($data, $newData);
+
+        $data = array(
+            array(
+                'one' => 1,
+                'two' => 2,
+                'three' => 3
+            ),
+            array(
+                'one' => 1,
+                'two' => 2,
+                'three' => 3
+            )
+        );
+        $newData = $model->getCollectionAsArray($collection, array('options' => array()));
+        $this->assertEquals($data, $newData);
+
+    }
 }
-?>
+
+
+class ConcreteAbstractModel extends AbstractModel
+{
+    public function getCollectionAsArray($collection, $options = null)
+    {
+        return  parent::_getCollectionAsArray($collection, $options);
+    }
+}
+
+class TestObject
+{
+    public function toArray($includes)
+    {
+        $data = array('one' => 1, 'two' => 2);
+        
+        if(isset($includes['options'])) {
+            $data['three'] = 3;
+        }
+
+        return $data;
+    }
+}

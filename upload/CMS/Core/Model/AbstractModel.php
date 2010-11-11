@@ -112,7 +112,7 @@ abstract class AbstractModel
         throw new \Core\Model\Exception('Id is not allowed to be set.');
     }
 
-    protected function _getCollectionAsArray($collection, $options)
+    protected function _getCollectionAsArray($collection, $options = null)
     {
         $data = array();
         foreach($collection as $object)
