@@ -135,6 +135,10 @@ abstract class Content
         return $data;
     }
 
+    public function fromArray($data)
+    {
+    }
+
     public function getId()
     {
         return $this->id;
