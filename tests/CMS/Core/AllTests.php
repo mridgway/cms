@@ -40,6 +40,7 @@ class AllTests
         $suite->addTestSuite('Core\Model\TemplateTest');
         $suite->addTestSuite('Core\Model\ModuleTest');
         $suite->addTestSuite('Core\Model\FrontendTest');
+        $suite->addTestSuite('Core\Model\AddressTest');
 
         $suite->addTestSuite('Core\Model\Block\DynamicBlockTest');
         $suite->addTestSuite('Core\Model\Block\StaticBlockTest');

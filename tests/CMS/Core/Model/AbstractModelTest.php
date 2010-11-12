@@ -2,7 +2,7 @@
 namespace Core\Model;
 
 require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+//require_once '../../../bootstrap.php';
 
 /**
  * Test class for Entity.
@@ -122,8 +122,9 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase {
                 'three' => 3
             )
         );
-        $newData = $model->getCollectionAsArray($collection, array('options' => array()));
-        $this->assertEquals($data, $newData);
+        
+        $this->assertEquals($data, $model->getCollectionAsArray($collection, array('options' => array())));
+        $this->assertEquals(null, $model->getCollectionAsArray(array(), array('options' => array())));
 
     }
 
@@ -133,10 +134,94 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase {
             'test' => 1
         );
 
-        $model = new \Core\Model\ConcreteAbstractModel($em);
+        $model = new \Core\Model\ConcreteAbstractModel();
         $model->setIf('test', $data);
         $this->assertEquals($data['test'], $model->test);
-        $this->assertEquals(false, $model->setIf('one', $data));
+    }
+
+    public function testGetArrayIfSet()
+    {
+        $data = array(
+            'one' => 1,
+            'two' => 2
+        );
+
+        $test = new TestObject();
+        $model = new \Core\Model\ConcreteAbstractModel();
+        $model->setTest($test);
+
+        $this->assertEquals($data, $model->getArrayIf('test', array('test')));
+        $this->assertEquals($data, $model->getArrayIf('test', array('test' => array())));
+        $this->assertEquals($data, $model->getArrayIf('test', array('test' => null)));
+
+        $data = \array_merge($data, array('three' => 3));
+        $this->assertEquals($data, $model->getArrayIf('test', array('test' => array('options'))));
+        $this->assertEquals($data, $model->getArrayIf('test', array('test' => array('options' => array()))));
+
+        $collection = array(
+            new TestObject(),
+            new TestObject()
+        );
+
+        $data = array(
+            array(
+                'one' => 1,
+                'two' => 2
+            ),
+            array(
+                'one' => 1,
+                'two' => 2
+            )
+        );
+        
+        $model->setCollection($collection);
+        $this->assertEquals($data, $model->getArrayIf('collection', array('collection')));
+    }
+
+    public function testToArray()
+    {
+        $collection = array(
+            new TestObject(),
+            new TestObject()
+        );
+
+        $data = array(
+            array(
+                'one' => 1,
+                'two' => 2
+            ),
+            array(
+                'one' => 1,
+                'two' => 2
+            )
+        );
+
+        $date = new \DateTime();
+
+        $model = new ConcreteAbstractModel();
+        $model->setCollection($collection);
+        $model->setTest('test');
+        $model->setObject(new TestObject());
+        $model->setDate($date);
+        
+        $data = array(
+            'test' => 'test',
+            'collection' => null,
+            'object' => null,
+            'date' => $date->format('Y-m-d H:i:s')
+        );
+
+        $this->assertEquals($data, $model->toArray());
+
+        $data['collection'] = array(
+            array('one' => 1, 'two' => 2),
+            array('one' => 1, 'two' => 2)
+        );
+
+        $this->assertEquals($data, $model->toArray(array('collection')));
+
+        $data['object'] = array('one' => 1, 'two' => 2);
+        $this->assertEquals($data, $model->toArray(array('collection', 'object')));
     }
 }
 
@@ -144,6 +229,9 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase {
 class ConcreteAbstractModel extends AbstractModel
 {
     public $test;
+    public $object;
+    public $collection = array();
+    public $date;
     
     public function getCollectionAsArray($collection, $options = null)
     {
@@ -152,12 +240,57 @@ class ConcreteAbstractModel extends AbstractModel
 
     public function setIf($key, $array)
     {
-        $this->setIfSet($key, $array);
+        $this->_setIfSet($key, $array);
+    }
+
+    public function getTest()
+    {
+        return $this->test;
     }
 
     public function setTest($value)
     {
         $this->test = $value;
+    }
+
+    public function getArrayIf($key, $array)
+    {
+        return $this->_getArrayIfSet($key, $array);
+    }
+
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+
+    public function setCollection($collection)
+    {
+        $this->collection = $collection;
+    }
+
+    public function toArray($includes = null)
+    {
+        return $this->_toArray($includes);
+    }
+
+    public function setObject($object)
+    {
+        $this->object = $object;
+    }
+
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 }
 
@@ -166,9 +299,11 @@ class TestObject
     public function toArray($includes)
     {
         $data = array('one' => 1, 'two' => 2);
-        
-        if(isset($includes['options'])) {
-            $data['three'] = 3;
+
+        if(is_array($includes)) {
+            if(in_array('options', $includes) || \array_key_exists('options', $includes)) {
+                $data['three'] = 3;
+            }
         }
 
         return $data;

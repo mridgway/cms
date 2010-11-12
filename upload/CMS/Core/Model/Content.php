@@ -104,39 +104,12 @@ abstract class Content
 
     public function toArray($includes = null)
     {
-        $data['id'] = $this->getId();
-
-        if(isset($includes['author'])) {
-            $data['author'] = $this->getAuthor()->toArray($includes['author']);
-        }
-
-        $data['authorName'] = $this->getAuthorName();
-        $data['creationDate'] = $this->getCreationDate()->format('Y-m-d H:i:s');
-        $data['modificationDate'] = $this->getModificationDate()->format('Y-m-d H:i:s');
-
-        if(isset($includes['tags'])) {
-            $data['tags'] = $this->_getCollectionAsArray($this->getTags(), $includes['tags']);
-        }
-
-        if(isset($includes['status'])) {
-            $data['status'] = $this->getStatus()->toArray($includes['status']);
-        }
-
-        $data['isFeatured'] = $this->getIsFeatured();
-
-        if(isset($includes['dependentPage'])) {
-            $data['dependentPage'] = $this->getDependentPage()->toArray($includes['dependentPage']);
-        }
-
-        if(isset($includes['activities'])) {
-            $data['activities'] = $this->_getCollectionAsArray($this->getActivities(), $includes['activities']);
-        }
-
-        return $data;
+        return $this->_toArray($includes);
     }
 
     public function fromArray($data)
     {
+        $this->_setIfSet('authorName', $data);
     }
 
     public function getId()
