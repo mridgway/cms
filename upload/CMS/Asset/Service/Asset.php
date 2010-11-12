@@ -61,6 +61,31 @@ class Asset
     }
 
     /**
+     * Moves an asset to a different group.
+     * 
+     * @param string $url
+     * @param string $groupName
+     * @return \Asset\Model\Asset
+     */
+    public function getWithUrlAndMove($url, $groupName)
+    {
+        $asset = null;
+
+        if ($url != '') {
+            $em = $this->getEntityManager();
+            $parts = explode('?', $url);
+            $parts = explode('/', $parts[0]);
+            $groupName = $parts[2];
+            $hash = $parts[4];
+            $asset = $em->getRepository('Asset\Model\Asset')
+                    ->getAssetByGroupNameAndHash($groupName, $hash);
+            $this->changeGroup($asset, $groupName);
+        }
+
+        return $asset;
+    }
+
+    /**
      * Moves an image from one group to another. Old files are left in place,
      * but will not be linked to from the database.
      *
