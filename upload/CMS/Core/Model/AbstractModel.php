@@ -170,6 +170,9 @@ abstract class AbstractModel
         $data = array();
         foreach($properties as $property) {
             $key = $property->getName();
+            if(\strstr($key, '_')) {
+                continue;
+            }
             $method = 'get' . \ucfirst($key);
             $value = $this->$method();
 
