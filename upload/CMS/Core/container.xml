@@ -84,5 +84,11 @@
         <service id="middleManService" class="Core\Service\MiddleMan">
             <argument type="service" id="doctrine" />
         </service>
+        <service id="pageRouteService" class="Core\Service\PageRoute">
+            <argument type="service" id="doctrine" />
+            <call method="setRouteService">
+                <argument type="service" id="routeService" />
+            </call>
+        </service>
     </services>
 </container>

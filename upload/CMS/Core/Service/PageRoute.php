@@ -13,4 +13,26 @@ namespace Core\Service;
  */
 class PageRoute extends \Core\Service\AbstractService
 {
+    /**
+     * @var \Core\Service\Route
+     */
+    protected $_routeService;
+
+    public function createAndRouteTo(\Core\Model\Page $page, $routeName)
+    {
+        $route = $this->getRouteService()->findBySysname($routeName);
+        $pageRoute = $route->routeTo($page);
+        $this->getEntityManager()->persist($pageRoute);
+        $this->getEntityManager()->flush();
+    }
+
+    public function setRouteService(\Core\Service\Route $routeService)
+    {
+        $this->_routeService = $routeService;
+    }
+
+    public function getRouteService()
+    {
+        return $this->_routeService;
+    }
 }

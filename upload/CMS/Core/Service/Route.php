@@ -23,4 +23,9 @@ class Route extends \Core\Service\AbstractService
     {
         return new \Core\Model\Route($routeName);
     }
+
+    public function findOneBySysname($sysname)
+    {
+        return $this->getEntityManager()->getRepository('Core\Model\Route')->findOneBySysname($sysname);
+    }
 }
