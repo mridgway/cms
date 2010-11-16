@@ -20,7 +20,7 @@ class PageRoute extends \Core\Service\AbstractService
 
     public function createAndRouteTo(\Core\Model\Page $page, $routeName)
     {
-        $route = $this->getRouteService()->findBySysname($routeName);
+        $route = $this->getRouteService()->findOneBySysname($routeName);
         $pageRoute = $route->routeTo($page);
         $this->getEntityManager()->persist($pageRoute);
         $this->getEntityManager()->flush();

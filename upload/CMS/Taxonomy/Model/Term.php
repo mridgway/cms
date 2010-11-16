@@ -54,6 +54,11 @@ class Term
         $this->setDefinition($definition);
     }
 
+    public function toArray($includes = null)
+    {
+        return $this->_toArray($includes);
+    }
+
     public function getId()
     {
         return $this->id;

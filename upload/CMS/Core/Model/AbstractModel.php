@@ -153,7 +153,7 @@ abstract class AbstractModel
         $method = 'get' . \ucfirst($key);
         $object = $this->$method();
 
-        if(\is_array($object)) {
+        if(\is_array($object) || $object instanceof \IteratorAggregate) {
             return $this->_getCollectionAsArray($object, $array[$key]);
         }
 
