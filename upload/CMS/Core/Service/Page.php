@@ -88,17 +88,21 @@ class Page extends \Core\Service\AbstractService
      * @param Core\Model\Template|string|int $template
      * @return Core\Model\Template
      */
-    public function ensureTemplate($template)
+    public function ensureTemplate(&$template)
     {
-        if (!$template instanceof \Core\Model\Template) {
+        if (!($template instanceof \Core\Model\Template)) {
             if (is_int($template)) {
                 $template = $this->getEntityManager()->find('Core\Model\Template', $template);
             } else {
-                $template = $this->getEntityManager()->getRepository('Core\Model\Template')->findBySysname($template);
+                $template = $this->getEntityManager()->getRepository('Core\Model\Template')->findOneBySysname($template);
             }
         }
 
-        return $template;
+        if (!($template instanceof \Core\Model\Template)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -110,7 +114,9 @@ class Page extends \Core\Service\AbstractService
      */
     public function createPageFromTemplate($template, $placeholders = array())
     {
-        $template = $this->ensureTemplate($template);
+        if (!$this->ensureTemplate($template)) {
+            throw new \Exception('Invalid template provided.');
+        }
 
         // keeps track of new blocks that replaced placeholders
         $replacements = array();
@@ -135,23 +141,20 @@ class Page extends \Core\Service\AbstractService
                     && array_key_exists($block->getContent()->getSysname(), $placeholders)) {
                 $newBlock->setContent($placeholders[$block->getContent()->getSysname()]['content']);
                 $newBlock->setView($placeholders[$block->getContent()->getSysname()]['view']);
-                $replacements[$block->getId()] = $newBlock;
             }
             // Set block config
             foreach($block->getConfigValues() as $name => $value) {
                 $newBlock->setConfigValue($value->getName(), $value->getValue(), $value->getInheritsFrom());
             }
             $page->addBlock($newBlock);
+            $replacements[spl_object_hash($block)] = $newBlock;
         }
 
-        // Fix any config inheritance that may be pointing to placeholders
+        // Fix config inheritance to point to the new blocks
         foreach ($page->getBlocks() AS $newBlock) {
             foreach ($newBlock->getConfigValues() as $name => $value) {
-                if ($value->getInheritsFrom()
-                        && $newBlock->getConfigProperty($name)->getInheritable()
-                        && $value->getInheritsFrom() instanceof \Core\Model\Block\StaticBlock
-                        && $newBlock->getConfigProperty($name)->getInheritableFrom() != 'Core\Model\Block') {
-                    $value->setInheritsFrom($replacements[$value->getInheritsFrom()->getId()]);
+                if ($value->getInheritsFrom()) {
+                    $value->setInheritsFrom($replacements[spl_object_hash($value->getInheritsFrom())]);
                 }
             }
         }

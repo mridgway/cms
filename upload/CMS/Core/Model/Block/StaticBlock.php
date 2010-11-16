@@ -46,7 +46,16 @@ class StaticBlock extends \Core\Model\Block
      */
     public function getConfigValue($name)
     {
-        return $this->content->$name;
+        if ($this->content instanceof \Core\Model\Content\Placeholder) {
+            return null;
+        }
+        
+        $nameParts = explode('.', $name);
+        $instance = $this->content;
+        foreach ($nameParts AS $property) {
+            $instance = $instance->$property;
+        }
+        return $instance;
     }
 
     /**

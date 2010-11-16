@@ -28,6 +28,8 @@ class FormMediator
      */
     protected $_instance = null;
 
+    protected $_dataKeysPassed = array();
+
     /**
      *
      * @param Zend_Form $form
@@ -152,21 +154,11 @@ class FormMediator
      */
     public function isValid($data)
     {
-        $instance = $this->getInstance();
+        $this->_dataKeysPassed = array_keys($data);
 
         $isValid = false;
         if ($this->_form->isValid($data)) {
             $isValid = true;
-            foreach ($this->_fields AS $name => $field) {
-                if ($field['validatorMethod'] !== false) {
-                    if (!$this->callMethod($instance, $field['validatorMethod'], array($this->getForm()->getElement($name)))) {
-                        $element = $this->_form->getElement($name);
-                        $element->addError($field['validatorErrorMessage']);
-
-                        $isValid = false;
-                    }
-                }
-            }
         }
         return $isValid;
     }
@@ -176,16 +168,20 @@ class FormMediator
      *
      * @param bool $suppressArrayNotation
      */
-    public function transferValues($suppressArrayNotation = false)
+    public function transferValues()
     {
         $instance = $this->getInstance();
 
-        $values = $this->_form->getValues($suppressArrayNotation);
+        $values = $this->_form->getValues();
         if($this->_form->isArray()) {
-            $this->setData($values[$this->_form->getName()]);
-        } else {
-            $this->setData($values);
+            $values = $values[$this->_form->getName()];
         }
+        foreach($values AS $key => $value) {
+            if (!in_array($key, $this->_dataKeysPassed)) {
+                unset($values[$key]);
+            }
+        }
+        $this->setData($values);
 
         return $this->_instance;
     }

@@ -66,7 +66,7 @@
                     },
                     file_dialog_start: function () { }, // does not trigger in FF3.5 or Safari 4 (IE not tested)
                     file_queued_handler: function (oFile) {
-                        swfu.setButtonDisabled(true);
+                        //swfu.setButtonDisabled(true);
                         swfu.startUpload();
                         $('#' + swfu.movieName).after(
                             $('<p>Uploading Image...</p>')
@@ -106,7 +106,7 @@
                     },
                     upload_complete_handler: function (oFile) {
                         $('#' + swfu.movieName + '-message').remove();
-                        swfu.setButtonDisabled(false);
+                        //swfu.setButtonDisabled(false);
                     }
                 }));
 

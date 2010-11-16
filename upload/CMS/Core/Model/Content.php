@@ -79,6 +79,13 @@ abstract class Content
     protected $status;
 
     /**
+     *
+     * @var boolean
+     * @Column(type="boolean")
+     */
+    protected $isFeatured = false;
+
+    /**
      * The main page that this content shows up on. Example: blog article page. This is not
      * required, since many content types don't get their own page. This page relies on this content
      * and this content relies on this page. Deletions should probably be bidirectionally cascaded.
@@ -175,6 +182,16 @@ abstract class Content
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    public function getIsFeatured()
+    {
+        return $this->isFeatured;
+    }
+
+    public function setIsFeatured($isFeatured)
+    {
+        $this->isFeatured = $isFeatured;
     }
 
     public function getActivities()

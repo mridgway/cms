@@ -14,7 +14,7 @@ namespace Taxonomy\Repository;
 class Term extends \Doctrine\ORM\EntityRepository
 {
 
-    public function findByVocabularySysnameAndName($vocabularyName, $name)
+    public function findOneByVocabularySysnameAndName($vocabularyName, $name)
     {
         $qb = $this->createQueryBuilder('t');
         $qb->innerJoin('t.vocabulary', 'v');
@@ -23,6 +23,6 @@ class Term extends \Doctrine\ORM\EntityRepository
         $qb->setParameter('name', $name);
         $qb->setParameter('vocabularySysname', $vocabularyName);
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getSingleResult();
     }
 }

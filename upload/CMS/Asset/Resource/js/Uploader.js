@@ -56,7 +56,7 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
         },
 
         fileQueued : function () {
-            this.setButtonDisabled(true);
+            //this.setButtonDisabled(true);
             this.startUpload();
         },
 
@@ -109,7 +109,7 @@ CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS)
         },
 
         uploadComplete : function (file) {
-            this.setButtonDisabled(false);
+            //this.setButtonDisabled(false);
         },
 
         debug : function (message) {

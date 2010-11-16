@@ -24,7 +24,7 @@ class TermElementFactory
             $options[] = $term->getName();
         }
 
-        $element = new \Taxonomy\Form\Element\MultiTag('term');
+        $element = new \Taxonomy\Form\Element\MultiTag('tags');
         $element->setJQueryParam('source', $options);
 
         return $element;

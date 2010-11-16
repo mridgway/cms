@@ -33,7 +33,7 @@ class Taxonomy_View_Helper_MultiTag extends ZendX_JQuery_View_Helper_UiWidget
 
         $params = ZendX_JQuery::encodeJson($params);
 
-        $js = sprintf('%s("#%s").autocomplete(%s).formTag().addTag("'.implode(', ', $value).'");',
+        $js = sprintf('%s("#%s").autocomplete(%s).formTag().addTag("'.implode(',', $value).'");',
                 ZendX_JQuery_View_Helper_JQuery::getJQueryHandler(),
                 $attribs['id'],
                 $params,
