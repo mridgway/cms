@@ -18,10 +18,10 @@ class IdentityElementFactory
         return new \Core\Form\Element\Hidden('id');
     }
 
-    public static function getIdentityElement()
+    public static function getIdentifierElement()
     {
-        $identity = new \Core\Form\Element\Text('identity');
-        $identity->setLabel('Identity:');
+        $identity = new \Core\Form\Element\Text('identifier');
+        $identity->setLabel('Identifier:');
         $identity->setAllowEmpty(false);
         $identity->addValidator(new \Zend_Validate_StringLength(1, 150));
 

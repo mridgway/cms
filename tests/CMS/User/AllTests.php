@@ -20,9 +20,10 @@ class AllTests
         $suite = new \CMSTestSuite('User Tests');
 
         $suite->addTestSuite('User\Model\GroupTest');
-        $suite->addTestSuite('User\Model\IdentityTest');
         $suite->addTestSuite('User\Model\SessionTest');
         $suite->addTestSuite('User\Model\UserTest');
+
+        $suite->addTestSuite('User\Model\Identity\LocalTest');
 
         $suite->addTestSuite('User\Model\Acl\PermissionTest');
         $suite->addTestSuite('User\Model\Acl\ResourceTest');

@@ -13,6 +13,12 @@ namespace User\Model;
  *
  * @Entity
  * @Table(name="Identity")
+ * @InheritanceType("SINGLE_TABLE")
+ * @DiscriminatorColumn(name="type", type="string")
+ * @DiscriminatorMap({
+ *      "Local" = "User\Model\Identity\Local",
+ *      "OpenID" = "User\Model\Identity\OpenID"
+ * })
  *
  * @property int $id
  * @property string $value
@@ -30,22 +36,9 @@ class Identity extends \Core\Model\AbstractModel
 
     /**
      * @var string
-     * @Column(type="string", name="identity", length="500", unique="true", nullable="false")
+     * @Column(type="string", length="500", unique="true", nullable="false")
      */
-    protected $identity;
-
-    /**
-     * @var string
-     * @Column(type="string", name="passHash", length="128", nullable="true")
-     */
-    protected $passHash;
-
-    /**
-     * @TODO make this a foreign key?
-     * @var string
-     * @Column(type="string", name="type", length="100", nullable="false")
-     */
-    protected $type;
+    protected $identifier;
 
     /**
      * @var \User\Model\User
@@ -58,24 +51,23 @@ class Identity extends \Core\Model\AbstractModel
      * @param string $type
      * @param string $identity
      */
-    public function __construct($type, $identity, \User\Model\User $user)
+    public function __construct($identity, \User\Model\User $user)
     {
-        $this->setType($type);
-        $this->setIdentity($identity);
+        $this->setIdentifier($identity);
         $this->setUser($user);
     }
 
     /**
-     * @param string $identity
+     * @param string $identifier
      * @return Identity
      */
-    public function setIdentity($identity)
+    public function setIdentifier($identifier)
     {
         $validator = new \Zend_Validate_StringLength(1, 500);
-        if (!$validator->isValid($identity)) {
-            throw new \Core\Model\Exception('Identity must be between 1 and 500 charactrs');
+        if (!$validator->isValid($identifier)) {
+            throw new \Core\Model\Exception('Identifier must be between 1 and 500 charactrs');
         }
-        $this->identity = $identity;
+        $this->identifier = $identifier;
         return $this;
     }
 
@@ -109,20 +101,6 @@ class Identity extends \Core\Model\AbstractModel
     }
 
     /**
-     * @param string $type
-     * @return Identity
-     */
-    public function setType($type)
-    {
-        $validator = new \Zend_Validate_StringLength(1, 100);
-        if (!$validator->isValid($type)) {
-            throw new \Core\Model\Exception('Type must be between 1 and 100 charactrs');
-        }
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
      * @param User $user
      * @return Identity
      */
@@ -130,5 +108,10 @@ class Identity extends \Core\Model\AbstractModel
     {
         $this->user = $user;
         return $this;
+    }
+
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }

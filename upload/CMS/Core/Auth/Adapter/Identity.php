@@ -48,7 +48,7 @@ class Identity implements \Zend_Auth_Adapter_Interface
      */
     public function authenticate()
     {
-        $result = $this->_em->getRepository('User\Model\Identity')->findOneByIdentity($this->_identity);
+        $result = $this->_em->getRepository('User\Model\Identity')->findOneByIdentifier($this->_identity);
 
         // Identity not found
         if (null == $result) {
@@ -56,7 +56,7 @@ class Identity implements \Zend_Auth_Adapter_Interface
         }
 
         // Identity doesn't require a password, return successful
-        if (null == $result->getPassHash()) {
+        if (!($result instanceof \User\Model\Identity\Local)) {
             return new \Zend_Auth_Result(\Zend_Auth_Result::SUCCESS, $result, array(self::AUTH_SUCCESS));
         }
 

@@ -92,9 +92,12 @@ class Page extends \Core\Service\AbstractService
     {
         if (!($template instanceof \Core\Model\Template)) {
             if (is_int($template)) {
-                $template = $this->getEntityManager()->find('Core\Model\Template', $template);
+                $template = $this->getEntityManager()
+                        ->find('Core\Model\Template', $template);
             } else {
-                $template = $this->getEntityManager()->getRepository('Core\Model\Template')->findOneBySysname($template);
+                $template = $this->getEntityManager()
+                        ->getRepository('Core\Model\Template')
+                        ->findOneBySysname($template);
             }
         }
 
