@@ -38,6 +38,17 @@ class Term extends \Core\Service\AbstractService
     }
 
     /**
+     * Find a term.
+     *
+     * @param integer $id
+     * @return \Taxonomy\Model\Term
+     */
+    public function retrieve($id)
+    {
+        return $this->getEntityManager()->getRepository('Taxonomy\Model\Term')->find($id);
+    }
+
+    /**
      * Creates a new term.
      * 
      * @param \Taxonomy\Model\Vocabulary|string|integer $vocabulary

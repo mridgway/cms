@@ -121,6 +121,11 @@ abstract class AbstractModel
         $data = array();
         foreach($collection as $object)
         {
+            if(\method_exists($object,'getId')) {
+                $data[$object->getId()] = $object->toArray($options);
+                continue;
+            }
+
             $data[] = $object->toArray($options);
         }
         return $data;
@@ -152,6 +157,10 @@ abstract class AbstractModel
 
         $method = 'get' . \ucfirst($key);
         $object = $this->$method();
+
+        if(null == $object) {
+            return null;
+        }
 
         if(\is_array($object) || $object instanceof \IteratorAggregate) {
             return $this->_getCollectionAsArray($object, $array[$key]);

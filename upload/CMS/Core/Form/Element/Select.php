@@ -38,4 +38,21 @@ class Select extends \Zend_Form_Element_Select
                                       'class' => 'element'));
         }
     }
+
+    /**
+     * Converts and array with an 'id' key to a value.
+     *
+     * @param array|string|integer $value
+     * @return integer|string
+     */
+    public function setValue($value)
+    {
+        if (is_array($value)) {
+            if (\array_key_exists('id', $value)) {
+                $value = $value['id'];
+            }
+        }
+
+        parent::setValue($value);
+    }
 }
