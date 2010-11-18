@@ -30,7 +30,7 @@ abstract class AbstractModel extends AbstractService
     protected function _update($data)
     {
         if(!isset($data['id'])) {
-            throw new Exception('Id must be set to update object.');
+            throw new \Exception('Id must be set to update object.');
         }
 
         $values = $this->_getValidatorValues($data);
