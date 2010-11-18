@@ -21,4 +21,12 @@ class Address extends \Core\Service\AbstractModel
 
         return $address;
     }
+
+    public function update($data)
+    {
+        $address = $this->_update($data);
+        $this->getEntityManager()->flush();
+
+        return $address;
+    }
 }
