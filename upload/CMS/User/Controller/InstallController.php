@@ -75,8 +75,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
 
         $mododevUser = new \User\Model\User($adminGroup, 'mododev@mododesigngroup.com', 'Modo', 'Developer');
         $this->_em->persist($mododevUser);
-        $mododevLogin = new \User\Model\Identity('local', 'mododev', $mododevUser);
-        $mododevLogin->setPassword('testing');
+        $mododevLogin = new \User\Model\Identity\Local('mododev', 'testing', $mododevUser);
         $this->_em->persist($mododevLogin);
 
         $this->_em->flush();

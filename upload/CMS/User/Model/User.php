@@ -62,6 +62,12 @@ class User extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
     protected $roleAssignments;
 
     /**
+     * @var ArrayCollection
+     * @OneToMany(targetEntity="User\Model\Identity", mappedBy="User")
+     */
+    protected $identities;
+
+    /**
      * @var array|null
      */
     protected $roles = null;
@@ -218,5 +224,28 @@ class User extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
     {
         $this->acl = $acl;
         return $this;
+    }
+
+    public function getLocalIdentity()
+    {
+        foreach($this->getIdentities() AS $identity) {
+            if ($identity instanceof Identity\Local) {
+                return $identity;
+            }
+        }
+
+        return null;
+    }
+
+    public function getOpenIDs()
+    {
+        $openIDs = array();
+        foreach ($this->getIdentities() AS $identity) {
+            if ($identity instanceof Identity\OpenID) {
+                $openIDs[] = $identity;
+            }
+        }
+
+        return $openIDs;
     }
 }

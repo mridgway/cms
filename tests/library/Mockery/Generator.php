@@ -148,6 +148,9 @@ class Generator
             } elseif ($param->getClass()) {
                 $paramDef .= $param->getClass()->getName() . ' ';
             }
+            if ($param->isPassedByReference()) {
+                $paramDef .= '&';
+            }
             $paramDef .= '$' . $param->getName();
             if ($param->isOptional()) {
                 $paramDef .= ' = ';
@@ -188,6 +191,9 @@ class Generator
                 $paramDef .= 'array ';
             } elseif ($param->getClass()) {
                 $paramDef .= $param->getClass()->getName() . ' ';
+            }
+            if ($param->isPassedByReference()) {
+                $paramDef .= '&';
             }
             $paramDef .= '$' . $param->getName();
             if ($param->isOptional()) {
@@ -314,6 +320,7 @@ class Generator
             \$handler = \$this->_mockery_expectations[\$method];
             return \$handler->call(\$args);
         } elseif (!is_null(\$this->_mockery_partial) && method_exists(\$this->_mockery_partial, \$method)) {
+            foreach(\$args as &\$arg) {}
             return call_user_func_array(array(\$this->_mockery_partial, \$method), \$args);
         } elseif (\$this->_mockery_ignoreMissing) {
             \$return = new \Mockery\Undefined;

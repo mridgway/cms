@@ -16,7 +16,7 @@ class Login extends \Core\Form\AbstractForm
     public function init()
     {
         $this->addElements(array(
-            Factory\IdentityElementFactory::getIdentityElement(),
+            Factory\IdentityElementFactory::getIdentifierElement(),
             Factory\IdentityElementFactory::getPasswordElement()
         ));
 
