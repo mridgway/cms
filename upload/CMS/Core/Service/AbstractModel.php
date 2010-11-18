@@ -57,6 +57,10 @@ abstract class AbstractModel extends AbstractService
     {
         $object = $this->getEntityManager()->getRepository($this->getClassName())->find($id);
 
+        if(null == $object) {
+            throw new \Exception('There are no ' . $this->getClassName() . ' objects in storage with id = ' . $id);
+        }
+
         return $object;
     }
 
