@@ -16,7 +16,32 @@ abstract class AbstractModel extends AbstractService
     protected $_className;
     protected $_validationClassName;
 
-    public function _create ($data)
+    protected function _create($data)
+    {
+        $values = $this->_getValidatorValues($data);
+
+        $class = $this->getClassName();
+        $object = new $class();
+        $object->fromArray($values);
+
+        return $object;
+    }
+
+    protected function _update($data)
+    {
+        if(!isset($data['id'])) {
+            throw new Exception('Id must be set to update object.');
+        }
+
+        $values = $this->_getValidatorValues($data);
+
+        $object = $this->_retrieve($data['id']);
+        $object->fromArray($values);
+
+        return $object;
+    }
+
+    protected function _getValidatorValues($data)
     {
         $class = $this->getValidationClassName();
         $validation = new $class();
@@ -25,11 +50,7 @@ abstract class AbstractModel extends AbstractService
             throw \Core\Exception\ValidationException::invalidData($validation->getErrorMessages());
         }
 
-        $class = $this->getClassName();
-        $object = new $class();
-        $object->fromArray($validation->getValues());
-
-        return $object;
+        return $validation->getValues();
     }
 
     protected function _retrieve($id)

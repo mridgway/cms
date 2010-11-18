@@ -2,7 +2,7 @@
 namespace Core\Model;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 /**
  * Test class for Entity.
@@ -225,14 +225,13 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase {
     }
 }
 
-
 class ConcreteAbstractModel extends AbstractModel
 {
     public $test;
     public $object;
     public $collection = array();
     public $date;
-    
+
     public function getCollectionAsArray($collection, $options = null)
     {
         return  parent::_getCollectionAsArray($collection, $options);

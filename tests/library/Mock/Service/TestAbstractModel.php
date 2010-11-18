@@ -23,4 +23,9 @@ class TestAbstractModel extends \Core\Service\AbstractModel
     {
         return $this->_retrieveArray($id, $includes);
     }
+
+    public function update($data)
+    {
+        return parent::_update($data);
+    }
 }
