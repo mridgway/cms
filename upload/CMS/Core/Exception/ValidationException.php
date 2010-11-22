@@ -9,10 +9,10 @@ class ValidationException extends \Exception
      */
     protected $_messages = array();
 
-    public static function invalidData($array)
+    public static function invalidData($className, $errors)
     {
         $exception = new self('data is invalid');
-        $exception->addMessages($array);
+        $exception->addMessages($className, $errors);
         return $exception;
     }
 
@@ -21,8 +21,25 @@ class ValidationException extends \Exception
         return $this->_messages;
     }
 
-    public function addMessages($array)
+    public function addMessages($className, $errors)
     {
-        $this->_messages = \array_merge($array, $this->getMessages());
+        $this->_messages[$className] = $errors;
+    }
+
+    public function __toString()
+    {
+        $output = '';
+        foreach($this->getMessages() as $key => $value) {
+            $output .= $key . ' failed validation with the following errors: ';
+            foreach($value as $fieldName => $problems) {
+                $output .= $fieldName . '->';
+                foreach($problems as $error => $message) {
+                    $output .= '[' . $error . '->' . $message . ']';
+                }
+                $output .= ' ';
+            }
+        }
+
+        return $output;
     }
 }

@@ -47,7 +47,7 @@ abstract class AbstractModel extends AbstractService
         $validation = new $class();
 
         if(!$validation->isValid($data)) {
-            throw \Core\Exception\ValidationException::invalidData($validation->getErrorMessages());
+            throw \Core\Exception\ValidationException::invalidData($this->getClassName(), $validation->getMessages());
         }
 
         return $validation->getValues();

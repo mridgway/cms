@@ -39,7 +39,7 @@ class Url extends \Zend_Validate_Abstract
         $valueString = (string) $value;
         $this->_setValue($valueString);
 
-        if (!Zend_Uri::check($value)) {
+        if (!\Zend_Uri::check($value)) {
             $this->_error(self::INVALID_URL);
             return false;
         }

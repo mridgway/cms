@@ -130,9 +130,10 @@ class Page extends \Core\Service\AbstractService
             // @var $newBlock \Core\Model\Block
             $newBlock = null;
             if ($block instanceof \Core\Model\Block\StaticBlock) {
-                $newBlock = new \Core\Model\Block\StaticBlock($block->getContent(), $block->getView(false));
+                $class = \get_class($block);
+                $newBlock = new $class($block->getContent(), $block->getView(false));
             } else {
-                $class = get_class($block);
+                $class = \get_class($block);
                 $newBlock = new $class($block->getView(false));
             }
             $newBlock->setWeight($block->getWeight());

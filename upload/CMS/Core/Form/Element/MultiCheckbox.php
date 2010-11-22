@@ -119,11 +119,13 @@ class MultiCheckbox extends \Zend_Form_Element_MultiCheckbox
      */
     public function setValue($value)
     {
-        foreach ($value as $key => $content) {
-            if (\is_array($content)) {
-                if (\array_key_exists('id', $content)) {
-                    $value = array_map(function($c) {return $c['id'];}, $value);
-                    break;
+        if($value) {
+            foreach ($value as $key => $content) {
+                if (\is_array($content)) {
+                    if (\array_key_exists('id', $content)) {
+                        $value = array_map(function($c) {return $c['id'];}, $value);
+                        break;
+                    }
                 }
             }
         }

@@ -68,6 +68,19 @@ class Module extends \Core\Service\AbstractService
         return $this->getModuleRegistry()->getDatabaseStorage()->getModule($moduleName)->getContentType($contentTypeName)->getView($viewName);
     }
 
+    /**
+     * Helper function to easily get a block view.
+     *
+     * @param string $moduleName
+     * @param string $blockTypeName
+     * @param string $viewName
+     * @return \Core\Model\Module\View
+     */
+    public function getBlockView($moduleName, $blockTypeName, $viewName)
+    {
+        return $this->getModuleRegistry()->getDatabaseStorage()->getModule($moduleName)->getBlockType($blockTypeName)->getView($viewName);
+    }
+
     public function setModuleRegistry(\Core\Module\Registry $moduleRegistry)
     {
         $this->_moduleRegistry = $moduleRegistry;
