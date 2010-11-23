@@ -25,7 +25,6 @@ class AllTests
 
         $suite->addTestSuite('Core\Model\Frontend\ActionTest');
         $suite->addTestSuite('Core\Model\Frontend\CodeTest');
-        $suite->addTestSuite('Core\Model\Frontend\PageInfoTest');
         $suite->addTestSuite('Core\Model\Frontend\BlockInfoTest');
         $suite->addTestSuite('Core\Model\Frontend\SimpleTest');
 
