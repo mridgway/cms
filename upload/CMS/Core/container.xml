@@ -89,6 +89,9 @@
             <call method="setRouteService">
                 <argument type="service" id="routeService" />
             </call>
+            <call method="setPageService">
+                <argument type="service" id="pageService" />
+            </call>
         </service>
     </services>
 </container>

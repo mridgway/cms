@@ -19,7 +19,7 @@ abstract class CMSFunctionalTestCase extends \PHPUnit_Framework_TestCase
             APPLICATION_PATH . '/application.ini'
         );
 
-        $this->application->bootstrap()->run();
+        $this->application->bootstrap();
     }
 
 }
