@@ -62,6 +62,15 @@ class ContentElementFactory
         return $tags;
     }
 
+    public static function getIsFeaturedElement()
+    {
+        $element = new \Core\Form\Element\Checkbox('isFeatured');
+        $element->setLabel('Is Featured');
+        $element->addFilter(new \Zend_Filter_Boolean());
+
+        return $element;
+    }
+
     /**
      * @todo implement this
      */
