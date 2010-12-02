@@ -15,6 +15,8 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
     {
         $view = new \Mock\View();
         $this->form = new \Mock\Block\Dynamic\Form\NonAbstractForm($view);
+        $request = new \Zend_Controller_Request_Http();
+        $this->form->setRequest($request);
         $this->zendForm = new \Zend_Form();
         $this->form->setForm($this->zendForm);
     }
@@ -31,13 +33,13 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
     public function testFailure()
     {
         $this->form->failure('message1');
-        $errors = $this->form->_form->getErrorMessages();
+        $errors = $this->form->getForm()->getErrorMessages();
         $this->assertEquals('message1', $errors[0]);
 
         $a = array('message2', 'message3');
         $this->form->failure($a);
         \array_unshift($a, 'message1');
-        $errors = $this->form->_form->getErrorMessages();
+        $errors = $this->form->getForm()->getErrorMessages();
         $this->assertEquals($a, $errors);
     }
 

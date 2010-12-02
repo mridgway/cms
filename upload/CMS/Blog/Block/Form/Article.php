@@ -27,9 +27,9 @@ class Article extends \Core\Model\Block\Dynamic\Form
         $blogService = $this->getServiceContainer()->getService('blogService');
         $data = $this->getRequest()->getPost();
 
-        $this->_form = $blogService->getAddForm($data);
+        $this->setForm($blogService->getAddForm($data));
 
-        if ($this->_form->isValid($data)) {
+        if ($this->getForm()->isValid($data)) {
             unset($data['id']);
             $article = $blogService->createArticle($data);
             return $this->success($article->dependentPage->getURL());
