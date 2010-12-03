@@ -38,7 +38,6 @@ class Form extends \Core\Model\Block\DynamicBlock
             $location = $this->_request->getRequestUri();
         }
         header("Location:$location");
-        die();
     }
 
     /**
