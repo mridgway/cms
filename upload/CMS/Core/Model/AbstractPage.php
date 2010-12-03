@@ -196,7 +196,9 @@ abstract class AbstractPage
      */
     public function addDependentContent(\Core\Model\Content $content)
     {
-        $this->dependentContent[] = $content;
+        if (!$this->dependentContent->contains($content)) {
+            $this->dependentContent[] = $content;
+        }
         return $this;
     }
 

@@ -219,6 +219,7 @@ abstract class Content
     public function setDependentPage(\Core\Model\Page $page)
     {
         $this->dependentPage = $page;
+        $page->addDependentContent($this);
     }
 
     /**
