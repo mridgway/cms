@@ -74,6 +74,9 @@
         </service>
         <service id="contentService" class="Core\Service\Content">
             <argument type="service" id="doctrine" />
+            <call method="setTermService">
+                <argument type="service" id="termService" />
+            </call>
         </service>
         <service id="locationService" class="Core\Service\Layout\Location">
             <argument type="service" id="doctrine" />

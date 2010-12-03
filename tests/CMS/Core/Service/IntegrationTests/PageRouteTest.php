@@ -9,7 +9,6 @@ require_once __DIR__ . '/../../../../bootstrap.php';
  */
 class PageRouteTest extends \CMS\CMSAbstractIntegrationTestCase
 {
-    protected $_entitiesToRemove = array();
     protected $_uniqueName;
     protected $_page;
     protected $_route;
@@ -18,41 +17,33 @@ class PageRouteTest extends \CMS\CMSAbstractIntegrationTestCase
     {
         parent::setUp();
 
+        $this->_sc->getService('doctrine')->beginTransaction();
+
         $em = $this->_sc->getService('doctrine');
         $sysname = \uniqid();
         $this->_uniqueName = $sysname;
 
         $layout = new \Core\Model\Layout($sysname);
         $em->persist($layout);
-        $this->_entitiesToRemove[] = $layout;
 
         $page = new \Core\Model\Page($layout);
         $em->persist($page);
-        $this->_entitiesToRemove[] = $page;
         $this->_page = $page;
 
         $route = new \Core\Model\Route($sysname . '/:param', $sysname);
         $em->persist($route);
-        $this->_entitiesToRemove[] = $route;
         $this->_route = $route;
 
         $pageRoute = $route->routeTo($page, array('param' => 1));
         $em->persist($pageRoute);
-        $this->_entitiesToRemove[] = $pageRoute;
 
         $em->flush();
     }
 
     protected function tearDown()
     {
-        if(count($this->_entitiesToRemove) > 0) {
-            $em = $this->_sc->getService('doctrine');
-            foreach($this->_entitiesToRemove as $entity)
-            {
-                $em->remove($entity);
-            }
-            $em->flush();
-        }
+        $this->_sc->getService('doctrine')->rollback();
+        \Core\Module\Registry::destroy();
     }
 
     public function testDoNotCreateIfNotUnique()
@@ -88,7 +79,5 @@ class PageRouteTest extends \CMS\CMSAbstractIntegrationTestCase
         $this->assertEquals($this->_page, $newPageRoute->getPage());
         $this->assertEquals($this->_route, $newPageRoute->getRoute());
         $this->assertEquals($data['params'], $newPageRoute->getParams());
-
-        $this->_entitiesToRemove[] = $newPageRoute;
     }
 }
