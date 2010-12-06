@@ -73,18 +73,18 @@ class Term extends \Core\Service\AbstractService
     }
 
     /**
-     * Gets a collection of terms.  If the terms do not exist, they are created.
+     * Gets an array of terms.  If the terms do not exist, they are created.
      * 
      * @param array $terms
      * @param string $vocabularyName
-     * @param \Doctrine\Common\Collections\ArrayCollection $vocabularyName
+     * @return array
      */
     public function getOrCreateTerms(array $terms, $vocabularyName)
     {
-        $newTerms = new \Doctrine\Common\Collections\ArrayCollection();
+        $newTerms = array();
         foreach($terms as $term)
         {
-            $newTerms->add($this->getOrCreateTerm($term, $vocabularyName));
+            $newTerms[] = $this->getOrCreateTerm($term, $vocabularyName);
         }
 
         return $newTerms;

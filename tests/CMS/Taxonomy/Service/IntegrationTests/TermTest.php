@@ -38,7 +38,7 @@ class TermTest extends \CMS\CMSAbstractIntegrationTestCase
         $termCollection->add($term1);
         $termCollection->add($term2);
 
-        $newTermCollection = $termService->getOrCreateTerms($terms, 'contentTags');
+        $newTermCollection = new \Doctrine\Common\Collections\ArrayCollection($termService->getOrCreateTerms($terms, 'contentTags'));
 
         $this->assertEquals(\Doctrine\Common\Util\Debug::export($termCollection, 2), \Doctrine\Common\Util\Debug::export($newTermCollection, 2));
     }
