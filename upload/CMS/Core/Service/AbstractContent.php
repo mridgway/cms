@@ -3,7 +3,7 @@
 namespace Core\Service;
 
 /**
- * Base class for services that require the entity manager
+ * Abstract service for any service that serves a Core\Model\Content class
  *
  * @package     CMS
  * @subpackage  Core
@@ -19,14 +19,24 @@ abstract class AbstractContent extends AbstractModel
     protected function _create($data)
     {
         $content = parent::_create($data);
+        return $this->_setContentObjects($content, $data);
+    }
 
+    protected function _update($data)
+    {
+        $content = parent::_update($data);
+        return $this->_setContentObjects($content, $data, false);
+    }
+
+    protected function _setContentObjects(\Core\Model\Content $content, array $data, $throwErrors = true)
+    {
         if (isset($data['author']['id']) && $data['author']['id'] != '') {
             $author = $this->getUserService()->getUser($data['author']['id']);
             $content->setAuthor($author);
             $content->setAuthorName($author->getFirstName() . ' ' . $author->getLastName());
         } elseif (isset($data['authorName']) && '' != $data['authorName']) {
             $content->setAuthorName($data['authorName']);
-        } else {
+        } elseif ($throwErrors) {
             throw \Core\Exception\ValidationException::invalidData(\get_class($content), array('author' => array('required' => 'a valid author id or author name is required')));
         }
 

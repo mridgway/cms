@@ -89,6 +89,72 @@ class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
 
         $this->assertEquals(\Doctrine\Common\Util\Debug::export($content, 1), \Doctrine\Common\Util\Debug::export($newContent, 1));
     }
+
+    public function testOnlySetAuthorNameIfAuthorIdIsNotGiven()
+    {
+        $data = array(
+            'tags' => array(
+                'tag1',
+                'tag2'
+            ),
+            'authorName' => 'doesnotmatter',
+            'isFeatured' => true
+        );
+
+        $content = new ConcreteContent();
+        $content->setTags($this->_sc->getService('termService')->getOrCreateTerms($data['tags'], 'contentTags'));
+        $content->setAuthorName($data['authorName']);
+        $content->setIsFeatured(true);
+
+        $contentService = new ConcreteContentService();
+        $contentService->setTermService($this->_sc->getService('termService'));
+        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
+        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+
+        $newContent = $contentService->create($data);
+
+        $this->assertEquals(\Doctrine\Common\Util\Debug::export($content, 1), \Doctrine\Common\Util\Debug::export($newContent, 1));
+    }
+
+    public function testShouldThrowErrorIfAuthorIsNotSet()
+    {
+        $data = array(
+            'tags' => array(
+                'tag1',
+                'tag2'
+            ),
+            'isFeatured' => true
+        );
+
+        $contentService = new ConcreteContentService();
+        $contentService->setTermService($this->_sc->getService('termService'));
+        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
+        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+
+        $this->setExpectedException('Core\Exception\ValidationException');
+        $newContent = $contentService->create($data);
+    }
+
+    public function shouldNotThrowErrorIfAuthorIsNotSet()
+    {
+        $data = array(
+            'isFeatured' => false
+        );
+
+        $content = new ConcreteContent();
+        $content->setTags($this->_sc->getService('termService')->getOrCreateTerms(array('tag1', 'tag2'), 'contentTags'));
+        $content->setAuthorName('authorName');
+        $content->setIsFeatured(true);
+
+        $contentService = new ConcreteContentService();
+        $contentService->setTermService($this->_sc->getService('termService'));
+        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
+        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+
+        $newContent = $contentService->setContentObjects($content, $data, false);
+
+        $this->assertEquals(false, $content->getIsFeatured());
+    }
 }
 
 class ConcreteContent extends \Core\Model\Content {}
@@ -98,6 +164,11 @@ class ConcreteContentService extends \Core\Service\AbstractContent
     {
         return $this->_create($data);
     }
+
+    public function setContentObjects($content, $data, $throwErrors)
+    {
+        return $this->_setContentObjects($content, $data, $throwErrors);
+    }
 }
 
 class ConcreteContentValidation extends \Zend_Form
@@ -105,6 +176,7 @@ class ConcreteContentValidation extends \Zend_Form
     public function init()
     {
         $this->addElements(array(
+            \Core\Form\Factory\ContentElementFactory::getIdElement(),
             \Core\Form\Factory\ContentElementFactory::getIsFeaturedElement(),
             \Core\Form\Factory\ContentElementFactory::getAuthorNameElement()
         ));
