@@ -73,8 +73,6 @@ class AllTests
         $suite->addTestSuite('Core\Service\AddressTest');
         $suite->addTestSuite('Core\Service\AbstractModelTest');
 
-        $suite->addTestSuite('Core\Service\IntegrationTests\PageRouteTest');
-
         return $suite;
     }
 }

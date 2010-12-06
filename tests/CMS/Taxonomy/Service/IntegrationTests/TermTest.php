@@ -1,5 +1,5 @@
 <?php
-namespace Core\Service\IntegrationTests;
+namespace Taxonomy\Service\IntegrationTests;
 
 require_once 'PHPUnit/Framework.php';
 require_once __DIR__ . '/../../../../bootstrap.php';
@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../../bootstrap.php';
  * Integration Test for Question Service.
  * This test assumes that the Geocode Module is installed and seeded.
  */
-class ContentTest extends \CMS\CMSAbstractIntegrationTestCase
+class TermTest extends \CMS\CMSAbstractIntegrationTestCase
 {
     public function setUp()
     {
@@ -38,19 +38,8 @@ class ContentTest extends \CMS\CMSAbstractIntegrationTestCase
         $termCollection->add($term1);
         $termCollection->add($term2);
 
-        $content = new MockContent();
-        $contentService = new MockContentService();
-        $contentService->setTermService($termService);
-        $contentService->setTerms($content, $terms);
+        $newTermCollection = $termService->getOrCreateTerms($terms, 'contentTags');
 
-        $this->assertEquals(\Doctrine\Common\Util\Debug::export($termCollection, 2), \Doctrine\Common\Util\Debug::export($content->getTags(), 2));
-    }
-}
-class MockContent extends \Core\Model\Content {}
-class MockContentService extends \Core\Service\Content
-{
-    public function setTerms(\Core\Model\Content $content, array $terms)
-    {
-        return $this->_setTerms($content, $terms);
+        $this->assertEquals(\Doctrine\Common\Util\Debug::export($termCollection, 2), \Doctrine\Common\Util\Debug::export($newTermCollection, 2));
     }
 }

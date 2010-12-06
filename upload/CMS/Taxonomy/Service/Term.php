@@ -18,7 +18,6 @@ class Term extends \Core\Service\AbstractService
      */
     protected $_vocabularyService;
 
-
     /**
      * @param string $termName
      */
@@ -71,6 +70,24 @@ class Term extends \Core\Service\AbstractService
         $this->getEntityManager()->flush();
 
         return $term;
+    }
+
+    /**
+     * Gets a collection of terms.  If the terms do not exist, they are created.
+     * 
+     * @param array $terms
+     * @param string $vocabularyName
+     * @param \Doctrine\Common\Collections\ArrayCollection $vocabularyName
+     */
+    public function getOrCreateTerms(array $terms, $vocabularyName)
+    {
+        $newTerms = new \Doctrine\Common\Collections\ArrayCollection();
+        foreach($terms as $term)
+        {
+            $newTerms->add($this->getOrCreateTerm($term, $vocabularyName));
+        }
+
+        return $newTerms;
     }
 
     public function setVocabularyService(\Taxonomy\Service\Vocabulary $vocabularyService)
