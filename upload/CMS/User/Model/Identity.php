@@ -114,4 +114,24 @@ class Identity extends \Core\Model\AbstractModel
     {
         return $this->identifier;
     }
+
+    public function toArray($includes = array())
+    {
+        $data = array();
+        $data['id'] = $this->getId();
+        $data['identifier'] = $this->getIdentifier();
+
+        return $data;
+    }
+
+    public function fromArray(array $data)
+    {
+        $this->_setIfSet('identifier', $data);
+    }
+
+    public static function createFromArray(array $data)
+    {
+        $identity = new self($data['identifier'], $data['user']);
+        return $identity;
+    }
 }

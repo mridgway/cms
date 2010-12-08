@@ -248,4 +248,43 @@ class User extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
 
         return $openIDs;
     }
+
+    public function toArray($includes = array())
+    {
+        $array = array();
+        $array['id'] = $this->getId();
+        $array['email'] = $this->getEmail();
+        $array['firstName'] = $this->getFirstName();
+        $array['lastName'] = $this->getLastName();
+        $array['emailPrivacy'] = $this->getEmailPrivacy();
+
+        return $array;
+    }
+
+    public function fromArray($data)
+    {
+        $this->_setIfSet('email', $data);
+        $this->_setIfSet('firstName', $data);
+        $this->_setIfSet('lastName', $data);
+        $this->_setIfSet('emailPrivacy', $data);
+    }
+
+    public static function createFromArray($data)
+    {
+        if (!\array_key_exists('group', $data)
+                || !\array_key_exists('email', $data)
+                || !\array_key_exists('firstName', $data)
+                || !\array_key_exists('lastName', $data)) {
+            throw new \Core\Exception\ValidationException('Not enough data provided');
+        }
+
+        $user = new self($data['group'], $data['email'], $data['firstName'], $data['lastName']);
+        unset($data['group']);
+        unset($data['email']);
+        unset($data['firstName']);
+        unset($data['lastName']);
+        $user->fromArray($data);
+
+        return $user;
+    }
 }
