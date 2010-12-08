@@ -6,6 +6,20 @@
             <call method="setEntityManager">
                 <argument type="service" id="doctrine" />
             </call>
+            <call method="setIdentityService">
+                <argument type="service" id="identityService" />
+            </call>
+            <call method="setAuth">
+                <argument type="service" id="auth" />
+            </call>
+            <call method="setAcl">
+                <argument type="service" id="acl" />
+            </call>
+        </service>
+        <service id="identityService" class="User\Service\Identity">
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine" />
+            </call>
         </service>
     </services>
 </container>
