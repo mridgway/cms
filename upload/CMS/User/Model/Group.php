@@ -11,7 +11,7 @@ namespace User\Model;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
- * @Entity
+ * @Entity(repositoryClass="User\Repository\Group")
  * @Table(name="User_Group")
  *
  * @property int $id
@@ -27,10 +27,16 @@ class Group extends \Core\Model\AbstractModel
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var string
-     * @Column(name="name", type="string", length="50", nullable="FALSE")
+     * @Column(type="string", length="50", nullable="FALSE")
+     */
+    protected $sysname;
+
+    /**
+     * @var string
+     * @Column(name="name", type="string", length="50")
      */
     protected $name;
 
@@ -49,8 +55,9 @@ class Group extends \Core\Model\AbstractModel
      * @param string $type
      * @param string $identity
      */
-    public function __construct($name)
+    public function __construct($sysname, $name)
     {
+        $this->setSysname($sysname);
         $this->setName($name);
         $this->setRoleAssignments(new \Doctrine\Common\Collections\ArrayCollection());
     }

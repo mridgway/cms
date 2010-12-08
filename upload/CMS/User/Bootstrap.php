@@ -80,6 +80,7 @@ class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
         }
 
         \Zend_Registry::set('acl', $acl);
+        $sf->setService('acl', $acl);
     }
 
 }

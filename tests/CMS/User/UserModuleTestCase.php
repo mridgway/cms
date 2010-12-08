@@ -8,7 +8,7 @@ class UserModuleTestCase extends \CMSTestCase
      * @var Session
      */
     protected $session;
-    
+
     /**
      * @var User
      */
@@ -25,7 +25,7 @@ class UserModuleTestCase extends \CMSTestCase
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->testGroup = new \User\Model\Group('Test');
+        $this->testGroup = new \User\Model\Group('test', 'Test');
         $this->user = new \User\Model\User($this->testGroup, 'test@test.com', 'Modo', 'Developer');
         $this->role = new \User\Model\Acl\Role('test');
 

@@ -14,17 +14,26 @@ namespace Core\Service;
 abstract class AbstractService
 {
     /**
-     * @var Core\Auth\Auth
-     */
-    protected $_auth;
-
-    /**
      * Entity manager
      *
      * @var Doctrine\ORM\EntityManager
      */
     protected $_em = null;
 
+    /**
+     * @var Zend_Auth
+     */
+    protected $_auth = null;
+
+    /**
+     * @var Zend_Acl
+     */
+    protected $_acl = null;
+
+    /**
+     * @var Zend_Mail_Transport_Abstract
+     */
+    protected $_mailTransport = null;
 
     /**
      * Constructor
@@ -72,14 +81,36 @@ abstract class AbstractService
         return $this;
     }
 
+    /**
+     * @param \Zend_Auth $auth
+     */
+    public function setAuth(\Zend_Auth $auth)
+    {
+        $this->_auth = $auth;
+    }
+
+    /**
+     * @return Zend_Auth
+     */
     public function getAuth()
     {
         return $this->_auth;
     }
 
-    public function setAuth($auth)
+    /**
+     * @param \Zend_Acl $acl
+     */
+    public function setAcl(\Zend_Acl $acl)
     {
-        $this->_auth = $auth;
+        $this->_acl = $acl;
+    }
+
+    /**
+     * @return Zend_Acl
+     */
+    public function getAcl()
+    {
+        return $this->_acl;
     }
 
     /**
