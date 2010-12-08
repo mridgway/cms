@@ -2,76 +2,95 @@
 
 namespace Core\Model\Frontend;
 
-class BlockInfoTest extends \Zend_Test_PHPUnit_ControllerTestCase
-{
-    protected $blockInfo;
-    protected $route;
-    protected $params;
-    protected $page;
-    protected $location;
-    protected $pageRoute;
-    protected $block1;
-    protected $application;
+require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/../../../../bootstrap.php';
 
+use \Mockery as m;
+
+class BlockInfoTest extends \PHPUnit_Framework_TestCase
+{
     public function setUp()
     {
-        $this->bootstrap = new \Zend_Application(
-                'testing',
-                APPLICATION_PATH . '/application.ini'
-        );
+    }
 
-
-        $this->blockInfo = new BlockInfo();
-        $this->route = new \Core\Model\Route('test/:test1/:test2/:test3');
-        $this->params = array(
-            'test1' => 1,
-            'test2' => 2,
-            'test3' => 3,
-        );
-
-        $layout = new \Core\Model\Layout('test');
-        $this->location = new \Core\Model\Layout\Location('test');
-        $layout->addLocation($this->location);
-        $this->page = new \Core\Model\Page($layout);
-
-        $this->pageRoute = new \Core\Model\PageRoute($this->route, $this->page, $this->params);
-
-        $this->block1 = new \Core\Model\Block\StaticBlock(new \Core\Model\Content\Text('testTitle', 'testContent'), new \Mock\View());
-        $this->block1->setLocation($this->location);
-        $this->block1->weight = 0;
-        $this->page->addBlock($this->block1);
-
-        parent::setUp();
+    public function tearDown()
+    {
+        m::close();
     }
 
     public function testSuccess()
     {
-        $em = \Zend_Registry::get('doctrine');
-        $user = $em->getRepository('User\Model\User')->find(1);
-        $session = new \User\Model\Session($user);
-        $auth = \Core\Auth\Auth::getInstance();
-        $auth->getStorage()->write($session);
-        $acl = \Zend_Registry::get('acl');
-        $acl->addRole($auth->getIdentity(), $auth->getIdentity()->getRoles());
+        $data = new \stdClass();
+        $data->id = 1;
+        $data->properties = array('property1' => 'value1');
+        $data->actions = array();
+        $data->location = 'sysname';
+        $data->weight = 1;
 
-        $frontend = $this->blockInfo->success($this->block1);
-        $frontend = $frontend->data[0];
+        $blockService = m::mock('Core\Service\Block');
+        $blockService->shouldReceive('getVariables')->andReturn($data->properties);
 
-        $this->assertEquals($this->block1->id, $frontend->id);
-        $this->assertEquals(\Core\Service\Manager::get('Core\Service\Block')->getVariables($this->block1), $frontend->properties);
-        $frontend->actions;
+        $auth = m::mock('Core\Auth\Auth');
+        $auth->shouldReceive('getIdentity')->andReturn(true);
+
+        $location = m::Mock('Core\Model\Layout\Location');
+        $location->shouldReceive('getSysname')->andReturn('sysname');
+
+        $block = m::mock('Core\Model\Block');
+        $block->shouldReceive('canView')->with(true)->andReturn(true);
+        $block->shouldReceive('getId')->andReturn(1);
+        $block->shouldReceive('getLocation')->andReturn($location);
+        $block->shouldReceive('getWeight')->andReturn(1);
+        $block->shouldReceive('canMove')->andReturn(false);
+        $block->shouldReceive('canEdit')->andReturn(false);
+        $block->shouldReceive('canConfigure')->andReturn(false);
+        $block->shouldReceive('canDelete')->andReturn(false);
+
+        $blockInfo = new \Core\Model\Frontend\BlockInfo();
+        $blockInfo->setBlockService($blockService);
+        $blockInfo->setAuth($auth);
+
+        $newInfo = $blockInfo->success($block);
+
+        $this->assertEquals(array($data), $newInfo->data);
     }
 
     public function testGetBlockActions()
     {
-        $em = \Zend_Registry::get('doctrine');
-        $user = $em->getRepository('User\Model\User')->find(1);
-        $session = new \User\Model\Session($user);
-        $auth = \Core\Auth\Auth::getInstance();
-        $auth->getStorage()->write($session);
-        $acl = \Zend_Registry::get('acl');
-        $acl->addRole($auth->getIdentity(), $auth->getIdentity()->getRoles());
+        $block = m::mock('Core\Model\Block');
+        $block->shouldReceive('getId')->andReturn(1);
+        $block->shouldReceive('canMove')->andReturn(true);
+        $block->shouldReceive('canEdit')->andReturn(true);
+        $block->shouldReceive('canConfigure')->andReturn(true);
+        $block->shouldReceive('canDelete')->andReturn(true);
 
-        $this->assertEquals(3, count($this->blockInfo->_getBlockActions($this->block1)));
+        $move = new Action('block-move');
+        $move->plugin = 'BlockMove';
+
+        $edit = new Action('block-edit', '/direct/block/edit/?id=' . $block->getId());
+        $edit->plugin = 'BlockEdit';
+
+        $configure = new Action('block-configure', '/direct/block/configure/?id=' . $block->getId());
+        $configure->plugin = 'BlockConfigure';
+
+        $delete = new Action('block-delete', '/direct/block/delete/?id=' . $block->getId());
+        $delete->plugin = 'BlockDelete';
+
+        $actions = array(
+            'block-move' => $move,
+            'block-edit' => $edit,
+            'block-configure' => $configure,
+            'block-delete' => $delete
+        );
+
+        $auth = m::mock('Core\Auth\Auth');
+        $auth->shouldReceive('getIdentity')->andReturn(true);
+
+        $blockInfo = new \Core\Model\Frontend\BlockInfo();
+        $blockInfo->setAuth($auth);
+
+        $returnedActions = $blockInfo->_getBlockActions($block);
+
+        $this->assertEquals($actions, $returnedActions);
     }
 }

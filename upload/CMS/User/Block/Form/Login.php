@@ -20,7 +20,7 @@ class Login extends \Core\Model\Block\Dynamic\Form
     public function init()
     {
         if (!$this->getForm()) {
-            $this->_form = new \User\Form\Login();
+            $this->setForm(new \User\Form\Login());
         }
     }
 
@@ -28,9 +28,9 @@ class Login extends \Core\Model\Block\Dynamic\Form
     {
         $data = $this->getRequest()->getPost();
 
-        $this->_form = new \User\Form\Login();
+        $this->setForm(new \User\Form\Login());
 
-        if ($this->_form->isValid($data)) {
+        if ($this->getForm()->isValid($data)) {
             $auth  = \Zend_Auth::getInstance();
             $authAdapter = new \Core\Auth\Adapter\Identity($this->getEntityManager());
             $authAdapter->setIdentity($data['identifier'])

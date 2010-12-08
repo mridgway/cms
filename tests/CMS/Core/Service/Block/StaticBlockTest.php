@@ -24,9 +24,12 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $em = m::mock('Doctrine\ORM\EntityManager');
-        
+
+        $date = new \DateTime();
         $view = new \Mock\View();
         $content = new \Core\Model\Content\Text(null, 'put content here', false);
+        $content->setCreationDate($date);
+        $content->setModificationDate($date);
         $block = new \Core\Model\Block\StaticBlock($content, $view);
 
         $moduleService = m::mock('Core\Service\Module');
@@ -39,12 +42,16 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($block, $newBlock);
 
         $newBlock = $sbService->create($content, null);
+        $newBlock->getContent()->setCreationDate($date);
+        $newBlock->getContent()->setModificationDate($date);
         $this->assertEquals($block, $newBlock);
 
         $newBlock = $sbService->create(null, $view);
         $this->assertEquals($block, $newBlock);
 
         $newBlock = $sbService->create($content, $view);
+        $newBlock->getContent()->setCreationDate($date);
+        $newBlock->getContent()->setModificationDate($date);
         $this->assertEquals($block, $newBlock);
     }
 

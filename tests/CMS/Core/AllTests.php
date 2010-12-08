@@ -19,13 +19,14 @@ class AllTests
     {
         $suite = new \CMSTestSuite('Core Tests');
 
+        $suite->addTestSuite('Core\Filter\SlugTest');
+
         $suite->addTestSuite('Core\Controller\PageControllerTest');
         $suite->addTestSuite('Core\Controller\Request\HttpTest');
         $suite->addTestSuite('Core\Controller\Router\RewriteTest');
 
         $suite->addTestSuite('Core\Model\Frontend\ActionTest');
         $suite->addTestSuite('Core\Model\Frontend\CodeTest');
-        $suite->addTestSuite('Core\Model\Frontend\PageInfoTest');
         $suite->addTestSuite('Core\Model\Frontend\BlockInfoTest');
         $suite->addTestSuite('Core\Model\Frontend\SimpleTest');
 
@@ -40,6 +41,7 @@ class AllTests
         $suite->addTestSuite('Core\Model\TemplateTest');
         $suite->addTestSuite('Core\Model\ModuleTest');
         $suite->addTestSuite('Core\Model\FrontendTest');
+        $suite->addTestSuite('Core\Model\AddressTest');
 
         $suite->addTestSuite('Core\Model\Block\DynamicBlockTest');
         $suite->addTestSuite('Core\Model\Block\StaticBlockTest');
@@ -69,6 +71,7 @@ class AllTests
         $suite->addTestSuite('Core\Service\Mediator\ContentMediatorTest');
         $suite->addTestSuite('Core\Service\Layout\LocationTest');
         $suite->addTestSuite('Core\Service\AddressTest');
+        $suite->addTestSuite('Core\Service\AbstractModelTest');
 
         return $suite;
     }

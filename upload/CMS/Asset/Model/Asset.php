@@ -95,6 +95,14 @@ class Asset extends \Core\Model\AbstractModel
         $this->setUploadDate();
     }
 
+    public function toArray($includes = null)
+    {
+        $data = $this->_toArray($includes);
+        $data['url'] = $this->getUrl();
+
+        return $data;
+    }
+
     /**
      * @param string $sysname
      * @return Asset

@@ -37,4 +37,12 @@ class AssetElementFactory
 
         return $caption;
     }
+
+    public static function getUrlElement()
+    {
+        $element = new \Asset\Form\Element\Asset('url');
+        $element->setLabel('Url:');
+
+        return $element;
+    }
 }

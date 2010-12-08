@@ -27,7 +27,7 @@ class Address extends \Core\Model\AbstractModel
     protected $addressLine1;
 
     /**
-     * @Column(type="string", length="255")
+     * @Column(type="string", length="255", nullable="TRUE")
      * @var string
      */
     protected $addressLine2;
@@ -49,6 +49,20 @@ class Address extends \Core\Model\AbstractModel
      * @var string
      */
     protected $zip;
+
+    public function toArray($includes = null)
+    {
+        return $this->_toArray();
+    }
+
+    public function fromArray($data)
+    {
+        $this->_setIfSet('addressLine1', $data);
+        $this->_setIfSet('addressLine2', $data);
+        $this->_setIfSet('city', $data);
+        $this->_setIfSet('state', $data);
+        $this->_setIfSet('zip', $data);
+    }
 
     public function getId()
     {

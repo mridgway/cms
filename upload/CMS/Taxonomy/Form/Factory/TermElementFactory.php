@@ -63,4 +63,21 @@ class TermElementFactory
 
         return $element;
     }
+
+    public static function termsMultiCheckbox($vocabularyName)
+    {
+        $vocabulary = \Zend_Registry::get('doctrine')
+            ->getRepository('Taxonomy\Model\Vocabulary')
+            ->findOneBySysname($vocabularyName);
+
+        $options = array();
+        foreach ($vocabulary->getTerms() AS $term) {
+            $options[$term->getId()] = $term->getName();
+        }
+
+        $element = new \Core\Form\Element\MultiCheckbox('terms');
+        $element->setMultiOptions($options);
+
+        return $element;
+    }
 }

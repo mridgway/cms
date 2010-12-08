@@ -111,4 +111,93 @@ abstract class AbstractModel
     {
         throw new \Core\Model\Exception('Id is not allowed to be set.');
     }
+
+    protected function _getCollectionAsArray($collection, $options = null)
+    {
+        if(null == $collection) {
+            return null;
+        }
+        
+        $data = array();
+        foreach($collection as $object)
+        {
+            if(\method_exists($object,'getId')) {
+                $data[$object->getId()] = $object->toArray($options);
+                continue;
+            }
+
+            $data[] = $object->toArray($options);
+        }
+        return $data;
+    }
+
+    protected function _setIfSet($key, $array)
+    {
+        if (!array_key_exists($key, $array)) {
+            return;
+        }
+
+        $method = 'set' . \ucfirst($key);
+        $this->$method($array[$key]);
+    }
+
+    protected function _getArrayIfSet($key, $array)
+    {
+        if(!isset($array)) {
+            return null;
+        }
+
+        if(!\array_key_exists($key, $array) && !\in_array($key, $array)) {
+            return null;
+        }
+
+        if(!isset($array[$key])) {
+            $array[$key] = null;
+        }
+
+        $method = 'get' . \ucfirst($key);
+        $object = $this->$method();
+
+        if(null == $object) {
+            return null;
+        }
+
+        if(\is_array($object) || $object instanceof \IteratorAggregate) {
+            return $this->_getCollectionAsArray($object, $array[$key]);
+        }
+
+        $data = $object->toArray($array[$key]);
+
+        return $data;
+    }
+
+    protected function _toArray($includes = null)
+    {
+        $ref = new \ReflectionClass($this);
+        $properties = $ref->getProperties();
+
+        $data = array();
+        foreach($properties as $property) {
+            $key = $property->getName();
+            if(\strstr($key, '_')) {
+                continue;
+            }
+            $method = 'get' . \ucfirst($key);
+            $value = $this->$method();
+
+            if(\is_scalar($value)) {
+                $data[$key] = $value;
+                continue;
+            }
+
+            if($value instanceof \DateTime) {
+                $data[$key] = $value->format('Y-m-d H:i:s');
+                continue;
+            }
+            
+            $data[$key] = $this->_getArrayIfSet($key, $includes);
+        }
+
+        return $data;
+    }
 }

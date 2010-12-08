@@ -19,23 +19,25 @@ class Form extends \Core\Model\Block\DynamicBlock
      *
      * @var Zend_Form
      */
-    protected $_form;
+    private $_form;
 
     public function init ()
     {
-        
+
     }
-    
+
     /**
      * Registers a form as successful by doing a redirect to prevent refresh submits
      */
     public function success($location = null)
     {
+        if ($this->_request->isXmlHttpRequest()) {
+            die(new \Core\Model\Frontend\Simple());
+        }
         if (null === $location) {
             $location = $this->_request->getRequestUri();
         }
         header("Location:$location");
-        die();
     }
 
     /**
@@ -45,6 +47,11 @@ class Form extends \Core\Model\Block\DynamicBlock
      */
     public function failure($msg = null)
     {
+        if ($this->_request->isXmlHttpRequest()) {
+            $frontend = new \Core\Model\Frontend\Simple(1, 'Fail');
+            $frontend->data['errors'] = $this->_form->getMessages();
+            die($frontend);
+        }
         if ($msg) {
             if (is_array($msg)) {
                 $this->_form->addErrors($msg);
@@ -63,6 +70,10 @@ class Form extends \Core\Model\Block\DynamicBlock
     public function setForm(\Zend_Form $form)
     {
         $this->_form = $form;
+
+        $blockId = new \Core\Form\Element\Hidden('block_id');
+        $blockId->setValue($this->id);
+        $this->_form->addElement($blockId);
     }
 
     /**
@@ -82,10 +93,6 @@ class Form extends \Core\Model\Block\DynamicBlock
      */
     public function render()
     {
-        $blockId = new \Core\Form\Element\Hidden('block_id');
-        $blockId->setValue($this->id);
-        $this->_form->addElement($blockId);
-
         $this->getViewInstance()->assign('form', $this->_form);
         return parent::render();
     }

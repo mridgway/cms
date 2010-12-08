@@ -109,6 +109,17 @@ abstract class Content
         $this->dependentPage = null;
     }
 
+    public function toArray($includes = null)
+    {
+        return $this->_toArray($includes);
+    }
+
+    public function fromArray($data)
+    {
+        $this->_setIfSet('authorName', $data);
+        $this->_setIfSet('isFeatured', $data);
+    }
+
     public function getId()
     {
         return $this->id;
@@ -208,6 +219,7 @@ abstract class Content
     public function setDependentPage(\Core\Model\Page $page)
     {
         $this->dependentPage = $page;
+        $page->addDependentContent($this);
     }
 
     /**

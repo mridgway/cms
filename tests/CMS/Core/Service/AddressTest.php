@@ -1,7 +1,8 @@
 <?php
 namespace Core\Service;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once 'PHPUnit/Framework.php';
+//require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -23,23 +24,24 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $data = array(
-            'addressLine1' => 'line1',
-            'addressLine2' => 'line2',
+            'addressLine1' => '111 Road',
+            'addressLine2' => '222 Road',
             'city' => 'city',
-            'state' => 'state',
+            'state' => 'PA',
             'zip' => '12345'
         );
 
         $address = new \Core\Model\Address();
-        $address->setData($data);
+        $address->fromArray($data);
 
         $em = m::mock('Doctrine\ORM\EntityManager');
-        $em->shouldReceive('persist')->never();
-        $em->shouldReceive('flush')->never();
+        $em->shouldReceive('persist');
+        $em->shouldReceive('flush');
 
-        $addressService = m::mock(new \Core\Service\Address($em), array(m::BLOCKS => array('create')));
+        $addressService = new \Core\Service\Address($em);
 
         $newAddress = $addressService->create($data);
+
         $this->assertEquals($address, $newAddress);
     }
 }

@@ -65,6 +65,11 @@ class Vocabulary
         $this->setTerms(new ArrayCollection());
     }
 
+    public function toArray($includes = null)
+    {
+        return $this->_toArray($includes);
+    }
+
     public function getId()
     {
         return $this->id;

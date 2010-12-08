@@ -2,6 +2,7 @@
 namespace Asset\Model;
 
 require_once 'PHPUnit/Framework.php';
+//require_once '../../../bootstrap.php';
 
 /**
  * Test class for Asset.
@@ -62,6 +63,23 @@ class AssetTest extends \PHPUnit_Framework_TestCase {
     {
         $expected = '/assets/default/te/test/original.jpg';
         $this->assertEquals($expected, $this->asset->getUrl());
+    }
+
+    public function testToArray()
+    {
+        $data = array(
+            'id' => null,
+            'sysname' => 'test',
+            'name' => 'Test',
+            'extension' => '',
+            'group' => '',
+            'mimeType' => '',
+            'caption' => '',
+            'uploadDate' => $this->asset->getUploadDate()->format('Y-m-d H:i:s'),
+            'url' => $this->asset->getUrl()
+        );
+
+        $this->assertEquals($data, $this->asset->toArray());
     }
 }
 ?>

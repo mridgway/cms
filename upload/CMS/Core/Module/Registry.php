@@ -59,4 +59,9 @@ class Registry
     {
         return $this->_configStorage;
     }
+
+    public static function destroy ()
+    {
+        self::$_instance = null;
+    }
 }

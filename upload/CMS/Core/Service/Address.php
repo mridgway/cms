@@ -11,53 +11,22 @@ namespace Core\Service;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  */
-class Address extends \Core\Service\AbstractService
+class Address extends \Core\Service\AbstractModel
 {
-    /**
-     * Creates a new Address.  This should not persist or flush because address is a weak entity.
-     * (Address should be persisted through cascade operations.)
-     * 
-     * @param array $data
-     * @return \Core\Model\Address
-     */
     public function create($data)
     {
-        $form = $this->getSubForm();
-        $mediator = $this->getMediator($form);
-
-        if(!$mediator->isValid($data)) {
-            throw \Core\Exception\SubFormException::invalidData($form);
-        }
-
-        $address = new \Core\Model\Address();
-        $mediator->setInstance($address);
-        $mediator->transferValues();
+        $address = $this->_create($data);
+        $this->getEntityManager()->persist($address);
+        $this->getEntityManager()->flush();
 
         return $address;
     }
 
-    /**
-     * Only need validated SubForm for form errors.
-     * 
-     * @param array $data
-     * @return \Core\Form\SubForm\Address
-     */
-    public function getValidatedSubForm($data)
+    public function update($data)
     {
-        $form = $this->getSubForm();
-        $mediator = $this->getMediator($form);
-        $mediator->isValid($data);
+        $address = $this->_update($data);
+        $this->getEntityManager()->flush();
 
-        return $form;
-    }
-
-    public function getSubForm()
-    {
-        return new \Core\Form\SubForm\Address();
-    }
-
-    public function getMediator($form)
-    {
-        return new \Core\Service\Mediator\Address($form, 'Core\Model\Address');
+        return $address;
     }
 }

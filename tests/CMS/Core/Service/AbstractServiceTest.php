@@ -2,14 +2,14 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once '../../../bootstrap.php';
+//require_once '../../../bootstrap.php';
 
 use \Mockery as m;
 
 /**
  * Test class for AbstractService.
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class AbstractServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
