@@ -3,7 +3,7 @@
 namespace System;
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'SystemAllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'System\AllTests::main');
 }
 
 require_once __DIR__ . '/../bootstrap.php';
@@ -19,7 +19,7 @@ class AllTests
     {
         $suite = new SystemTestSuite('System Tests');
 
-        //$suite->addTest(Core\AllTests::suite());
+        //$suite->addTestSuite('System\Core\AllTests');
 
         return $suite;
     }

@@ -14,10 +14,20 @@ abstract class SystemTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $_sc;
 
+    /**
+     * @var \sfServiceContainer
+     */
+    protected $_em;
+
+    /**
+     * @var \Zend_Controller_Front
+     */
+    protected $_frontController;
+
     public function setUp()
     {
         parent::setUp();
-        
+
         $_SERVER['HTTP_HOST'] = 'doesnotmatter';
         $_SERVER['SERVER_PROTOCOL'] = 'doesnotmatter';
         $_SERVER['REMOTE_ADDR'] = 'doesnotmatter';
@@ -31,6 +41,9 @@ abstract class SystemTestCase extends \PHPUnit_Framework_TestCase
 
         $this->application->bootstrap();
         $this->_sc = $this->application->getBootstrap()->serviceContainer;
+
+        $this->_em = $this->_sc->getService('doctrine');
+
         $this->_frontController = $this->application->getBootstrap()->getResource('frontController');
         $this->_frontController->returnResponse(true);
 

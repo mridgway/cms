@@ -3,7 +3,7 @@
 namespace Integration;
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'IntegrationAllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Integration\AllTests::main');
 }
 
 require_once __DIR__ . '/../bootstrap.php';
@@ -19,8 +19,8 @@ class AllTests
     {
         $suite = new IntegrationTestSuite('Integration Tests');
 
-        $suite->addTest(Core\AllTests::suite());
-        $suite->addTest(Taxonomy\AllTests::suite());
+        $suite->addTestSuite('Integration\Core\AllTests');
+        $suite->addTestSuite('Integration\Taxonomy\AllTests');
 
         return $suite;
     }

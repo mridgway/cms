@@ -3,7 +3,7 @@
 namespace Integration\Core;
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Integration\AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'Integration\Core\AllTests::main');
 }
 
 require_once __DIR__ . '/../../bootstrap.php';
