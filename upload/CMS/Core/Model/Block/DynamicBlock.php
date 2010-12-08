@@ -96,7 +96,6 @@ abstract class DynamicBlock extends \Core\Model\Block
 
             // keep set exit false to allow testing
             $redirector->setExit(false);
-            $redirector->gotoUrl($location);
         }
 
         return $this->_redirector;
