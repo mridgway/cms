@@ -1,28 +1,15 @@
 <?php
-namespace Core\Service\IntegrationTests;
+
+namespace Integration\Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 /**
- * Integration Test for Page Route Service.
+ * Integration Test for Abstract Content Service.
  */
-class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
+class AbstractContentTest extends \Integration\IntegrationTestCase
 {
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->_sc->getService('doctrine')->beginTransaction();
-    }
-
-    protected function tearDown()
-    {
-        $this->_sc->getService('doctrine')->rollback();
-        \Core\Module\Registry::destroy();
-    }
-
     public function testCreate()
     {
         $data = array(
@@ -48,8 +35,8 @@ class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
         $contentService->setUserService($userService);
-        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
-        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
         $newContent = $contentService->create($data);
 
@@ -82,8 +69,8 @@ class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
         $contentService->setUserService($userService);
-        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
-        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
         $newContent = $contentService->create($data);
 
@@ -108,8 +95,8 @@ class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
 
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
-        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
-        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
         $newContent = $contentService->create($data);
 
@@ -128,8 +115,8 @@ class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
 
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
-        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
-        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
         $this->setExpectedException('Core\Exception\ValidationException');
         $newContent = $contentService->create($data);
@@ -148,8 +135,8 @@ class AbstractContentTest extends \CMS\CMSAbstractIntegrationTestCase
 
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
-        $contentService->setValidationClassName('Core\Service\IntegrationTests\ConcreteContentValidation');
-        $contentService->setClassName('Core\Service\IntegrationTests\ConcreteContent');
+        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
         $newContent = $contentService->setContentObjects($content, $data, false);
 

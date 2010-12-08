@@ -1,28 +1,14 @@
 <?php
-namespace Taxonomy\Service\IntegrationTests;
+namespace Integration\Taxonomy\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 /**
- * Integration Test for Question Service.
- * This test assumes that the Geocode Module is installed and seeded.
+ * Integration Test for Term Service.
  */
-class TermTest extends \CMS\CMSAbstractIntegrationTestCase
+class TermTest extends \Integration\IntegrationTestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->_sc->getService('doctrine')->beginTransaction();
-    }
-
-    protected function tearDown()
-    {
-        $this->_sc->getService('doctrine')->rollback();
-        \Core\Module\Registry::destroy();
-    }
-
     public function testSetTags()
     {
         $terms = array(

@@ -1,13 +1,14 @@
 <?php
-namespace Core\Service\IntegrationTests;
+
+namespace Integration\Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 /**
  * Integration Test for Page Route Service.
  */
-class PageRouteTest extends \CMS\CMSAbstractIntegrationTestCase
+class PageRouteTest extends \Integration\IntegrationTestCase
 {
     protected $_uniqueName;
     protected $_page;
@@ -16,8 +17,6 @@ class PageRouteTest extends \CMS\CMSAbstractIntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-
-        $this->_sc->getService('doctrine')->beginTransaction();
 
         $em = $this->_sc->getService('doctrine');
         $sysname = \uniqid();
@@ -38,12 +37,6 @@ class PageRouteTest extends \CMS\CMSAbstractIntegrationTestCase
         $em->persist($pageRoute);
 
         $em->flush();
-    }
-
-    protected function tearDown()
-    {
-        $this->_sc->getService('doctrine')->rollback();
-        \Core\Module\Registry::destroy();
     }
 
     public function testDoNotCreateIfNotUnique()

@@ -41,4 +41,25 @@ class MultiTag extends \ZendX_JQuery_Form_Element_AutoComplete
                                       'class' => 'element'));
         }
     }
+
+    /**
+     * Make sure the input array only has scalar values.
+     *
+     * @param array $value
+     */
+    public function setValue($value)
+    {
+        if($value) {
+            foreach ($value as $key => $content) {
+                if (\is_array($content)) {
+                    if (\array_key_exists('name', $content)) {
+                        $value = array_map(function($c) {return $c['name'];}, $value);
+                        break;
+                    }
+                }
+            }
+        }
+
+        parent::setValue($value);
+    }
 }
