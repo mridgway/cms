@@ -27,6 +27,8 @@ abstract class DynamicBlock extends \Core\Model\Block
      */
     protected $_em = null;
 
+    protected $_redirector;
+
     /**
      * Gets called when a block is loaded in the page.
      */
@@ -80,6 +82,24 @@ abstract class DynamicBlock extends \Core\Model\Block
             return parent::canConfigure($role);
         }
         return false;
+    }
+
+    public function setRedirector($redirector)
+    {
+        $this->_redirector = $redirector;
+    }
+
+    public function getRedirector()
+    {
+        if (null == $this->_redirector) {
+            $redirector = \Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
+
+            // keep set exit false to allow testing
+            $redirector->setExit(false);
+            $redirector->gotoUrl($location);
+        }
+
+        return $this->_redirector;
     }
 
 }
