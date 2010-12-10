@@ -22,7 +22,7 @@ class UserRoleAssignmentTest extends \PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $group = new \User\Model\Group('test');
+        $group = new \User\Model\Group('test', 'test');
         $this->user = new \User\Model\User($group, 'test@test.com', 'Test', 'User');
         $this->role = new \User\Model\Acl\Role('test');
         $this->roleAssignment = new UserRoleAssignment($this->user, $this->role);

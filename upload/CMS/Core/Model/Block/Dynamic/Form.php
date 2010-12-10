@@ -37,7 +37,8 @@ class Form extends \Core\Model\Block\DynamicBlock
         if (null === $location) {
             $location = $this->_request->getRequestUri();
         }
-        header("Location:$location");
+
+        $this->getRedirector()->gotoUrl($location);
     }
 
     /**

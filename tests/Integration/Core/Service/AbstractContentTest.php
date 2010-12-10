@@ -10,6 +10,25 @@ require_once __DIR__ . '/../../../bootstrap.php';
  */
 class AbstractContentTest extends \Integration\IntegrationTestCase
 {
+    protected $_user;
+
+    public function setUp()
+    {
+        parent::setUp();
+        
+        $data = array(
+            'group' => 'Admin',
+            'email' => 'test@test.com',
+            'firstName' => 'test',
+            'lastName' => 'test'
+        );
+
+        $userService = $this->_sc->getService('userService');
+        $user = $userService->createUser($data);
+
+        $this->_user = $user;
+    }
+
     public function testCreate()
     {
         $data = array(
@@ -18,23 +37,20 @@ class AbstractContentTest extends \Integration\IntegrationTestCase
                 'tag2'
             ),
             'author' => array(
-                'id' => 1
+                'id' => $this->_user->getId()
             ),
             'isFeatured' => true
         );
 
-        $userService = $this->_sc->getService('userService');
-        $user = $userService->getUser($data['author']['id']);
-
         $content = new ConcreteContent();
         $content->setTags($this->_sc->getService('termService')->getOrCreateTerms($data['tags'], 'contentTags'));
-        $content->setAuthor($user);
-        $content->setAuthorName($user->getFirstName() . ' ' . $user->getLastName());
+        $content->setAuthor($this->_user);
+        $content->setAuthorName($this->_user->getFirstName() . ' ' . $this->_user->getLastName());
         $content->setIsFeatured(true);
 
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
-        $contentService->setUserService($userService);
+        $contentService->setUserService($this->_sc->getService('userService'));
         $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
         $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
@@ -51,24 +67,21 @@ class AbstractContentTest extends \Integration\IntegrationTestCase
                 'tag2'
             ),
             'author' => array(
-                'id' => 1
+                'id' => $this->_user->getId()
             ),
             'authorName' => 'doesnotmatter',
             'isFeatured' => true
         );
 
-        $userService = $this->_sc->getService('userService');
-        $user = $userService->getUser($data['author']['id']);
-
         $content = new ConcreteContent();
         $content->setTags($this->_sc->getService('termService')->getOrCreateTerms($data['tags'], 'contentTags'));
-        $content->setAuthor($user);
-        $content->setAuthorName($user->getFirstName() . ' ' . $user->getLastName());
+        $content->setAuthor($this->_user);
+        $content->setAuthorName($this->_user->getFirstName() . ' ' . $this->_user->getLastName());
         $content->setIsFeatured(true);
 
         $contentService = new ConcreteContentService();
         $contentService->setTermService($this->_sc->getService('termService'));
-        $contentService->setUserService($userService);
+        $contentService->setUserService($this->_sc->getService('userService'));
         $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
         $contentService->setClassName('Integration\Core\Service\ConcreteContent');
 
