@@ -46,6 +46,8 @@ class InstallController extends AbstractInstallController
         // Core now depends on some models in User
         'User\Model\User',
         'User\Model\Identity',
+        'User\Model\Identity\Local',
+        'User\Model\Identity\OpenID',
         'User\Model\Session',
         'User\Model\Group',
 
