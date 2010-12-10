@@ -70,19 +70,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->view->resource->module->sysname = 'Core';
         $this->view->resource->discriminator = 'Text';
         $this->view->sysname = 'default';
-        
+
         $this->view->getInstance()->render($this->view->getFile());
 
         $this->view->getInstance()->render('Content/Text/default.phtml');
-    }
-
-    public function testGetInstance()
-    {
-        $helperLoader = new \Zend_Loader_PluginLoader();
-        \Core\Model\Module\View::setPluginLoader($helperLoader, 'helper');
-
-        $filterLoader = new \Zend_Loader_PluginLoader();
-        \Core\Model\Module\View::setPluginLoader($filterLoader, 'filter');
     }
 }
 ?>

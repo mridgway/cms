@@ -17,6 +17,12 @@ abstract class IntegrationTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
+
+        // make sure previous tests have cleaned up singletons
+        \Core\Module\Registry::destroy();
+        \Zend_Registry::_unsetInstance();
+        \Zend_Controller_Front::getInstance()->resetInstance();
+
         require_once 'ZendX/Application53/Application.php';
         $this->application = new \ZendX\Application53\Application(
             APPLICATION_ENV,
@@ -34,6 +40,7 @@ abstract class IntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->_sc->getService('doctrine')->rollback();
         \Core\Module\Registry::destroy();
         \Zend_Registry::_unsetInstance();
+        \Zend_Controller_Front::getInstance()->resetInstance();
     }
 
 }

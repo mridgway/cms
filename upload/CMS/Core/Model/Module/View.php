@@ -44,11 +44,6 @@ class View extends Model\AbstractModel
     protected $sysname;
 
     /**
-     * @var Zend_Loader_PluginLoader
-     */
-    private static $_pluginLoader = array();
-
-    /**
      * @param string Core\Model\Module\Resource
      * @param string $sysname
      */
@@ -97,22 +92,7 @@ class View extends Model\AbstractModel
         }
         $view->clearVars();
         $view->addBasePath($this->getBasePath());
-        if ($helperLoader = self::getPluginLoader('helper')) {
-            $view->setPluginLoader($helperLoader, 'helper');
-        }
-        if ($filterLoader = self::getPluginLoader('filter')) {
-            $view->setPluginLoader(self::getPluginLoader('filter'), 'filter');
-        }
+
         return $view;
-    }
-
-    public static function setPluginLoader($pluginLoader, $type)
-    {
-        self::$_pluginLoader[$type] = $pluginLoader;
-    }
-
-    public static function getPluginLoader($type)
-    {
-        return array_key_exists($type, self::$_pluginLoader) ? self::$_pluginLoader[$type] : false;
     }
 }

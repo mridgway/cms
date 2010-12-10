@@ -2,6 +2,8 @@
 
 namespace System;
 
+use \Mockery as m;
+
 abstract class SystemTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -28,6 +30,11 @@ abstract class SystemTestCase extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        // make sure previous tests have cleaned up singletons
+        \Core\Module\Registry::destroy();
+        \Zend_Registry::_unsetInstance();
+        \Zend_Controller_Front::getInstance()->resetInstance();
+
         $_SERVER['HTTP_HOST'] = 'doesnotmatter';
         $_SERVER['SERVER_PROTOCOL'] = 'doesnotmatter';
         $_SERVER['REMOTE_ADDR'] = 'doesnotmatter';
@@ -39,12 +46,18 @@ abstract class SystemTestCase extends \PHPUnit_Framework_TestCase
             APPLICATION_PATH . '/application.ini'
         );
 
+        $redirector = new \Zend_Controller_Action_Helper_Redirector();
+        $mockRedirector = m::mock($redirector, array(m::BLOCKS => array('gotoUrl')));
+        $mockRedirector->shouldReceive('getExit')->andReturn(false);
+        \Zend_Controller_Action_HelperBroker::addHelper($mockRedirector);
+
         $this->application->bootstrap();
         $this->_sc = $this->application->getBootstrap()->serviceContainer;
 
         $this->_em = $this->_sc->getService('doctrine');
 
         $this->_frontController = $this->application->getBootstrap()->getResource('frontController');
+
         $this->_frontController->returnResponse(true);
 
         $this->_sc->getService('doctrine')->beginTransaction();
@@ -56,6 +69,7 @@ abstract class SystemTestCase extends \PHPUnit_Framework_TestCase
         \Core\Module\Registry::destroy();
         \Zend_Registry::_unsetInstance();
         \Zend_Controller_Front::getInstance()->resetInstance();
+        m::close();
     }
 
 }
