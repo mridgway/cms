@@ -358,6 +358,7 @@ abstract class Block
     public function setView(\Core\Model\Module\View $view)
     {
         $this->view = $view;
+        $this->_viewInstance = null;
         $this->getViewInstance();
         return $this;
     }
