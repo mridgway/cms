@@ -188,7 +188,7 @@ class AbstractContentTest extends \Integration\IntegrationTestCase
         $contentService->setContentObjects($newContent, $data, false);
 
 
-        $this->assertEquals(null, \Doctrine\Common\Util\Debug::export($newContent->getTags(), 1));
+        $this->assertEquals(array(), \Doctrine\Common\Util\Debug::export($newContent->getTags(), 1));
     }
 }
 

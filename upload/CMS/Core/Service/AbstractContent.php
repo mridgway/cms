@@ -41,10 +41,11 @@ abstract class AbstractContent extends AbstractModel
         }
 
         if(isset($data['tags'])) {
-            $tags = null;
+            $tags = array();
             if(\is_array($data['tags'])) {
                 $tags = $this->getTermService()->getOrCreateTerms($data['tags'], 'contentTags');
             }
+            \Doctrine\Common\Util\Debug::dump($tags);
             $content->setTags($tags);
         }
 
