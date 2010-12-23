@@ -117,7 +117,9 @@ abstract class Content
     public function fromArray($data)
     {
         $this->_setIfSet('authorName', $data);
+        $this->_setIfSet('isActive', $data);
         $this->_setIfSet('isFeatured', $data);
+        $this->_setIfSet('modificationDate', $data);
     }
 
     public function getId()

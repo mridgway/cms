@@ -155,6 +155,41 @@ class AbstractContentTest extends \Integration\IntegrationTestCase
 
         $this->assertEquals(false, $content->getIsFeatured());
     }
+
+    public function testUpdateTags()
+    {
+        $data = array(
+            'tags' => array(
+                'tag1',
+                'tag2'
+            ),
+            'author' => array(
+                'id' => $this->_user->getId()
+            ),
+            'isFeatured' => true
+        );
+
+        $contentService = new ConcreteContentService();
+        $contentService->setTermService($this->_sc->getService('termService'));
+        $contentService->setUserService($this->_sc->getService('userService'));
+        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
+
+        $newContent = $contentService->create($data);
+
+        $data = array(
+            'tags' => '',
+            'author' => array(
+                'id' => $this->_user->getId()
+            ),
+            'isFeatured' => true
+        );
+
+        $contentService->setContentObjects($newContent, $data, false);
+
+
+        $this->assertEquals(null, \Doctrine\Common\Util\Debug::export($newContent->getTags(), 1));
+    }
 }
 
 class ConcreteContent extends \Core\Model\Content {}
@@ -163,6 +198,11 @@ class ConcreteContentService extends \Core\Service\AbstractContent
     public function create($data)
     {
         return $this->_create($data);
+    }
+
+    public function update($data)
+    {
+        return $this->_update($data);
     }
 
     public function setContentObjects($content, $data, $throwErrors)

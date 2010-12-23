@@ -40,8 +40,11 @@ abstract class AbstractContent extends AbstractModel
             throw \Core\Exception\ValidationException::invalidData(\get_class($content), array('author' => array('required' => 'a valid author id or author name is required')));
         }
 
-        if(isset($data['tags']) && \is_array($data['tags'])) {
-            $tags = $this->getTermService()->getOrCreateTerms($data['tags'], 'contentTags');
+        if(isset($data['tags'])) {
+            $tags = null;
+            if(\is_array($data['tags'])) {
+                $tags = $this->getTermService()->getOrCreateTerms($data['tags'], 'contentTags');
+            }
             $content->setTags($tags);
         }
 
