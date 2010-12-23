@@ -45,7 +45,6 @@ abstract class AbstractContent extends AbstractModel
             if(\is_array($data['tags'])) {
                 $tags = $this->getTermService()->getOrCreateTerms($data['tags'], 'contentTags');
             }
-            \Doctrine\Common\Util\Debug::dump($tags);
             $content->setTags($tags);
         }
 
