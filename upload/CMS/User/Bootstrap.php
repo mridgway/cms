@@ -76,7 +76,7 @@ class Bootstrap extends \ZendX\Application53\Application\Module\Bootstrap
             }
             \Core\Auth\Auth::getInstance()->getIdentity()->setAcl($acl);
         } catch (\PDOException $e) {
-            //throw $e;
+            throw $e;
         }
 
         \Zend_Registry::set('acl', $acl);

@@ -30,4 +30,11 @@ class AbstractActivity extends AbstractModel
     {
         $this->dateCreated = new \DateTime();
     }
+
+    public function getModuleName()
+    {
+        $class = \get_class($this);
+        $array = \explode('\\', $class);
+        return $array[0];
+    }
 }
