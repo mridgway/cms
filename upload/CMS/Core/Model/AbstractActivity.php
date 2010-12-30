@@ -37,4 +37,13 @@ class AbstractActivity extends AbstractModel
         $array = \explode('\\', $class);
         return $array[0];
     }
+
+    public function getPartialPath($name = 'default.phtml')
+    {
+        $class = \get_class($this);
+        $array = \explode('\\', $class);
+        $folder0 = $array[count($array) - 1];
+
+        return 'Activity/' . \lcfirst($folder0) . '/' . $name;
+    }
 }
