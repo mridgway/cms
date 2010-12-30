@@ -17,6 +17,14 @@ class AbstractActivityTest extends \CMSTestCase
 
         $this->assertEquals('Core', $moduleName);
     }
+
+    public function testGetPartialPath()
+    {
+        $activity = new ConcreteActivity();
+        $script = $activity->getPartialPath();
+
+        $this->assertEquals('Activity\\concreteActivity\\default.phtml', $script);
+    }
 }
 
 class ConcreteActivity extends AbstractActivity{}
