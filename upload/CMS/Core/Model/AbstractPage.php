@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({"Page"="Core\Model\Page", "Template"="Core\Model\Template"})
- * 
+ *
  * @property int $id
  * @property string $title
  * @property string $description
@@ -84,10 +84,21 @@ abstract class AbstractPage
      * @param Block $block
      * @return AbstractPage
      */
-    public function addBlock(\Core\Model\Block $block, Layout\Location $location = null, $weight = null)
+    public function addBlock(\Core\Model\Block $block, $location = null, $weight = null)
     {
         $block->page = $this;
         if (null !== $location) {
+            if (\is_string($location)) {
+                foreach ($this->getLayout()->getLocations() AS $loc) {
+                    if ($loc->getSysname() == $location) {
+                        $location = $loc;
+                        break;
+                    }
+                }
+            }
+            if (!$location instanceof Layout\Location) {
+                throw new \Core\Model\Exception('Location invalid');
+            }
             $block->location = $location;
         } else {
             if (null === $block->location) {
@@ -96,7 +107,7 @@ abstract class AbstractPage
         }
         if (null !== $weight) {
             $block->weight = $weight;
-        } else {
+        } elseif (null === $block->weight) {
             $heaviestWeight = 0;
             if (null === $this->blocks) {
                 $this->setBlocks(new ArrayCollection); // resets to an empty array collection

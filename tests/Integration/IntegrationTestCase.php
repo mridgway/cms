@@ -31,6 +31,7 @@ abstract class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 
         $this->application->bootstrap();
         $this->_sc = $this->application->getBootstrap()->serviceContainer;
+        \Zend_Controller_Front::getInstance()->setParam('bootstrap', $this->application->getBootstrap());
 
         $this->_sc->getService('doctrine')->beginTransaction();
     }

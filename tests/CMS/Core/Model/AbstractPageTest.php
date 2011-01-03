@@ -2,6 +2,7 @@
 namespace Core\Model;
 
 require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 /**
  * Test class for AbstractPage.
@@ -54,6 +55,16 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->page->blocks));
         $this->assertEquals($this->left, $this->block1->location);
         $this->assertEquals(0, $this->block1->weight);
+    }
+
+    public function testAddBlockWithOutWeightOrLocation()
+    {
+        $this->block1->setWeight(4);
+
+        $this->page->addBlock($this->block1);
+        $this->assertEquals(1, count($this->page->blocks));
+        $this->assertEquals($this->right, $this->block1->location);
+        $this->assertEquals(4, $this->block1->weight);
     }
 
     public function testAddBlockFailLocation()
@@ -182,4 +193,3 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(FALSE, $this->page->canEdit('user'));
     }
 }
-?>
