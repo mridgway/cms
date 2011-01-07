@@ -121,6 +121,11 @@ abstract class Block
     private $serviceContainer;
 
     /**
+     * @var \Zend_Controller_Action_Helper_FlashMessenger
+     */
+    protected $_flashMessenger;
+
+    /**
      *
      * @param Page $page
      * @param string $location
@@ -531,5 +536,19 @@ abstract class Block
     public function getService($serviceName)
     {
         return $this->serviceContainer->getSErvice($serviceName);
+    }
+
+    public function getFlashMessenger()
+    {
+        if(!$this->_flashMessenger) {
+            $this->setFlashMessenger(\Zend_Controller_Action_HelperBroker::getStaticHelper('flashMessenger'));
+        }
+
+        return $this->_flashMessenger;
+    }
+
+    public function setFlashMessenger($flashMessenger)
+    {
+        $this->_flashMessenger = $flashMessenger;
     }
 }
