@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -422,5 +422,26 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $pageService->setEntityManager($em);
 
         $pageService->update($page, $pageObject);
+    }
+
+    public function testUpdatePageTitle()
+    {
+        $layout = new \Core\Model\Layout('test');
+        $page = new \Core\Model\Page($layout);
+
+        $em = m::mock('Doctrine\ORM\EntityManager');
+        $pageService = new \Core\Service\Page($em);
+
+        // this should update the page title
+        $pageService->updatePageTitle($page, 'new title');
+        $this->assertEquals('new title', $page->getTitle());
+
+        // this should update the page title
+        $pageService->updatePageTitle($page, 'a newer title', 'new title');
+        $this->assertEquals('a newer title', $page->getTitle());
+
+        // this should not update the page title
+        $pageService->updatePageTitle($page, 'a newerer title', 'new title');
+        $this->assertEquals('a newer title', $page->getTitle());
     }
 }

@@ -167,6 +167,23 @@ class Page extends \Core\Service\AbstractService
     }
 
     /**
+     * Sets or updates a page title.
+     *
+     * @param \Core\Model\Page $page
+     * @param string $newTitle
+     * @param string $oldTitle
+     * @return \Core\Model\Page
+     */
+    public function updatePageTitle($page, $newTitle, $oldTitle = '')
+    {
+        if('' == $page->getTitle() || $oldTitle == $page->getTitle()) {
+            $page->setTitle($newTitle);
+        }
+
+        return $page;
+    }
+
+    /**
      * Gets all config values or content type properties for all blocks on a page.
      * 
      * @param \Core\Model\AbstractPage $page
