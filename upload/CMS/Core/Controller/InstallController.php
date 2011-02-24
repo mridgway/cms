@@ -67,7 +67,7 @@ class InstallController extends AbstractInstallController
     public function installAction ()
     {
         $this->clearCacheAction();
-        
+
         echo '<h3>Installing Core</h3>';
         echo '<b>Creating tables...</b><br/>';
         ob_flush();
@@ -88,6 +88,11 @@ class InstallController extends AbstractInstallController
         ob_flush();
         $this->_create404();
         echo '<b>404 page created.</b><br/></br>';
+
+        echo '<b>Creating 403 Page...</b><br/>';
+        ob_flush();
+        $this->_create403();
+        echo '<b>403 page created.</b><br/></br>';
 
         echo '<h3>Core Module Installed</h3>';
         ob_flush();
@@ -144,13 +149,13 @@ class InstallController extends AbstractInstallController
         $layout4->setTitle('1 Column');
         $layout4->setLocations(array($main));
         $this->_em->persist($layout4);
-        
+
         $this->_em->flush();
     }
 
     public function _create404()
     {
-        $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname('1col');
+        $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname('default');
         $main = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname('main');
         $page = new \Core\Model\Page($layout);
         $this->_em->persist($page);
@@ -158,6 +163,43 @@ class InstallController extends AbstractInstallController
         $route = new \Core\Model\Route('404', '404');
         $this->_em->persist($route);
         $this->_em->persist($route->routeTo($page));
+
+        $searchUrl = '/search';
+        $block404Text = <<<EOD
+<div class="error404">
+<h1>Error 404 - OOPS! It looks like you've requested a page that is no longer available.</h1>
+</div><!--error404-->
+EOD;
+        $view = $this->getModule()->getContentType('Text')->getView('default');
+        $text = new \Core\Model\Content\Text('404 Not Found', $block404Text, true);
+        $block = new \Core\Model\Block\StaticBlock($text, $view);
+        $page->addBlock($block, 'main');
+
+        $this->_em->persist($text);
+
+        $this->_em->flush();
+    }
+
+    public function _create403()
+    {
+        $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname('default');
+        $main = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname('main');
+        $page = new \Core\Model\Page($layout);
+        $this->_em->persist($page);
+
+        $route = new \Core\Model\Route('403', '403');
+        $this->_em->persist($route);
+        $this->_em->persist($route->routeTo($page));
+
+        $block403Text = <<<EOD
+<h1>Sorry, you do not have access to this page.</h1>
+EOD;
+        $view = $this->getModule()->getContentType('Text')->getView('default');
+        $text = new \Core\Model\Content\Text('403 Permission Denied', $block403Text, true);
+        $block = new \Core\Model\Block\StaticBlock($text, $view);
+        $page->addBlock($block, 'main');
+
+        $this->_em->persist($text);
 
         $this->_em->flush();
     }

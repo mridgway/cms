@@ -32,13 +32,14 @@ class Form extends \Core\Model\Block\DynamicBlock
     public function success($location = null)
     {
         if ($this->_request->isXmlHttpRequest()) {
-            die(new \Core\Model\Frontend\Simple());
+            $this->init();
+            die($this->render());
         }
         if (null === $location) {
             $location = $this->_request->getRequestUri();
         }
 
-        $this->getRedirector()->gotoUrl($location);
+        $this->getRedirector()->gotoUrl($location, array('exit' => true));
     }
 
     /**
