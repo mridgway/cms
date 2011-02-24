@@ -18,7 +18,7 @@ class SizeTest extends \PHPUnit_Framework_TestCase {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->size = new Size(100, 200);
+        $this->size = new Size(200, 100);
     }
 
     /**
@@ -29,8 +29,8 @@ class SizeTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test__constructor() {
-        $this->assertEquals(100, $this->size->width);
-        $this->assertEquals(200, $this->size->height);
+        $this->assertEquals(200, $this->size->width);
+        $this->assertEquals(100, $this->size->height);
     }
 
     public function testSetCrop() {
