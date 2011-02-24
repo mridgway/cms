@@ -27,7 +27,7 @@ class Page extends AbstractPage
     /**
      * @var Core\Model\Template
      * @ManyToOne(targetEntity="Core\Model\Template", fetch="LAZY")
-     * @JoinColumn(name="template_id", referencedColumnName="id", nullable="true")
+     * @JoinColumn(name="template_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $template;
 
@@ -37,7 +37,7 @@ class Page extends AbstractPage
      * @param int $left
      * @param int $right
      */
-    public function __construct(Layout $layout)
+    public function __construct(Layout $layout = null)
     {
         parent::__construct($layout);
     }
@@ -66,6 +66,14 @@ class Page extends AbstractPage
     }
 
     /**
+     * @return Core\Model\PageRoute
+     */
+    public function getPageRoute()
+    {
+        return $this->pageRoute;
+    }
+
+    /**
      *
      * @param Template $template
      * @return Page
@@ -86,5 +94,4 @@ class Page extends AbstractPage
 
         throw new \Exception('A block with id ' . $id . ' does not exist on this page.');
     }
-    
 }

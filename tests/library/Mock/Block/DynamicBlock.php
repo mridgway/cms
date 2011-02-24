@@ -4,7 +4,11 @@ namespace Mock\Block;
 
 class DynamicBlock extends \Core\Model\Block\DynamicBlock
 {
-    public function init(){}
+    public function init()
+    {
+        $param1 = 'aParameter';
+        $this->addParameter('param1', $param1);
+    }
 
     public function configure()
     {

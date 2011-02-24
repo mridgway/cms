@@ -2,6 +2,7 @@
 namespace Core\Model\Block;
 
 require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/../../../../bootstrap.php';
 
 /**
  * Test class for DynamicBlock.
@@ -42,5 +43,17 @@ class DynamicBlockTest extends \PHPUnit_Framework_TestCase
         $this->block->setRequest($request);
         $this->assertEquals($request, $this->block->getRequest());
     }
+
+    public function testGetParameters()
+    {
+        $this->block->init();
+        $paremeters = $this->block->getParameters();
+        $this->assertEquals(array('param1' => 'aParameter', 0 => 'default'), $paremeters);
+    }
+
+    public function testGetCacheTags()
+    {
+        $cacheTags = $this->block->getCacheTags();
+        $this->assertEquals(array('Mock'), $cacheTags);
+    }
 }
-?>

@@ -31,7 +31,7 @@ class ErrorController extends \Zend_Controller_Action
 
         $this->getRequest()->setParam('exception', $errors->exception);
         $sc = $this->getInvokeArg('bootstrap')->serviceContainer;
-
+        
         switch ($errors->type) {
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
@@ -147,28 +147,24 @@ EOD;
      */
     protected function getLogger($sysname)
     {
-        try {
-            $config = $this->getServiceContainer()->getService('config')->log->{$sysname};
-            if ($config && $config->enabled) {
-                if (!isset($this->_logs[$sysname])) {
-                    $logger = new \Zend_Log();
-                    if ($config->path) {
-                        $logger->addWriter(new \Zend_Log_Writer_Stream($config->path, 'a+'));
-                    }
-                    if ($config->email) {
-                        $mail = new \Zend_Mail();
-                        $mail->setFrom('errors@greenhomeguide.com')
-                             ->addTo($config->email);
-                        $writer = new \Zend_Log_Writer_Mail($mail);
-                        $writer->setSubjectPrependText('GHG Error');
-                        $logger->addWriter($writer);
-                    }
-                    $this->_logs[$sysname] = $logger;
+        $config = $this->getServiceContainer()->getService('config')->log->{$sysname};
+        if ($config && $config->enabled) {
+            if (!isset($this->_logs[$sysname])) {
+                $logger = new \Zend_Log();
+                if ($config->path) {
+                    $logger->addWriter(new \Zend_Log_Writer_Stream($config->path, 'a+'));
                 }
-            } else {
-                return null;
+                if ($config->email) {
+                    $mail = new \Zend_Mail();
+                    $mail->setFrom('errors@greenhomeguide.com')
+                         ->addTo($config->email);
+                    $writer = new \Zend_Log_Writer_Mail($mail);
+                    $writer->setSubjectPrependText('GHG Error');
+                    $logger->addWriter($writer);
+                }
+                $this->_logs[$sysname] = $logger;
             }
-        } catch (\Exception $e) {
+        } else {
             return null;
         }
         return $this->_logs[$sysname];

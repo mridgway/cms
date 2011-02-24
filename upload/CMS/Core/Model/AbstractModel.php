@@ -78,7 +78,11 @@ abstract class AbstractModel
             }
         }
 
-        throw new \Exception('Method `'.$name.'` does not exist.');
+        throw new \Exception(sprintf(
+                'Method `%s` does not exist on %s.',
+                $name,
+                get_class($this)
+        ));
     }
 
     /**
@@ -194,7 +198,7 @@ abstract class AbstractModel
                 $data[$key] = $value->format('Y-m-d H:i:s');
                 continue;
             }
-            
+
             $data[$key] = $this->_getArrayIfSet($key, $includes);
         }
 

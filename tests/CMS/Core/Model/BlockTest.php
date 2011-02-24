@@ -260,7 +260,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(TRUE, $this->block->canView('admin'));
         $this->assertEquals(TRUE, $this->block->canDelete('admin'));
         $this->assertEquals(TRUE, $this->block->canEdit('admin'));
-        $this->assertEquals(TRUE, $this->block->canConfigure('admin'));
+        $this->assertEquals(false, $this->block->canConfigure('admin'));
         $this->assertEquals(TRUE, $this->block->canMove('admin'));
 
         $this->assertEquals(FALSE, $this->block->canView('user'));

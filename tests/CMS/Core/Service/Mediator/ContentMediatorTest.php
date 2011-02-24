@@ -110,7 +110,7 @@ class ContentMediatorTest extends \PHPUnit_Framework_TestCase
         $this->contentMediator->isValid($data);
         $this->contentMediator->transferValues();
         $this->assertEquals(1, $this->article->getId());
-        //$this->assertEquals($mockUser, $this->article->getAuthor());
+        $this->assertEquals($mockUser, $this->article->getAuthor());
         $this->assertEquals('Testerson McTest', $this->article->getAuthorName());
         $this->assertEquals('10-21-2010', $this->article->getCreationDate()->format('m-d-Y'));
         $this->assertEquals('10-28-2010', $this->article->getModificationDate()->format('m-d-Y'));

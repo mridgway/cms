@@ -36,14 +36,14 @@ class Identity extends \Core\Model\AbstractModel
 
     /**
      * @var string
-     * @Column(type="string", length="500", unique="true", nullable="false")
+     * @Column(type="string", length="255", unique="true", nullable="false")
      */
     protected $identifier;
 
     /**
      * @var \User\Model\User
      * @ManyToOne(targetEntity="User\Model\User")
-     * @JoinColumn(name="user_id", referencedColumnName="id", nullable="false")
+     * @JoinColumn(name="user_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     protected $user;
 
@@ -68,35 +68,6 @@ class Identity extends \Core\Model\AbstractModel
             throw new \Core\Model\Exception('Identifier must be between 1 and 500 charactrs');
         }
         $this->identifier = $identifier;
-        return $this;
-    }
-
-    /**
-     * Hashes a password and sets it as the pass hash
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $hasher = new \Core\Auth\Hasher();
-        $this->setPassHash($hasher->hash($password));
-        return $this;
-    }
-
-    /**
-     *
-     * @param string $passHash
-     * @return Identity
-     */
-    protected function setPassHash($passHash = null)
-    {
-        if (null !== $passHash) {
-            $validator = new \Zend_Validate_StringLength(32);
-            if (!$validator->isValid($passHash)) {
-                throw new \Core\Model\Exception('PassHash is not properly hashed');
-            }
-        }
-        $this->passHash = $passHash;
         return $this;
     }
 

@@ -18,15 +18,20 @@ class Term extends \Core\Service\AbstractService
      */
     protected $_vocabularyService;
 
+    public function getTerm($termName, $vocabularySysname)
+    {
+        return $this->getEntityManager()
+                ->getRepository('Taxonomy\Model\Term')
+                ->findOneByVocabularySysnameAndName($vocabularySysname, $termName);
+    }
+
     /**
      * @param string $termName
      */
     public function getOrCreateTerm($termName, $vocabularySysname)
     {
         try {
-            $term = $this->getEntityManager()
-                ->getRepository('Taxonomy\Model\Term')
-                ->findOneByVocabularySysnameAndName($vocabularySysname, $termName);
+            $term = $this->getTerm($termName, $vocabularySysname);
         } catch (\Doctrine\ORM\NoResultException $e) {
             $term = $this->createTerm($vocabularySysname, array(
                 'name' => $termName
@@ -49,7 +54,7 @@ class Term extends \Core\Service\AbstractService
 
     /**
      * Creates a new term.
-     * 
+     *
      * @param \Taxonomy\Model\Vocabulary|string|integer $vocabulary
      * @param array $data
      */
@@ -74,7 +79,7 @@ class Term extends \Core\Service\AbstractService
 
     /**
      * Gets an array of terms.  If the terms do not exist, they are created.
-     * 
+     *
      * @param array $terms
      * @param string $vocabularyName
      * @return array

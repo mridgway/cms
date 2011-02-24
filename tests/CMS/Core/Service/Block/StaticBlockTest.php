@@ -2,7 +2,7 @@
 namespace Core\Service\Block;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -29,7 +29,7 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
         $view = new \Mock\View();
         $content = new \Core\Model\Content\Text(null, 'put content here', false);
         $content->setCreationDate($date);
-        $content->setModificationDate($date);
+        $content->setModificationDate(null);
         $block = new \Core\Model\Block\StaticBlock($content, $view);
 
         $moduleService = m::mock('Core\Service\Module');
@@ -39,19 +39,19 @@ class StaticBlockTest extends \PHPUnit_Framework_TestCase
         $sbService->setModuleService($moduleService);
 
         $newBlock = $sbService->create();
-        $this->assertEquals($block, $newBlock);
+        $newBlock->getContent()->setCreationDate($date);
+        $this->assertEquals(\Doctrine\Common\Util\Debug::export($block, 2), \Doctrine\Common\Util\Debug::export($newBlock, 2));
 
         $newBlock = $sbService->create($content, null);
         $newBlock->getContent()->setCreationDate($date);
-        $newBlock->getContent()->setModificationDate($date);
         $this->assertEquals($block, $newBlock);
 
         $newBlock = $sbService->create(null, $view);
+        $newBlock->getContent()->setCreationDate($date);
         $this->assertEquals($block, $newBlock);
 
         $newBlock = $sbService->create($content, $view);
         $newBlock->getContent()->setCreationDate($date);
-        $newBlock->getContent()->setModificationDate($date);
         $this->assertEquals($block, $newBlock);
     }
 

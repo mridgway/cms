@@ -7,10 +7,15 @@ CMS.Use([], function (CMS) {
             options = $.extend({
                 destroyOnClose: true,
                 modal: true,
-                width: 450,
-                resizable: false
+                width: 500,
+                resizable: false,
+                closeOnEscape: false
             }, options);
-            this.domElement = $(element).dialog(options);
+
+            var dialogContent = $(element).not('script');
+            var scripts = $(element).filter('script');
+            this.domElement = $(dialogContent).dialog(options);
+            $('body').append(scripts);
             if (options.destroyOnClose) {
                 this.domElement.bind('dialogclose', function () {
                     $(this).dialog('destroy');

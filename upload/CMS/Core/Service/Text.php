@@ -11,8 +11,18 @@ namespace Core\Service;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  */
-class Text extends \Core\Service\AbstractService
+class Text extends \Core\Service\AbstractContent
 {
+
+    public function retrieve($id)
+    {
+        return $this->_retrieve($id);
+    }
+
+    public function _getDefaultClassName()
+    {
+        return 'Core\Model\Content\Text';
+    }
 
     /**
      *
@@ -58,9 +68,20 @@ class Text extends \Core\Service\AbstractService
      * @param boolean $shared
      * @return \Core\Model\Content\Text
      */
-    public function create($title, $content, $shared = false)
+    public function create($title, $content, $shared = null)
     {
-        return new \Core\Model\Content\Text($title, $content, $shared);
+        $this->getEntityManager()->beginTransaction();
+        try {
+            $text = new \Core\Model\Content\Text($title, $content, $shared);
+            $this->getEntityManager()->persist($text);
+            $this->getEntityManager()->flush();
+            $this->getEntityManager()->commit();
+        } catch(\Exception $e) {
+            $this->getEntityManager()->rollback();
+            $this->getEntityManager()->close();
+            throw $e;
+        }
+        return $text;
     }
 
     /**

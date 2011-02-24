@@ -34,47 +34,47 @@ class Asset extends \Core\Model\AbstractModel
 
     /**
      * @var string
-     * @Column(name="sysname", type="string", length="64", nullable="false")
+     * @Column(name="sysname", type="string", length="64", nullable=false)
      */
     protected $sysname;
 
     /**
      * @var string
-     * @Column(name="name", type="string", length="150", nullable="false")
+     * @Column(name="name", type="string", length="150", nullable=false)
      */
     protected $name;
 
     /**
      * @var string
      * @ManyToOne(targetEntity="Asset\Model\Extension")
-     * @JoinColumn(name="extension", referencedColumnName="sysname", nullable="false")
+     * @JoinColumn(name="extension", referencedColumnName="sysname", nullable=false)
      */
     protected $extension;
 
     /**
      * @var Asset\Model\Group
      * @ManyToOne(targetEntity="Asset\Model\Group")
-     * @JoinColumn(name="grp", referencedColumnName="sysname", nullable="false")
+     * @JoinColumn(name="grp", referencedColumnName="sysname", nullable=false)
      */
     protected $group;
 
     /**
      * @var string
      * @ManyToOne(targetEntity="Asset\Model\MimeType")
-     * @JoinColumn(name="mime_type", referencedColumnName="sysname", nullable="false")
+     * @JoinColumn(name="mime_type", referencedColumnName="sysname", nullable=false)
      */
     protected $mimeType;
 
     /**
      * @var string
-     * @Column(name="caption", type="string", length="255", nullable="true")
+     * @Column(name="caption", type="string", length="255", nullable=true)
      */
     protected $caption;
 
     /**
      *
      * @var DateTime
-     * @Column(name="upload_date", type="datetime", nullable="false")
+     * @Column(name="upload_date", type="datetime", nullable=false)
      */
     protected $uploadDate;
 
@@ -178,7 +178,6 @@ class Asset extends \Core\Model\AbstractModel
     }
 
     /**
-     * @PrePersist
      * @param DateTime $date
      * @return Asset
      */

@@ -20,19 +20,113 @@ abstract class DynamicBlock extends \Core\Model\Block
      */
     protected $_request = null;
 
+    protected $_canUseCache = false;
+
     /**
-     * Entity Manager
-     *
      * @var \Doctrine\ORM\EntityManager
      */
     protected $_em = null;
 
     protected $_redirector;
 
+    protected $_parameters = array();
+
+    protected $_cacheTags;
+
+    protected $_output;
+
+    /** @var \Zend_Cache_Core */
+    protected $_cache;
+
     /**
      * Gets called when a block is loaded in the page.
+     * All dependencies for block rendering must be set here.
      */
-    abstract public function init();
+    public function init() {}
+
+    public function run()
+    {
+        if (!$this->getOutput() && \method_exists($this, '_run')) {
+            $this->_run();
+            $this->setOutput(parent::render());
+            $this->getCache()->save($this->getOutput(), 'block' . \sha1(\serialize($this->getParameters())), $this->getCacheTags());
+            $this->getServiceContainer()->getService('blockCacheListener')->reset();
+        }
+    }
+
+    public function addParameter($key, $value)
+    {
+        $this->_parameters[$key] = $value;
+    }
+
+    public function getParameters()
+    {
+        $array = array();
+        foreach($this->getConfigValues() as $key => $configValue) {
+            $array[$key] = $this->getConfigValue($key);
+        }
+
+        return \array_merge($array, $this->_parameters, array($this->getView(false)->sysname));
+    }
+
+    public function setCacheTags($array)
+    {
+        $this->_cacheTags = $array;
+    }
+
+    public function getCacheTags()
+    {
+        if(!$this->_cacheTags) {
+            $class = \get_class($this);
+            $classParts = \explode('\\', $class);
+            $this->setCacheTags(array($classParts[0]));
+        }
+        return $this->_cacheTags;
+    }
+
+    public function render()
+    {
+        if(!$this->getOutput()) {
+            $this->setOutput(parent::render());
+        }
+        return $this->getOutput();
+    }
+
+    protected function setOutput($output)
+    {
+        $this->_output = $output;
+    }
+
+    protected function getOutput()
+    {
+        if(!$this->_output) {
+            $this->setOutput($this->getCache()->load('block' . \sha1(\serialize($this->getParameters()))));
+        }
+        return $this->_output;
+    }
+
+    public function setCache(\Zend_Cache_Core $cache)
+    {
+        $this->_cache = $cache;
+    }
+
+    public function getCache()
+    {
+        if(!$this->_cache) {
+            $this->setCache($this->getServiceContainer()->getService('blockCache'));
+        }
+        return $this->_cache;
+    }
+
+    public function getCanUseCache()
+    {
+        return $this->_canUseCache;
+    }
+
+    public function setCanUseCache($bool)
+    {
+        $this->_canUseCache = $bool;
+    }
 
     /**
      * Gets called if the block's id is submitted in a form
@@ -89,18 +183,16 @@ abstract class DynamicBlock extends \Core\Model\Block
         $this->_redirector = $redirector;
     }
 
+    /**
+     * @return Zend_Controller_Action_Helper_Redirector
+     */
     public function getRedirector()
     {
         if (null == $this->_redirector) {
             $redirector = \Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-
-            // keep set exit false to allow testing
-            $redirector->setExit(false);
-
             $this->setRedirector($redirector);
         }
 
         return $this->_redirector;
     }
-
 }

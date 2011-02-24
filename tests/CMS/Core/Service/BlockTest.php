@@ -176,6 +176,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $block->shouldReceive('setRequest')->with($request);
         $block->shouldReceive('setServiceContainer')->with($sc);
         $block->shouldReceive('init');
+        $block->shouldReceive('run');
 
         $blockService = m::mock(new \Core\Service\Block($em), array(m::BLOCKS => array('initBlock')));
         $blockService->shouldReceive('getServiceContainer')->andReturn($sc);

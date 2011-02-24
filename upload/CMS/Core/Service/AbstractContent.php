@@ -25,10 +25,10 @@ abstract class AbstractContent extends AbstractModel
     protected function _update($data)
     {
         $content = parent::_update($data);
-        return $this->_setContentObjects($content, $data, false);
+        return $this->_setContentObjects($content, $data);
     }
 
-    protected function _setContentObjects(\Core\Model\Content $content, array $data, $throwErrors = true)
+    protected function _setContentObjects(\Core\Model\Content $content, array $data)
     {
         if (isset($data['author']['id']) && $data['author']['id'] != '') {
             $author = $this->getUserService()->getUser($data['author']['id']);
@@ -36,8 +36,14 @@ abstract class AbstractContent extends AbstractModel
             $content->setAuthorName($author->getFirstName() . ' ' . $author->getLastName());
         } elseif (isset($data['authorName']) && '' != $data['authorName']) {
             $content->setAuthorName($data['authorName']);
-        } elseif ($throwErrors) {
-            throw \Core\Exception\ValidationException::invalidData(\get_class($content), array('author' => array('required' => 'a valid author id or author name is required')));
+        }
+
+        if (isset($data['creationDate'])) {
+            $content->setCreationDate($data['creationDate']);
+        }
+
+        if (isset($data['modificationDate'])) {
+            $content->setModificationDate($data['modificationDate']);
         }
 
         if(isset($data['tags'])) {

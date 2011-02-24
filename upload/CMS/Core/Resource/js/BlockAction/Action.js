@@ -8,6 +8,7 @@ CMS.Use([], function (CMS) {
         name: null,
         color: '#cccccc',
         postback: null,
+        img: '',
 
         actionClass: 'action',
         domElement: null,
@@ -20,12 +21,15 @@ CMS.Use([], function (CMS) {
         getDomElement: function () {
             if (null == this.domElement) {
                 this.domElement = $('<li>').addClass(this.name).css('background-color', this.color);
+                if (this.img) {
+                    this.domElement.css('background-image', 'url('+this.img+')');
+                }
                 var link = $('<a>', {
                     title: this.caption,
                     css: {
                         display: 'block',
-                        height: 15,
-                        width: 15
+                        height: 25,
+                        width: 25
                     },
                     click: function (e) {
                         e.preventDefault();

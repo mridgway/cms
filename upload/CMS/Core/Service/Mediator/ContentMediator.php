@@ -22,6 +22,11 @@ class ContentMediator extends \Core\Service\AbstractMediator
      */
     protected $_userService;
 
+    /**
+     * @var \Asset\Service\Asset
+     */
+    protected $_assetService;
+
     public function init()
     {
         $self = $this;
@@ -46,7 +51,7 @@ class ContentMediator extends \Core\Service\AbstractMediator
                 'authorName' => array(),
                 'creationDate' => array(
                     'getMethod' => function ($instance) {
-                        return $instance->getCreationDate()->format('m-d-Y');
+                        return $instance->getCreationDate() ? $instance->getCreationDate()->format('m-d-Y') : null;
                     },
                     'filterMethod' => function ($instance, $value) {
                         try {
@@ -58,7 +63,7 @@ class ContentMediator extends \Core\Service\AbstractMediator
                 ),
                 'modificationDate' => array(
                     'getMethod' => function ($instance) {
-                        return $instance->getModificationDate()->format('m-d-Y');
+                        return $instance->getModificationDate() ? $instance->getModificationDate()->format('m-d-Y') : null;
                     },
                     'filterMethod' => function ($instance, $value) {
                         try {
@@ -121,5 +126,21 @@ class ContentMediator extends \Core\Service\AbstractMediator
     public function getTermService()
     {
         return $this->_termService;
+    }
+
+    /**
+     * @param \Asset\Service\Asset $assetService
+     */
+    public function setAssetService(\Asset\Service\Asset $assetService)
+    {
+        $this->_assetService = $assetService;
+    }
+
+    /**
+     * @return \Asset\Service\Asset
+     */
+    public function getAssetService()
+    {
+        return $this->_assetService;
     }
 }

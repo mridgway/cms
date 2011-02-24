@@ -29,8 +29,8 @@ class SizeTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test__constructor() {
-        $this->assertEquals(100, $this->size->height);
-        $this->assertEquals(200, $this->size->width);
+        $this->assertEquals(100, $this->size->width);
+        $this->assertEquals(200, $this->size->height);
     }
 
     public function testSetCrop() {

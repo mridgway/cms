@@ -7,9 +7,6 @@
             <call method="setBlockService">
                 <argument type="service" id="blockService" />
             </call>
-            <call method="setDefaultForm">
-                <argument>Core\Form\Page</argument>
-            </call>
             <call method="setRouteService">
                 <argument type="service" id="routeService" />
             </call>
@@ -76,6 +73,12 @@
             <argument type="service" id="doctrine" />
             <call method="setTermService">
                 <argument type="service" id="termService" />
+            </call>
+            <call method="setModuleRegistry">
+                <argument type="service" id="moduleRegistry" />
+            </call>
+            <call method="setServiceContainer">
+                <argument type="service" id="service_container" />
             </call>
         </service>
         <service id="locationService" class="Core\Service\Layout\Location">

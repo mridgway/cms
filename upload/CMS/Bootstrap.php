@@ -26,7 +26,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         sfServiceContainerAutoloader::register();
         $sc = new \sfServiceContainerBuilder();
         $this->serviceContainer = $sc;
-        
+
         $sc->setParameter('APPLICATION_ROOT', APPLICATION_ROOT);
 
         // this is the only way to get the service container to Core\Controller\Plugin\Predispatch
@@ -73,7 +73,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $evm = \Zend_Registry::get('doctrine')->getEventManager();
         $evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $metadataLoader);
     }
-    
+
     public function _initServiceManager()
     {
         \Core\Service\Manager::setEntityManager(\Zend_Registry::get('doctrine'));
@@ -84,7 +84,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $request = new \Core\Controller\Request\Http;
         \Zend_Controller_Front::getInstance()->setRequest($request);
     }
-    
+
     public function _initRouter ()
     {
         $front = \Zend_Controller_Front::getInstance();
@@ -113,7 +113,7 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
     public function getResourceOptions($resource)
     {
         $resourceOptions = $this->getOption('resources');
-        
+
         if (null !== $resourceOptions && isset($resourceOptions[$resource])) {
             return $resourceOptions[$resource];
         }
@@ -159,5 +159,49 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
 
         $cache->setNamespace('cms');
         return $cache;
+    }
+
+    protected function _initBlockCache()
+    {
+        $blockCacheConfig = $this->getOption('resources');
+        $blockCacheListener = new \Core\Cache\BlockCacheListener();
+
+        $frontendOptions = array(
+            'lifetime' => 60*15,
+            'automatic_serialization' => true
+        );
+
+        if(!$blockCacheConfig['blockCache']['isEnabled']) {
+            $frontendOptions['caching'] = false;
+        } else {
+            $this->serviceContainer
+                    ->getService('doctrine')
+                    ->getEventManager()
+                    ->addEventListener(array(\Doctrine\ORM\Events::onFlush), $blockCacheListener);
+        }
+
+        $backendOptions = array(
+            'cache_dir' => APPLICATION_ROOT . '/data/cache/',
+            'cache_file_umask' => 0777
+        );
+
+        $blockCache = \Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+
+        $this->serviceContainer->setService('blockCache', $blockCache);
+        $this->serviceContainer->setService('blockCacheListener', $blockCacheListener);
+    }
+
+    /**
+     * Load and set the app config
+     */
+    protected function _initAppConfig()
+    {
+        $environment = $this->getApplication()->getEnvironment();
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH . '/config.ini',
+            APPLICATION_ENV
+        );
+        Zend_Registry::set('config', $config);
+        $this->serviceContainer->setService('config', $config);
     }
 }

@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @category    Model
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
- *
+ * 
  * @Entity
  * @Table(name="content")
  * @InheritanceType("JOINED")
@@ -24,7 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property \Core\Model\Page $dependentPage
  * @property array $activities
  */
-abstract class Content
+abstract class Content 
     extends Model\AbstractModel
     implements \Zend_Acl_Resource_Interface
 {
@@ -56,7 +56,7 @@ abstract class Content
 
     /**
      * @var DateTime
-     * @Column(type="datetime")
+     * @Column(type="datetime", nullable=true)
      */
     protected $modificationDate;
 
@@ -71,15 +71,12 @@ abstract class Content
     protected $tags;
 
     /**
-     *
-     * @var Taxonomy\Model\Term
-     * @ManyToOne(targetEntity="Taxonomy\Model\Term")
-     * @JoinColumn(referencedColumnName="id", nullable = "false")
+     * @var boolean
+     * @Column(type="boolean")
      */
-    protected $status;
+    protected $isActive = true;
 
     /**
-     *
      * @var boolean
      * @Column(type="boolean")
      */
@@ -89,10 +86,10 @@ abstract class Content
      * The main page that this content shows up on. Example: blog article page. This is not
      * required, since many content types don't get their own page. This page relies on this content
      * and this content relies on this page. Deletions should probably be bidirectionally cascaded.
-     *
+     * 
      * @var Core\Model\AbstractPage
      * @ManyToOne(targetEntity="Core\Model\Page", cascade={"delete"})
-     * @JoinColumn(name="page_id", referencedColumnName="id", nullable="true")
+     * @JoinColumn(name="page_id", referencedColumnName="id", nullable="true", onDelete="CASCADE")
      */
     protected $dependentPage;
 
@@ -104,7 +101,6 @@ abstract class Content
     public function __construct()
     {
         $this->creationDate = new \DateTime;
-        $this->modificationDate = new \DateTime;
         $this->tags = new ArrayCollection();
         $this->dependentPage = null;
     }
@@ -119,6 +115,7 @@ abstract class Content
         $this->_setIfSet('authorName', $data);
         $this->_setIfSet('isActive', $data);
         $this->_setIfSet('isFeatured', $data);
+        $this->_setIfSet('creationDate', $data);
         $this->_setIfSet('modificationDate', $data);
     }
 
@@ -174,17 +171,20 @@ abstract class Content
 
     public function setTags($tags)
     {
-        $this->tags = $tags;
+        $this->tags->clear();
+        foreach($tags as $tag) {
+            $this->tags->add($tag);
+        }
     }
 
-    public function getStatus()
+    public function getIsActive()
     {
-        return $this->status;
+        return $this->isActive;
     }
 
-    public function setStatus($status)
+    public function setIsActive($isActive)
     {
-        $this->status = $status;
+        $this->isActive = $isActive;
     }
 
     public function getIsFeatured()
@@ -205,6 +205,15 @@ abstract class Content
     public function setActivities($activities)
     {
         $this->activities = $activities;
+    }
+
+    public function updateActivityLocations()
+    {
+        if ($this->getActivities()) {
+            foreach ($this->getActivities() AS $activity) {
+                $activity->updateLocation();
+            }
+        }
     }
 
     /**
@@ -247,6 +256,10 @@ abstract class Content
 
     public function canView($role)
     {
+        // Hide pages that have inactive content
+        if (!$this->getIsActive() && !$this->canEdit($role)) {
+            return false;
+        }
         return \Zend_Registry::get('acl')->isAllowed($role, $this, 'view');
     }
 

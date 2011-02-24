@@ -12,7 +12,7 @@ use Core\Exception\FormException;
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  */
-class Page extends \Core\Service\AbstractService
+class Page extends \Core\Service\AbstractModel
 {
     /**
      * @var Core\Service\Block
@@ -24,14 +24,137 @@ class Page extends \Core\Service\AbstractService
      */
     protected $_routeService;
 
-    /**
-     * @var Core\Form\Page
-     */
-    protected $_defaultForm;
+    public function retrieve($id)
+    {
+        return $this->_retrieve($id);
+    }
+
+    // NOTE!  This is not implemented with the same interface as expected.  Layout, PageRoute, and Route models need refactored to have toArray() functions first.
+    public function retrieveAsArray($id)
+    {
+        $page = $this->retrieve($id);
+
+        $array =  $page->toArray();
+        $array['layout']['sysname'] = $page->getLayout()->getSysname();
+        $array['pageRoute']['route']['template'] = $page->getPageRoute()->getRoute()->getTemplate();
+        $array['pageRoute']['route']['id'] = $page->getPageRoute()->getRoute()->getId();
+        $array['pageRoute']['params']['page_route_id'] = $page->getPageRoute()->getId();
+
+        foreach($page->getPageRoute()->getParams() as $key => $value) {
+            $array['pageRoute']['params'][$key] = $value;
+        }
+
+        return $array;
+    }
+
+    public function getForm($id = null)
+    {
+        if($id) {
+            $page = $this->retrieve($id);
+            if($page->getPageRoute()->getRoute()->getSysname()) {
+                $form = new \Core\Form\PageWithParams();
+                $form->addRouteSubForm($page->getPageRoute());
+                return $form;
+            }
+        }
+
+        return new \Core\Form\PageWithTemplate();
+    }
+
+    public function create($data)
+    {
+        $this->getEntityManager()->beginTransaction();
+
+        try {
+            $model = $this->_create($data);
+            $this->getEntityManager()->persist($model);
+
+            $this->setObjects($model, $data);
+
+            $this->getEntityManager()->flush();
+            $this->getEntityManager()->commit();
+        } catch (\Exception $e) {
+            $this->getEntityManager()->rollback();
+            throw $e;
+        }
+
+        return $model;
+    }
+
+    public function setObjects($model, $data)
+    {
+        if(isset($data['pageRoute']['route']['template']) && '' != $data['pageRoute']['route']['template']) {
+            if($model->getPageRoute()) {
+                if($data['pageRoute']['route']['template'] != $model->getPageRoute()->getRoute()->getTemplate()) {
+                    $this->removeRoute($model);
+                    $this->createRoute($model, $data['pageRoute']['route']['template']);
+                }
+            } else {
+                $this->createRoute($model, $data['pageRoute']['route']['template']);
+            }
+        } elseif (!isset($data['pageRotue']['route']['template']) && !$model->getPageRoute()) {
+            throw \Core\Exception\ValidationException::invalidData('Core\Model\Route', array('pageRoute[route][template]' => array('required' => 'a template is required.')));
+        }
+
+        if(isset($data['pageRoute']['params'])) {
+            unset($data['pageRoute']['params']['page_route_id']);
+            $pageRouteByParams = $this->_em->getRepository('Core\Model\PageRoute')->findOneBy(array('params' => \serialize($data['pageRoute']['params']), 'route' => $model->getPageRoute()->getRoute()->getId()));
+            if(!$pageRouteByParams || ($pageRouteByParams && $pageRouteByParams->getId() == $model->getPageRoute()->getId())) {
+                $model->getPageRoute()->setParams($data['pageRoute']['params']);
+            } else {
+                throw \Core\Exception\ValidationException::invalidData('Core\Model\PageRoute', array('pageRoute[route][params]' => array('notUnique' => 'the parameters conflict with an existing page route.')));
+            }
+        }
+
+        if(isset($data['layout']['sysname']) && '' != $data['layout']['sysname']) {
+            $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname($data['layout']['sysname']);
+            $model->setLayout($layout);
+        } else {
+            throw \Core\Exception\ValidationException::invalidData('Core\Model\Layout', array('layout[sysname]' => array('required' => 'a layout sysname is required.')));
+        }
+    }
+
+    private function removeRoute($model)
+    {
+        $this->_em->remove($model->getPageRoute());
+        $this->_em->remove($model->getPageRoute()->getRoute());
+    }
+
+    private function createRoute($model, $template)
+    {
+        $route = $this->getRouteService()->create($template);
+        $this->_em->persist($route);
+        $pageRoute = new \Core\Model\PageRoute($route, $model);
+        $this->_em->persist($pageRoute);
+        $model->setPageRoute($pageRoute);
+    }
+
+    public function updatePage($data)
+    {
+        $this->getEntityManager()->beginTransaction();
+
+        try {
+
+            $model = $this->retrieve($data['id']);
+
+            $model = $this->_update($data);
+
+            $this->setObjects($model, $data);
+
+            $this->getEntityManager()->flush();
+            $this->getEntityManager()->commit();
+        } catch (\Exception $e) {
+            $this->getEntityManager()->rollback();
+            $this->getEntityManager()->close();
+            throw $e;
+        }
+
+        return $model;
+    }
 
     /**
      * Gets a page.
-     * 
+     *
      * @param integer $id
      * @return \Core\Model\Page
      */
@@ -60,7 +183,7 @@ class Page extends \Core\Service\AbstractService
     public function getPageIfAllowed($id, $actionType)
     {
         $page = $this->getPage($id);
-        
+
         $this->isAllowed($page, $actionType);
 
         return $page;
@@ -76,7 +199,7 @@ class Page extends \Core\Service\AbstractService
     public function isAllowed($page, $actionType)
     {
         if(!$this->getAuth()->getIdentity()->isAllowed($page, $actionType)) {
-            throw new \Exception('Not allowed to ' . $actionType . ' page.');
+            throw new \Core\Exception\PermissionException('Not allowed to ' . $actionType . ' page.');
         }
 
         return true;
@@ -185,7 +308,7 @@ class Page extends \Core\Service\AbstractService
 
     /**
      * Gets all config values or content type properties for all blocks on a page.
-     * 
+     *
      * @param \Core\Model\AbstractPage $page
      * @return array
      */
@@ -201,7 +324,7 @@ class Page extends \Core\Service\AbstractService
 
     /**
      * Adds a page to the system.
-     * 
+     *
      * @param array $data
      * @return boolean
      */
@@ -288,6 +411,10 @@ class Page extends \Core\Service\AbstractService
      */
     public function deletePage($page)
     {
+        if (!$page->canDelete($this->getAuth()->getIdentity())) {
+            throw \Core\Exception\PermissionException::denied();
+        }
+
         $route = $page->getPageRoute()->getRoute();
 
         if(!$route->getSysname())
@@ -304,14 +431,13 @@ class Page extends \Core\Service\AbstractService
             }
             $this->_em->remove($content);
         }
-
         $this->_em->remove($page);
         $this->_em->flush();
     }
 
     /**
      * Adds a block to a page.
-     * 
+     *
      * @param \Core\Model\Page $page
      * @param \Core\Model\Block $block
      * @param \Core\Model\Layout\Location $location
@@ -356,25 +482,8 @@ class Page extends \Core\Service\AbstractService
         $this->_routeService = $routeService;
     }
 
-    public function setDefaultForm($form)
+    public function getRouteService()
     {
-        if(\is_string($form))
-        {
-            $this->_defaultForm = new $form();
-        }
-        else
-        {
-            $this->_defaultForm = $form;
-        }
-    }
-
-    public function getDefaultForm()
-    {
-        if(null == $this->_defaultForm)
-        {
-            throw new \Exception(get_class($this) . ' does not have a default form set.  Make sure to inject a default form after initialization.');
-        }
-
-        return $this->_defaultForm;
+        return $this->_routeService;
     }
 }

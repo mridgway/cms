@@ -20,7 +20,7 @@
 
     $.fn.formTag = function(){
         $(this).wrap($('<div>', {
-            class: 'taxonomy-formtag-container'
+            'class': 'taxonomy-formtag-container'
         }));
         $(this).data('name', $(this).attr('name'));
         $(this).removeAttr('name');

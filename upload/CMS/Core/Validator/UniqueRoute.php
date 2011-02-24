@@ -66,15 +66,26 @@ class UniqueRoute extends \Zend_Validate_Abstract
         $valueString = (string)$value;
         $this->_setValue($valueString);
 
-        $routeService = new \Core\Service\Route(\Zend_Registry::get('doctrine'));
-        if ($this->_duplicate = $routeService->getDuplicateFor($this->_value)) {
+        $sc = \Zend_Registry::get('serviceContainer');
+        $routeService = $sc->getService('routeService');
+
+        // is the route unchanged?
+        if('' != $context['id']) {
+            $route = $routeService->retrieve($context['id']);
+            if($value == $route->getTemplate()) {
+                return true;
+            }
+        }
+
+        // is the route unique?
+        if ($this->_duplicate = $routeService->findOneByTemplate($this->_value)) {
             if ($this->getIgnoreField()
                 && isset($context[$this->getIgnoreField()])
                 && $context[$this->getIgnoreField()] == $this->_duplicate->id) {
                 return true;
             }
             $this->_conflict = $this->_duplicate->template;
-            $this->_error();
+            $this->_error(self::NOT_UNIQUE);
             return false;
         }
         return true;

@@ -37,6 +37,11 @@ class BlockInfo extends \Core\Model\Frontend
             $frontendBlock->actions = $this->_getBlockActions($block);
             $frontendBlock->location = $block->getLocation()->getSysname();
             $frontendBlock->weight = $block->getWeight();
+            if ($blockType = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getBlockTypeForBlock($block)) {
+                $frontendBlock->title = $blockType->getTitle();
+            } else {
+                $frontendBlock->title = '';
+            }
         }
         $this->data[] = $frontendBlock;
 

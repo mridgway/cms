@@ -69,4 +69,11 @@ class View extends \Zend_View
 
         return $file;
     }
+
+    public static function renderScript ($module, $path, $data = array())
+    {
+        $view = new self($module, $path);
+        $view->assign($data);
+        return $view->render();
+    }
 }

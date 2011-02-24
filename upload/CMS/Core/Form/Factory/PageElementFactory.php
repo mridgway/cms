@@ -23,8 +23,6 @@ class PageElementFactory
     {
         $title = new \Core\Form\Element\Text('title');
         $title->setLabel('Title:');
-        $title->setRequired();
-        $title->setAllowEmpty(false);
         $title->addValidator(new \Zend_Validate_StringLength(0, 255));
 
         return $title;

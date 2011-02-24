@@ -4,6 +4,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         caption: 'Move',
         name: 'block-move',
         color: '#878787',
+        img: '/resources/core/img/block-button-move.png',
 
         init: function (data) {
             this._super(data);

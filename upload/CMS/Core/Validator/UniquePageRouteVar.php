@@ -71,8 +71,9 @@ class UniquePageRouteVar extends \Zend_Validate_Abstract
             }
         }
 
-        $route = $this->_em->getRepository('Core\Model\Route')->findBySysname($this->_routeSysname);
-        $pageRoutesWithVar = $this->_em->getRepository('Core\Model\PageRoute')->getPageIdForRoute($route->getId(), array($this->_varName => $value));
+        $route = $this->_em->getRepository('Core\Model\Route')->findOneBySysname($this->_routeSysname);
+        $serializedParams = serialize(array($this->_varName => $value));
+        $pageRoutesWithVar = $this->_em->getRepository('Core\Model\PageRoute')->getPageIdForRoute($route->getId(), $serializedParams);
         if (count($pageRoutesWithVar) > 0) {
             $isValid = false;
             $this->_error(self::UNIQUE);

@@ -1,0 +1,34 @@
+<?php
+$results = $this->results;
+?>
+
+<?php if($results): ?>
+<h1>Shared Blocks</h1>
+<div id="answer_askapro">
+    <ul class="askapro_list">
+<?php foreach($results as $text): ?>
+        <li>
+            <a class="button answerButton" href="<?php echo $this->url(array('id' => $text->getId()), 'edit-text'); ?>">Edit</a>
+            <a class="question" href=""><?php echo $text->getTitle(); ?></a>
+            <div class="extended_question">
+                <?php echo $text->getContent(); ?>
+            </div>
+        </li>
+<?php endforeach; ?>
+    </ul>
+</div>
+<?php else: ?>
+<p>There is no shared text content.</p>
+<?php endif; ?>
+
+<script type="text/javascript" charset="utf-8">
+$('.question').each(function () {
+    var extendedQuestion = $(this).siblings('.extended_question');
+    extendedQuestion.hide();
+
+    $(this).click(function () {
+        extendedQuestion.slideToggle(400);
+        return false;
+    });
+});
+</script>

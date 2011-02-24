@@ -23,7 +23,7 @@ CMS.Use(['Core/CMS.Block'], function (CMS) {
         },
 
         _setupSortable: function () {
-            var wrap = $('<div>', {class: 'locationInnerWrap'});
+            var wrap = $('<div>', {'class': 'locationInnerWrap'});
             var children = this.domElement.children();
             children.find('script').remove();  // prevent javascript from executing again...
             if (children.length) {

@@ -16,6 +16,9 @@ class FormException extends \Exception
         return $exception;
     }
 
+    /**
+     * @return Zend_Form
+     */
     public function getForm()
     {
         return $this->_form;

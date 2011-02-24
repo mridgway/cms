@@ -28,4 +28,9 @@ class TestAbstractModel extends \Core\Service\AbstractModel
     {
         return parent::_update($data);
     }
+
+    public function _getValidatorValues($data)
+    {
+        return parent::_getValidatorValues($data);
+    }
 }

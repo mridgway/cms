@@ -4,6 +4,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         caption: 'Edit',
         name: 'block-edit',
         color: '#0865c1',
+        img: '/resources/core/img/block-button-edit.png',
 
         prevHtml: null,
         editors: [],
@@ -44,17 +45,15 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var self = this;
             // hook submit
             form.submit(function (e) {
+                $(this).trigger('preSubmit');
                 self.submitForm($(this).serialize());
                 return false;
             });
             // add cancel link
             var cancelLink = $('<a>', {
-                click: function () {
-                    self.cancelForm();
-                    return false;
-                },
                 text: 'Cancel',
-                href: '#'
+                href: document.URL,
+                'class': 'editCancel'
             });
             form.append(cancelLink);
         },
@@ -72,7 +71,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                     var block = self.domElement.parent().siblings('.block:first');
                     self.destroyEditors();
                     block.html(html);
-                    block.find('.ckeditor').ckeditor(function() {
+                    block.find('.wysiwyg').ckeditor(function() {
                         self.editors.push(this);
                     }, CMS.ckeditor.getConfig());
                 }
@@ -89,7 +88,11 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
             var block = self.domElement.parent().siblings('.block:first');
             block.hide(500, function () {
                 $(this).html(html);
-                $(this).find('.ckeditor').ckeditor(function() {
+                $('.editCancel').click(function () {
+                    self.cancelForm();
+                    return false;
+                });
+                $(this).find('.wysiwyg').ckeditor(function() {
                     self.editors.push(this);
                 }, CMS.ckeditor.getConfig());
                 $(this).show(500, function() {

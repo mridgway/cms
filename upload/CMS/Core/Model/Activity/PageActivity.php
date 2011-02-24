@@ -12,18 +12,12 @@ namespace Core\Model\Activity;
  *
  * @Entity
  */
-
 class PageActivity extends \Core\Model\AbstractActivity
 {
     /**
-     * @OneToOne(targetEntity="Core\Model\Page")
+     * @ManyToOne(targetEntity="Core\Model\Page")
      */
     protected $page;
-
-    /**
-     * @OneToOne(targetEntity="User\Model\User")
-     */
-    protected $user;
 
     public function __construct(\Core\Model\Page $page, \User\Model\User $user)
     {

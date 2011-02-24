@@ -28,7 +28,7 @@ class Value extends \Core\Model\AbstractModel
      *
      * @var Block
      * @ManyToOne(targetEntity="Core\Model\Block")
-     * @JoinColumn(name="block_id", referencedColumnName="id", nullable="false")
+     * @JoinColumn(name="block_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     protected $block;
 
@@ -47,7 +47,7 @@ class Value extends \Core\Model\AbstractModel
     /**
      *
      * @ManyToOne(targetEntity="Core\Model\Block")
-     * @JoinColumn(name="inherit_id", referencedColumnName="id", nullable="true")
+     * @JoinColumn(name="inherit_id", referencedColumnName="id", nullable="true", onDelete="SET NULL")
      */
     protected $inheritsFrom;
 

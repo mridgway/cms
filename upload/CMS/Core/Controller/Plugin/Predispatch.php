@@ -32,14 +32,14 @@ class Predispatch extends \Zend_Controller_Plugin_Abstract
     {
         if (!$request->isDirect() && $request->getRouteId()) {
             $routeRepository = \Zend_Registry::get('doctrine')->getRepository('Core\Model\PageRoute');
-                $pageId = $routeRepository->getPageIdForRoute($request->getRouteId(), $request->getSerializedParams());
+            $pageId = $routeRepository->getPageIdForRoute($request->getRouteId(), $request->getSerializedParams());
             if (null === $pageId) {
-                throw new \Exception('Page does not exist.');
+                throw new \Core\Exception\NotFoundException('Page does not exist.');
             }
 
-            $request->setParam('id', $pageId);
+            $request->setParam('current_page_id', $pageId);
 
-            if ($request->isPost() && !is_null($route = $request->getParam('block_id'))) {
+            if ($request->isPost() && ($route = $request->getParam('block_id'))) {
                 $this->_dispatchFormAction($route, $request);
             }
         }

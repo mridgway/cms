@@ -60,4 +60,22 @@ class Local extends \User\Model\Identity
         $this->passHash = $passHash;
         return $this;
     }
+
+    public function fromArray(array $data)
+    {
+        parent::fromArray($data);
+        $this->_setIfSet('password', $data);
+    }
+
+    public static function createFromArray(array $data)
+    {
+        if (!\array_key_exists('identifier', $data)
+                || !\array_key_exists('password', $data)
+                || !\array_key_exists('user', $data)) {
+            throw new \Core\Exception\ValidationException('Not enough data provided');
+        }
+
+        $identity = new Local($data['identifier'], $data['password'], $data['user']);
+        return $identity;
+    }
 }

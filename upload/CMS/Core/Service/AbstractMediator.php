@@ -14,7 +14,7 @@ class AbstractMediator extends \ZendX\Doctrine2\FormMediator
     /**
      * @var Doctrine\ORM\EntityManager
      */
-    protected $em;
+    protected $em = null;
 
     /**
      * @var Core\Auth\Auth

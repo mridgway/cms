@@ -110,6 +110,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 	-moz-border-radius:5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
+    border: #e7e7e7 1px solid;
 	background-image: url(images/sprites.png);
 	_background-image: url(images/sprites_ie6.png);
 	background-repeat: repeat-x;

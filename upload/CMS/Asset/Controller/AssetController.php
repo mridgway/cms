@@ -24,14 +24,14 @@ class AssetController extends \Zend_Controller_Action
         $id = $this->getRequest()->getParam('id', null);
         $group = $this->getRequest()->getParam('group', null);
         $sysname = $this->getRequest()->getParam('hash', null);
-        
+
         if (null !== $id) {
             $this->_asset = $this->_em->getRepository('Asset\Model\Asset')->find($id);
         } else if (null !== $group && null !== $sysname) {
             $this->_asset = $this->_em->getRepository('Asset\Model\Asset')
                                      ->getAssetByGroupNameAndHash($group, $sysname);
         }
-        
+
         if (!$this->_asset) {
             throw new \Exception('Asset not found.'); // 404
         }
@@ -47,7 +47,7 @@ class AssetController extends \Zend_Controller_Action
         $fileName = $this->getRequest()->getParam('file_name', 'original.png');
         $fileNameParts = explode('.', $fileName);
         $sizeName = $fileNameParts[0];
-        
+
         if($fileNameParts[1] != $this->_asset->getExtension()->getSysname()) {
             throw new \Exception('Unknown extension.'); // 404
         }
@@ -75,7 +75,7 @@ class AssetController extends \Zend_Controller_Action
             $width = $size->getWidth();
             if ($size->getCrop()) {
                 $image->cropThumbnailImage($width, $height);
-                //$image = $this->_cropImage($image, $size->height, $size->width);
+                //$image = $this->_cropImage($image, $height, $width);
             } else {
                 // resize image to correct dimensions
                 $image->resizeImage($width, $height, \Imagick::FILTER_CATROM, 1.0, true);
@@ -103,12 +103,12 @@ class AssetController extends \Zend_Controller_Action
      * @param int $minWidth
      * @return Imagick
      */
-    protected function _cropImage(Imagick $image, $minHeight, $minWidth)
+    protected function _cropImage(\Imagick $image, $minHeight, $minWidth)
     {
         $width = $image->getImageWidth();
         $height = $image->getImageHeight();
 
-        $vertical = ($height > $width) ? true : false;
+        $vertical = $height > $width;
         $resizeScale = ($vertical) ? $minWidth / $width : $minHeight / $height;
 
         // disables scaling up

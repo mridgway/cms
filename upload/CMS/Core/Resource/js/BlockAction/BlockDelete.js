@@ -4,6 +4,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         caption: 'Delete',
         name: 'block-delete',
         color: '#cc1e4b',
+        img: '/resources/core/img/block-button-delete.png',
 
         init: function (data) {
             this._super(data);

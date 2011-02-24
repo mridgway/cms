@@ -31,7 +31,7 @@ class Form extends \Core\Model\Block\DynamicBlock
      */
     public function success($location = null)
     {
-        if ($this->_request->isXmlHttpRequest()) {
+        if ($this->getRequest()->isXmlHttpRequest()) {
             $this->init();
             die($this->render());
         }
@@ -76,6 +76,13 @@ class Form extends \Core\Model\Block\DynamicBlock
         $blockId = new \Core\Form\Element\Hidden('block_id');
         $blockId->setValue($this->id);
         $this->_form->addElement($blockId);
+//        UNTESTED CSRF ATTACK MITIGATION
+//        if ($this->getService('auth')->hasIdentity()) {
+//            $salt = $this->getService('auth')->getIdentity()->getId();
+//            $nonce = new \Zend_Form_Element_Hash('nonce', array(
+//                'salt' => $salt
+//            ));
+//        }
     }
 
     /**

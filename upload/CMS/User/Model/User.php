@@ -38,13 +38,13 @@ class User extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
 
     /**
      * @var string
-     * @Column(type="string", name="first_name", nullable="false", length="100")
+     * @Column(type="string", nullable="false", length="100")
      */
     protected $firstName;
 
     /**
      * @var string
-     * @Column(type="string", name="last_name", nullable="false", length="100")
+     * @Column(type="string", nullable="false", length="100")
      */
     protected $lastName;
 

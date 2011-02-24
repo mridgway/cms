@@ -14,7 +14,7 @@ namespace Core\Model;
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
  */
-class AbstractActivity extends AbstractModel
+abstract class AbstractActivity extends AbstractModel
 {
     /**
      * @Id @Column(type="integer")
@@ -27,9 +27,19 @@ class AbstractActivity extends AbstractModel
      */
     protected $dateCreated;
 
+    /**
+     * @ManyToOne(targetEntity="User\Model\User")
+     */
+    protected $user;
+
     public function __construct()
     {
         $this->dateCreated = new \DateTime();
+    }
+
+    public function setLocation(\Geocode\Model\GeoLocation\Local $location = null)
+    {
+        $this->location = $location;
     }
 
     public function getModuleName()

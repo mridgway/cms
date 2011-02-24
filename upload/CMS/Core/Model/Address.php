@@ -22,31 +22,31 @@ class Address extends \Core\Model\AbstractModel
     protected $id;
 
     /**
-     * @Column(type="string", length="255")
+     * @Column(type="string", length="255", nullable=true)
      * @var string
      */
     protected $addressLine1;
 
     /**
-     * @Column(type="string", length="255", nullable="TRUE")
+     * @Column(type="string", length="255", nullable=true)
      * @var string
      */
     protected $addressLine2;
 
     /**
-     * @Column(type="string", length="150")
+     * @Column(type="string", length="150", nullable=true)
      * @var string
      */
     protected $city;
 
     /**
-     * @Column(type="string", length="63")
+     * @Column(type="string", length="63", nullable=true)
      * @var string
      */
     protected $state;
 
     /**
-     * @Column(type="string", length="7")
+     * @Column(type="string", length="7", nullable=true)
      * @var string
      */
     protected $zip;

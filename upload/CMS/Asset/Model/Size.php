@@ -66,11 +66,11 @@ class Size extends \Core\Model\AbstractModel
     protected $crop;
 
     /**
-     * @param int $height
      * @param int $width
+     * @param int $height
      * @param bool $crop
      */
-        public function __construct($height, $width, $crop = false)
+        public function __construct($width, $height, $crop = false)
     {
         $this->setHeight($height);
         $this->setWidth($width);

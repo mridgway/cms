@@ -30,7 +30,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
         },
 
         _initDomElement: function () {
-            var addBlockMenu = $('<dl>', {class: 'addBlockMenu'});
+            var addBlockMenu = $('<dl>', {'class': 'addBlockMenu'});
             addBlockMenu.append($('<dt>', {
                 html: $('<a>', {
                     text: this.caption,
@@ -87,7 +87,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
                     self.alterForm(form, sendData);
 
                     html.hide().insertBefore(self.domElement);
-                    html.find('.ckeditor').ckeditor(function() {
+                    html.find('.wysiwyg').ckeditor(function() {
                             self.editors.push(this);
                         }, CMS.ckeditor.getConfig());
                     html.show(500);
@@ -188,7 +188,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
                     self.destroyEditors();
                     $('#block-new-wrapper').replaceWith(html);
-                    html.find('.ckeditor').ckeditor(function() {
+                    html.find('.wysiwyg').ckeditor(function() {
                         self.editors.push(this);
                     }, CMS.ckeditor.getConfig());
                 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset>
+<?php foreach ($this->pages AS $page) : ?>
+    <url>
+        <loc><?php echo str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $this->serverUrl() . $page->getUrl()); ?></loc>
+    </url>
+<?php endforeach; ?>
+</urlset>

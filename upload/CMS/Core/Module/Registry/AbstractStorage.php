@@ -17,9 +17,9 @@ abstract class AbstractStorage
 
     abstract public function load();
 
-    public function getModules()
+    public function getModules($reload = false)
     {
-        if (null == $this->_modules) {
+        if (null == $this->_modules || $reload) {
             foreach($this->load() AS $module) {
                 $this->_modules[$module->sysname] = $module;
             }
@@ -33,12 +33,35 @@ abstract class AbstractStorage
      */
     public function getModule($name)
     {
-        return $this->_modules[$name];
+        $modules = $this->getModules();
+
+        if (!\array_key_exists($name, $modules)) {
+            $modules = $this->getModules(true);
+        }
+
+        return $modules[$name];
     }
 
+    public function getBlockTypeForBlock(\Core\Model\Block $block)
+    {
+        if ($blockType = $this->getBlockTypeByClass(get_class($block))) {
+            return $blockType;
+        }
+        foreach (class_parents($block) AS $className) {
+            if ($blockType = $this->getBlockTypeByClass($className)) {
+                return $blockType;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param string $name
+     * @return Core\Model\Module\BlockType
+     */
     public function getBlockType($name)
     {
-        foreach ($this->_modules AS $module) {
+        foreach ($this->getModules() AS $module) {
             foreach ($module->blockTypes AS $blockType) {
                 if ($blockType->sysname == $name) {
                     return $blockType;
@@ -48,9 +71,13 @@ abstract class AbstractStorage
         return null;
     }
 
+    /**
+     * @param string $class
+     * @return Core\Model\Module\BlockType
+     */
     public function getBlockTypeByClass($class)
     {
-        foreach ($this->_modules AS $module) {
+        foreach ($this->getModules() AS $module) {
             foreach ($module->blockTypes AS $blockType) {
                 if ($blockType->class == $class) {
                     return $blockType;
@@ -60,9 +87,13 @@ abstract class AbstractStorage
         return null;
     }
 
+    /**
+     * @param string $name
+     * @return Core\Model\Module\ContentType
+     */
     public function getContentType($name)
     {
-        foreach ($this->_modules AS $module) {
+        foreach ($this->getModules() AS $module) {
             foreach ($module->contentTypes AS $contentType) {
                 if ($contentType->sysname == $name) {
                     return $contentType;
@@ -72,9 +103,13 @@ abstract class AbstractStorage
         return null;
     }
 
+    /**
+     * @param string $class
+     * @return Core\Model\Module\ContentType
+     */
     public function getContentTypeByClass($class)
     {
-        foreach ($this->_modules AS $module) {
+        foreach ($this->getModules() AS $module) {
             foreach ($module->contentTypes AS $contentType) {
                 if ($contentType->class == $class) {
                     return $contentType;
@@ -86,7 +121,7 @@ abstract class AbstractStorage
 
     public function getActivityType($name)
     {
-        foreach ($this->_modules AS $module) {
+        foreach ($this->getModules() AS $module) {
             foreach ($module->activityTypes AS $activityType) {
                 if ($activityType->sysname == $name) {
                     return $activityType;
@@ -98,7 +133,7 @@ abstract class AbstractStorage
 
     public function getActivityTypeByClass($class)
     {
-        foreach ($this->_modules AS $module) {
+        foreach ($this->getModules() AS $module) {
             foreach ($module->activityTypes AS $activityType) {
                 if ($activityType->class == $class) {
                     return $activityType;
@@ -106,5 +141,10 @@ abstract class AbstractStorage
             }
         }
         return null;
+    }
+
+    public function reset()
+    {
+        $this->_modules = null;
     }
 }

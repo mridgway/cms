@@ -18,7 +18,7 @@ abstract class AbstractModel extends AbstractService
 
     protected function _create($data)
     {
-        $values = $this->_getValidatorValues($data);
+        $values = $this->_getValidatorValues($data);  
 
         $class = $this->getClassName();
         $object = new $class();
@@ -40,6 +40,22 @@ abstract class AbstractModel extends AbstractService
 
         return $object;
     }
+    
+    protected function _mergeByKeyRecursive($array1, $array2)
+    {
+        foreach ($array1 AS $key1 => $val1) {
+            if (!array_key_exists($key1, $array2)) {
+                continue;
+            }
+
+            if (is_array($array1[$key1]) && is_array($array2[$key1])) {
+                $array1[$key1] = $this->_mergeByKeyRecursive($array1[$key1], $array2[$key1]);
+            } else {
+                $array1[$key1] = $array2[$key1];
+            }
+        }
+        return $array1;
+    }
 
     protected function _getValidatorValues($data)
     {
@@ -50,7 +66,7 @@ abstract class AbstractModel extends AbstractService
             throw \Core\Exception\ValidationException::invalidData($this->getClassName(), $validation->getMessages());
         }
 
-        return $validation->getValues();
+        return $this->_mergeByKeyRecursive($data, $validation->getValues());
     }
 
     protected function _retrieve($id)
@@ -76,6 +92,7 @@ abstract class AbstractModel extends AbstractService
         if(\is_null($this->_className)) {
             $this->setClassName($this->_getDefaultClassName());
         }
+
         return $this->_className;
     }
 

@@ -20,4 +20,27 @@ class OpenID extends \User\Model\Identity
      * @Column(type="string", length="100", nullable="false")
      */
     protected $provider;
+
+    public function toArray($includes = array())
+    {
+        $data = parent::toArray($includes);
+        $data['provider'] = $this->getProvider();
+
+        return $data;
+    }
+
+    public function fromArray(array $data)
+    {
+        parent::fromArray($data);
+        $this->_setIfSet('provider', $data);
+    }
+
+    public static function createFromArray(array $data)
+    {
+        $identity = new self($data['identifier'], $data['user']);
+        unset($data['identifier']);
+        unset($data['user']);
+        $identity->fromArray($data);
+        return $identity;
+    }
 }

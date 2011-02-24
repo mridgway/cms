@@ -37,12 +37,18 @@ abstract class AbstractInstallController extends \ZendX\Application53\Controller
      * @var \Doctrine\ORM\EntityManager
      */
     protected $_em;
+    
+    /**
+     * @var sfServiceContainer
+     */
+    protected $_sc;
 
     public function init()
     {
         $sc = $this->getInvokeArg('bootstrap')->serviceContainer;
         $this->_em = $sc->getService('doctrine');
         $this->moduleRegistry = $sc->getService('moduleRegistry');
+        $this->_sc = $this->getInvokeArg('bootstrap')->serviceContainer;
     }
 
     public function indexAction()
@@ -88,7 +94,7 @@ abstract class AbstractInstallController extends \ZendX\Application53\Controller
             if (is_dir($resourceViewsDirectory)) {
                 $iterator = new \DirectoryIterator($resourceViewsDirectory);
                 foreach ($iterator AS $fileinfo) {
-                    if (!$fileinfo->isDot() && !$fileinfo->isDir()) {
+                    if (!$fileinfo->isDot() && !$fileinfo->isDir() && substr($fileinfo->getFilename(), 0, 1) != '_') {
                         $fileParts = explode('.', $fileinfo->getFilename());
                         $sysname = $fileParts[0];
                         $this->_em->persist($resource->createView($sysname));

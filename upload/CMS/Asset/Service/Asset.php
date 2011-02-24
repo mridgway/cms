@@ -62,12 +62,12 @@ class Asset
 
     /**
      * Moves an asset to a different group.
-     * 
+     *
      * @param string $url
      * @param string $groupName
      * @return \Asset\Model\Asset
      */
-    public function getWithUrlAndMove($url, $groupName)
+    public function getWithUrlAndMove($url, $newGroupName)
     {
         $asset = null;
 
@@ -79,7 +79,7 @@ class Asset
             $hash = $parts[4];
             $asset = $em->getRepository('Asset\Model\Asset')
                     ->getAssetByGroupNameAndHash($groupName, $hash);
-            $this->changeGroup($asset, $groupName);
+            $this->changeGroup($asset, $newGroupName);
         }
 
         return $asset;
@@ -92,7 +92,7 @@ class Asset
      * @param \Asset\Model\Asset $asset
      * @param \Asset\Model\Group $group
      */
-    public function changeGroup($asset, $group)
+    public function changeGroup(&$asset, $group)
     {
         if (!$asset instanceof \Asset\Model\Asset) {
             $asset = $this->getEntityManager()
@@ -101,18 +101,43 @@ class Asset
         }
 
         if (!$group instanceof \Asset\Model\Group) {
-            $group = $this->getEntityManager()
-                    ->getRepository('Asset\Model\Group')
-                    ->find($group);
+            $groupRepo = $this->getEntityManager()->getRepository('Asset\Model\Group');
+            if (is_int($group)) {
+                $group = $groupRepo->find($group);
+            } else {
+                $group = $groupRepo->findOneBySysname($group);
+            }
+            if (!$group instanceof \Asset\Model\Group) {
+                throw new \Exception('Asset group is invalid.');
+            }
         }
 
         if ($asset->getGroup() != $group) {
-            $oldFile = $asset->getLocation();
-            $asset->setGroup($group);
-            if (!file_exists($asset->getLocation())) {
-                \mkdir($asset->getFolder(), 0777, true);
-                if (!\copy($oldFile, $asset->getLocation())) {
-                    throw \Exception('Copy failed');
+            try {
+                // Check for existing image in that group, if exists return that
+                $existingAsset = $this->getEntityManager()->getRepository('Asset\Model\Asset')
+                    ->getAssetByGroupNameAndHash($group->getSysname(), $asset->getSysname());
+                $this->getEntityManager()->remove($asset);
+                $asset = $existingAsset;
+            } catch (\Doctrine\ORM\NoResultException $e) {
+                if ('tmp' != $asset->getGroup()->getSysname()) {
+                    // Copy instead of move
+                    $newAsset = new \Asset\Model\Asset($asset->getSysname(), $asset->getName(), $asset->getExtension(), $group, $asset->getMimeType());
+                    $newAsset->setCaption($asset->getCaption());
+                    $this->getEntityManager()->persist($newAsset);
+                    $oldFile = $asset->getLocation();
+                    $asset = $newAsset;
+                } else {
+                    $oldFile = $asset->getLocation();
+                    $asset->setGroup($group);
+                }
+                if (!file_exists($asset->getLocation())) {
+                    if (!file_exists($asset->getFolder())) {
+                        \mkdir($asset->getFolder(), 0777, true);
+                    }
+                    if (!\copy($oldFile, $asset->getLocation())) {
+                        throw \Exception('Copy failed');
+                    }
                 }
             }
 
@@ -139,6 +164,11 @@ class Asset
         $mimeType = $this->getMimeTypeService()->getMimeType($mimeType);
 
         return new \Asset\Model\Asset($sysname, $name, $extension, $group, $mimeType);
+    }
+
+    public function retrieve($id)
+    {
+        return $this->getEntityManager()->find('Asset\Model\Asset', $id);
     }
 
     /**

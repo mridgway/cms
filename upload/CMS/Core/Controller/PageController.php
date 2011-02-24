@@ -23,26 +23,40 @@ class PageController extends \Zend_Controller_Action
      */
     protected $_sc;
 
+    /**
+     * @var \Core\Service\PageService
+     */
+    protected $_pageService;
+
     public function init()
     {
-        $this->_sc = $this->getInvokeArg('bootstrap')->serviceContainer;
-        $this->_pageService = $this->_sc->getService('pageService');
+        $this->setServiceContainer($this->getInvokeArg('bootstrap')->serviceContainer);
+
+         if ($this->getRequest()->getParam('current_page_id') == false) {
+            $pageId = $this->getRequest()->getParam('id', false);
+            $this->getRequest()->setParam('current_page_id', $pageId);
+        }
     }
 
     public function viewAction()
     {
-        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'view');
+        $page = $this->getPageService()->getPageIfAllowed($this->getRequest()->getParam('current_page_id', false), 'view');
+        if ($pageNumber = $this->getRequest()->getParam('page')) {
+            $page->getLayout()->assign('paginationPage', $pageNumber);
+        }
         $pageRenderer = $this->_sc->getService('pageRendererService');
         $content = $pageRenderer->renderPage($page, $this->getRequest());
         $this->getResponse()->setBody($content);
     }
 
-    /**
-     * @todo refactor the crap out of this
-     */
     public function addBlockAction()
     {
-        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
+        $user = $this->_sc->getService('auth')->getIdentity();
+        if (!in_array($user->getGroup()->getSysname(), array('pro', 'admin', 'root'))) {
+            throw \Core\Exception\PermissionException::denied();
+        }
+
+        $page = $this->getPageService()->getPageIfAllowed($this->getRequest()->getParam('current_page_id', false), 'edit');
         $location = $this->_sc->getService('locationService')->getLocation($this->getRequest()->getParam('location', false));
         $type = $this->getRequest()->getParam('type');
 
@@ -57,7 +71,8 @@ class PageController extends \Zend_Controller_Action
 
                 $block = null;
                 if ($this->getRequest()->isPost() && $frontend->code->id <= 0) {
-                    $text = $frontend->html;
+                    $textId = $frontend->data->id;
+                    $text = $this->_sc->getService('doctrine')->getReference('Core\Model\Content\Text', $textId);
                     $block = $this->_sc->getService('staticBlockService')->create($text);
                     $this->_sc->getService('pageService')->addBlock($page, $block, $location);
                     $frontend = new \Core\Model\Frontend\BlockInfo();
@@ -121,31 +136,34 @@ class PageController extends \Zend_Controller_Action
     */
     public function addAction()
     {
-        $this->_pageService->isAllowed('AllPages', 'add');
+        $this->getPageService()->isAllowed('AllPages', 'add');
 
+        $form = $this->getPageService()->getForm();
+        $form->setAction('/direct/page/add');
         $frontend = new \Core\Model\Frontend\Simple();
 
-        $form = $this->_pageService->getDefaultForm();
-
-        $page = null;
-        if ($this->getRequest()->isPost()) {
-            try {
-                $page = $this->_pageService->addPage($this->getRequest()->getPost());
-                $form->setObject($page);
-                $frontend->success();
-                $frontend->data['url'] = $page->getURL();
-            } catch (\Core\Exception\FormException $e) {
-                $form = $e->getForm();
+        if($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if($form->isValid($data)) {
+                try {
+                    $page = $this->getPageService()->create($data);
+                    $frontend->data['url'] = $page->getURL();
+                    $frontend->success();
+                } catch (\Core\Exception\ValidationException $e) {
+                    $frontend->html = (string) $e;
+                    $frontend->fail();
+                }
+            } else {
+                $frontend->html = $form->render();
                 $frontend->fail();
             }
+        } else {
+            $frontend->html = $form->render();
         }
-
-        $form->setAction('/direct/page/add');
-        $frontend->html = (string)$form;
 
         $html = $this->getRequest()->getParam('html');
         if (isset($html)) {
-            $page = $this->_pageService->getPage($this->getRequest()->getParam('id', false));
+            $page = $this->getPageService()->getPage($this->getRequest()->getParam('id', false));
             $page->getLayout()->getLocation('main')->addContent($frontend->html);
             $page->getLayout()->assign('page', $page);
             echo $page->getLayout()->render();
@@ -159,26 +177,34 @@ class PageController extends \Zend_Controller_Action
     */
     public function editAction()
     {
-        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
+        $page = $this->getPageService()->getPageIfAllowed($this->getRequest()->getParam('current_page_id', false), 'edit');
 
+        $data = $this->getPageService()->retrieveAsArray($page->getId());
+
+        $form = $this->getPageService()->getForm($page->getId());
+        $form->setAction('/direct/page/edit?id=' . $page->getId());
         $frontend = new \Core\Model\Frontend\Simple();
+        $form->populate($data);
 
-        $form = $this->_pageService->getDefaultForm();
-        $form->setObject($page);
-
-        if ($this->getRequest()->isPost()) {
-            try {
-                $this->_pageService->editPage($page, $this->getRequest()->getPost());
-                $form->setObject($page);
-                $frontend->success();
-            } catch(\Core\Exception\FormException $e) {
-                $form = $e->getForm();
+        if($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if($form->isValid($data)) {
+                try {
+                    $page = $this->getPageService()->updatePage($data);
+                    $frontend->data['url'] = $page->getURL();
+                    $frontend->success();
+                } catch (\Core\Exception\ValidationException $e) {
+                    $frontend->html = (string) $e;
+                    $frontend->fail();
+                }
+            } else {
+                $frontend->html = $form->render();
                 $frontend->fail();
             }
+        } else {
+            $frontend->html = $form->render();
         }
 
-        $form->setAction('/direct/page/edit?id=' . $page->getId());
-        $frontend->html = (string)$form;
         echo $frontend;
     }
 
@@ -187,7 +213,7 @@ class PageController extends \Zend_Controller_Action
      */
     public function rearrangeAction()
     {
-        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
+        $page = $this->getPageService()->getPageIfAllowed($this->getRequest()->getParam('current_page_id', false), 'edit');
 
         $receivedfrontendObject = $this->getRequest()->getParam('page', null);
         if (!isset($receivedfrontendObject)) {
@@ -204,10 +230,10 @@ class PageController extends \Zend_Controller_Action
                 $pageObject->layout->locations[] = $frontendLocation->blocks;
             }
 
-            $this->_pageService->update($page, $pageObject);
+            $this->getPageService()->update($page, $pageObject);
         } catch (\Exception $e) {
             $frontendObject = new \Core\Model\Frontend\Simple();
-            die($frontendObject->fail('Page object not sent.'));
+            die($frontendObject->fail('Could not rearrange blocks: ' . $e->getMessage()));
         }
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
@@ -219,11 +245,37 @@ class PageController extends \Zend_Controller_Action
      */
     public function infoAction()
     {
-        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'edit');
+        $user = $this->getServiceContainer()->getService('auth')->getIdentity();
+        if (!in_array($user->getGroup()->getSysname(), array('admin', 'root'))) {
+            throw \Core\Exception\PermissionException::denied();
+        }
+
+        $page = $this->getPageService()->getPageIfAllowed($this->getRequest()->getParam('current_page_id', false), 'edit');
 
         $frontendObject = new \Core\Model\Frontend\PageInfo();
 
         echo $frontendObject->success($page);
+    }
+
+    public function sitemapAction()
+    {
+        $pages = $this->_sc->getService('doctrine')->getRepository('Core\Model\Page')->getAccessiblePages();
+
+        $this->getResponse()->setHeader('Content-type', 'application/xml', true);
+        $this->getResponse()->setHeader('charset', 'utf-8', true);
+        echo \Core\Model\View::renderScript('Core', 'sitemap.xml', array(
+            'pages' => $pages
+        ));
+    }
+
+    public function indexAction()
+    {
+        $pages = $this->_sc->getService('doctrine')->getRepository('Core\Model\Page')->getAccessiblePages();
+
+        $this->getResponse()->setHeader('charset', 'utf-8', true);
+        foreach ($pages AS $page) {
+            echo $page->getUrl() . PHP_EOL;
+        }
     }
 
 
@@ -235,10 +287,42 @@ class PageController extends \Zend_Controller_Action
      */
     public function deleteAction()
     {
-        $page = $this->_pageService->getPageIfAllowed($this->getRequest()->getParam('id', false), 'delete');
+        $page = $this->getPageService()->getPageIfAllowed($this->getRequest()->getParam('current_page_id', false), 'delete');
 
-        $this->_pageService->deletePage($page);
+        $blockService = $this->_sc->getService('blockService');
+        foreach ($page->getBlocks() AS $block) {
+            if ($block instanceof \Core\Model\Block\StaticBlock) {
+                try {
+                    $blockService->dispatchBlockAction($block, 'deleteAction', $this->getRequest());
+                } catch (\Exception $e) {}
+            }
+        }
+
+        $this->getPageService()->deletePage($page);
 
         echo new \Core\Model\Frontend\Simple(0, 'Page deleted successfully.');
+    }
+
+    public function setServiceContainer(\sfServiceContainer $sc)
+    {
+        $this->_sc = $sc;
+    }
+
+    public function getServiceContainer()
+    {
+        return $this->_sc;
+    }
+
+    public function setPageService(\Core\Service\Page $pageService)
+    {
+        $this->_pageService = $pageService;
+    }
+
+    public function getPageService()
+    {
+        if(!$this->_pageService) {
+            $this->setPageService($this->getServiceContainer()->getService('pageService'));
+        }
+        return $this->_pageService;
     }
 }

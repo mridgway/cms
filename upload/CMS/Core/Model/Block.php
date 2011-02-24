@@ -101,7 +101,7 @@ abstract class Block
 
     /**
      * The values the properties have.  These are pulled from the database while properties are hard coded.
-     *
+     * 
      * @var array
      * @OneToMany(targetEntity="Core\Model\Block\Config\Value", mappedBy="block", fetch="EAGER", cascade={"update", "persist", "remove"})
      */
@@ -111,7 +111,7 @@ abstract class Block
      * @todo cascade updates???
      * @var Block
      * @ManyToOne(targetEntity="Core\Model\Block")
-     * @JoinColumn(name="inherit_id", referencedColumnName="id", nullable="true")
+     * @JoinColumn(name="inherit_id", referencedColumnName="id", nullable="true", onDelete="SET NULL")
      */
     protected $inheritedFrom;
 
@@ -140,7 +140,7 @@ abstract class Block
 
         $this->configure();
     }
-
+    
     /**
      * Renders the contents of the block
      */
@@ -150,6 +150,10 @@ abstract class Block
         return $output;
     }
 
+    /**
+     * @param boolean $instance
+     * @return Zend_View
+     */
     public function getView($instance = true)
     {
         if ($instance) {
@@ -157,7 +161,7 @@ abstract class Block
         }
         return $this->view;
     }
-
+    
     public function getViewInstance()
     {
         if (null == $this->_viewInstance) {
@@ -210,7 +214,7 @@ abstract class Block
     }
 
     /**
-     * Adds multiple config properties.
+     * Adds multiple config properties. 
      *
      * @param array $properties
      * @return Block
@@ -252,11 +256,11 @@ abstract class Block
 
         if (isset($this->configValues[$name])) {
             $this->configValues[$name]->setValue($value);
-            $this->configValues[$name]->setInheritsFrom($inheritsFrom);
         } else {
             $configValue = new \Core\Model\Block\Config\Value($name, $value, $inheritsFrom);
             $this->addConfigValue($configValue);
         }
+        $this->configValues[$name]->setInheritsFrom($inheritsFrom);
         return $this;
     }
 
@@ -276,7 +280,11 @@ abstract class Block
             return $this->configProperties[$name]->getDefault();
         }
 
-        throw new \Exception('Block with id ' . $this->id . ' does not have ' . $name);
+        throw new \Exception(vsprintf('Block with id %s (%s) does not have %s', array(
+            $this->id,
+            get_class($this),
+            $name
+        )));
     }
 
     protected function getConfigValues()
@@ -306,7 +314,7 @@ abstract class Block
     {
         if ($this->_collectionKeysSet || $this->configValues->isEmpty())
             return;
-
+        
         foreach ($this->configValues as $key => $value) {
             $this->configValues[$value->name] = $value;
             unset($this->configValues[$key]);
@@ -473,7 +481,7 @@ abstract class Block
     {
         return \Zend_Registry::get('acl')->isAllowed($role, $this, 'view');
     }
-
+    
     /**
      *
      * @return bool
@@ -500,6 +508,7 @@ abstract class Block
      */
     public function canConfigure($role)
     {
+        return false;
         return \Zend_Registry::get('acl')->isAllowed($role, $this, 'configure');
     }
 
@@ -538,6 +547,9 @@ abstract class Block
         return $this->serviceContainer->getSErvice($serviceName);
     }
 
+    /**
+     * @return Zend_Controller_Action_Helper_FlashMessenger
+     */
     public function getFlashMessenger()
     {
         if(!$this->_flashMessenger) {

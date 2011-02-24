@@ -51,7 +51,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
         ob_flush();
         $this->_createHomepage();
         $this->_em->flush();
-        
+
         echo '<h3>Blog Module Installed</h3>';
         ob_flush();
     }
@@ -82,7 +82,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
         $rightBlock0->setConfigValue('count', 5);
         $rightBlock0->setConfigValue('id', 0, $mainBlock0);
         $rightBlock0->setConfigValue('paginate', 0);
-        
+
         $text = new \Core\Model\Content\Text('Add New Article', '<a href="/blog/add">Add New Article</a>');
         $this->text = $text;
         $this->_em->persist($text);
@@ -104,7 +104,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
     public function _createAddPage()
     {
         // the page
-        $page = new \Core\Model\Page($this->_em->getReference('Core\Model\Layout', '2colalt'));
+        $page = new \Core\Model\SystemPage($this->_em->getReference('Core\Model\Layout', '2colalt'));
 
         // the form block
         $formView = $this->getModule('Core')->getBlockType('Form')->getView('default');
@@ -140,7 +140,7 @@ class InstallController extends \Core\Controller\AbstractInstallController
     public function _createHomepage()
     {
         // the page
-        $page = new \Core\Model\Page($this->_em->getReference('Core\Model\Layout', '2col'));
+        $page = new \Core\Model\SystemPage($this->_em->getReference('Core\Model\Layout', '2col'));
 
         // add new article block
         $textView = $this->getModule('Core')->getContentType('Text')->getView('default');

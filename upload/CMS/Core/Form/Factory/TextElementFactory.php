@@ -22,6 +22,7 @@ class TextElementFactory
     {
         $title = new \Core\Form\Element\Text('title');
         $title->setLabel('Title:');
+        $title->setDescription('Add a title to make this a shared block');
         $title->setAllowEmpty(true);
         $title->addValidator(new \Zend_Validate_StringLength(0, 100));
         $title->addFilter(new \Zend_Filter_Null());

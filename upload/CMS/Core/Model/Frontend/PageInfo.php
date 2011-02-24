@@ -63,6 +63,12 @@ class PageInfo extends \Core\Model\Frontend
             $actions[$add->name] = $add;
         }
 
+        if ($page->canDelete(\Core\Auth\Auth::getInstance()->getIdentity())) {
+            $delete = new Action('pageDelete', '/direct/page/delete');
+            $delete->plugin = 'PageDelete';
+            $actions[$delete->name] = $delete;
+        }
+
         return $actions;
     }
 }

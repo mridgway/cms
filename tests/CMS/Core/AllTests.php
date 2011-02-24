@@ -19,9 +19,9 @@ class AllTests
     {
         $suite = new \CMSTestSuite('Core Tests');
 
+        $suite->addTestSuite('Core\Validator\ParamsTest');
         $suite->addTestSuite('Core\Filter\SlugTest');
 
-        $suite->addTestSuite('Core\Controller\PageControllerTest');
         $suite->addTestSuite('Core\Controller\Request\HttpTest');
         $suite->addTestSuite('Core\Controller\Router\RewriteTest');
 

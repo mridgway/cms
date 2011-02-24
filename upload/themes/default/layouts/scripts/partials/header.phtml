@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	
+
 	<meta charset="utf-8" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="Modo Design Group" />
@@ -9,7 +9,7 @@
 	<meta name="description" content="<?php echo $this->layout()->page->getDescription(); ?>" />
 
 	<title>CMS<?php if ($this->layout()->page->getTitle()) echo ' :: ' . $this->layout()->page->getTitle(); ?></title>
-	
+
 	<!--[if IE]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -24,9 +24,7 @@
     $this->headLink()->appendStylesheet('/resources/core/css/theme.css');
     $this->headLink()->appendStylesheet('/resources/core/css/page.css');
 
-    //$this->headScript()->appendFile('/resources/vendor/js/jquery.min.js');
     $this->headScript()->appendFile('/resources/vendor/js/jquery.tmpl.min.js');
-    //$this->headScript()->appendFile('/resources/vendor/js/jquery-ui/ui/minified/jquery-ui.min.js');
 
 
     if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) {
@@ -46,7 +44,7 @@
             ->addJavascriptFile('/resources/vendor/js/swfupload.js');
     echo $this->headScript();
 ?>
-    
+
     <!--[if lt IE 8]>
 	<link href="/resources/core/css/ie.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
@@ -56,8 +54,7 @@
     $(document).ready(function () {
         var Page;
         CMS.Use(['Core/CMS.Page', 'Core/CMS.AdminMenu'], function (CMS) {
-            Page = new CMS.Page(PAGE_INFO.data[0]);
-            var AdminMenu = new CMS.AdminMenu({page: Page});
+            var AdminMenu = new CMS.AdminMenu();
         });
     });
     </script>
@@ -68,11 +65,7 @@
 <?php if (isset($this->layout()->page)) : ?>
 <body id="page-<?php echo $this->layout()->page->id; ?>">
     <?php if (\Core\Auth\Auth::getInstance()->getIdentity()->isAllowed('AdminMenu', 'view')) : ?>
-    <ul id="adminMenu">
-        <li><a href="#" class="addPage">Add Page</a></li>
-        <li><a href="#" class="editPage">Edit Page</a></li>
-        <li><a href="#" class="deletePage">Delete Page</a></li>
-    </ul>
+        <?php echo $this->partial('partials/adminMenu.phtml', array('page' => $this->layout()->page)); ?>
     <?php endif; ?>
 <?php else: ?>
 <body>

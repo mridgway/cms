@@ -1,7 +1,6 @@
 <?php
 namespace Core\Service;
 
-require_once 'PHPUnit/Framework.php';
 require_once __DIR__ . '/../../../bootstrap.php';
 
 use \Mockery as m;
@@ -120,7 +119,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
 
         $model = new \Mock\Model\TestAbstractModel();
         $model->fromArray($data);
-        
+
         $repo = m::mock();
         $repo->shouldReceive('find')->andReturn($model);
 

@@ -36,7 +36,7 @@ class Asset_View_Helper_FormUpload extends Zend_View_Helper_FormText
             unset($attribs['group']);
 
             $html = $this->formText($name, $value, $attribs, $options, $listsep);
-            $html .= '<script type="text/javascript">$(document).ready(function() {$("#'.$name.'").formUpload({group:"'.$group.'"});});</script>';
+            $html .= '<script type="text/javascript">$(document).ready(function() {$("#'.$this->_normalizeId($name).'").formUpload({group:"'.$group.'"});});</script>';
         } catch (Exception $e) {
             $html = '<div class="">' . $e->getMessage() . '</div>';
         }

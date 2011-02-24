@@ -22,9 +22,20 @@ class PageRoute extends \Doctrine\ORM\EntityRepository
            ->innerJoin('pr.page', 'p')
            ->where($qb->expr()->eq('r.id', $routeId));
 
+        /* @var $route Core\Model\Route */
+        $route = $this->_em->find('Core\Model\Route', $routeId);
+
         if ($params) {
+            $routeParams = $route->getVariables();
+            $params = \unserialize($params);
+            foreach ($params AS $key => $param) {
+                if (!in_array($key, $routeParams)) {
+                    unset($params[$key]);
+                }
+            }
+
             $qb->andWhere('pr.params = :params');
-            $qb->setParameter('params', $params);
+            $qb->setParameter('params', serialize($params));
         }
         try {
             $pageRoute = $qb->getQuery()->getSingleScalarResult();

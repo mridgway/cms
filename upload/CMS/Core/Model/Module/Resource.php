@@ -104,7 +104,7 @@ abstract class Resource
     {
         if (null !== $class) {
             if (!class_exists($class)) {
-                throw new \Core\Model\Exception('Class does not exist.');
+                throw new \Core\Model\Exception('Class \''.$class.'\'does not exist.');
             }
         }
         $this->class = $class;

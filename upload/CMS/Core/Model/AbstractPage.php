@@ -17,7 +17,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Table(name="page")
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
- * @DiscriminatorMap({"Page"="Core\Model\Page", "Template"="Core\Model\Template"})
+ * @DiscriminatorMap({
+ *      "Page"="Core\Model\Page",
+ *      "Template"="Core\Model\Template",
+ *      "SystemPage"="Core\Model\SystemPage"
+ * })
  *
  * @property int $id
  * @property string $title
@@ -51,7 +55,7 @@ abstract class AbstractPage
     protected $description;
 
     /**
-     * @OneToMany(targetEntity="Core\Model\Block", mappedBy="page", fetch="LAZY", cascade={"all", "persist"})
+     * @OneToMany(targetEntity="Core\Model\Block", mappedBy="page", fetch="LAZY", cascade={"all"})
      * @OrderBy({"weight"="ASC"})
      */
     protected $blocks;
@@ -70,12 +74,25 @@ abstract class AbstractPage
     /**
      * @param Core\Model\Layout $layout
      */
-    public function __construct(Layout $layout)
+    public function __construct(Layout $layout = null)
     {
-        $this->setLayout($layout);
-
+        if($layout) {
+            $this->setLayout($layout);
+        }
+        
         $this->setBlocks(new ArrayCollection);
         $this->setDependentContent(new \Doctrine\Common\Collections\ArrayCollection());
+    }
+
+    public function fromArray($array)
+    {
+        $this->_setIfSet('title', $array);
+        $this->_setIfSet('description', $array);
+    }
+
+    public function toArray($includes = null)
+    {
+        return $this->_toArray($includes);
     }
 
     /**
@@ -108,7 +125,7 @@ abstract class AbstractPage
         if (null !== $weight) {
             $block->weight = $weight;
         } elseif (null === $block->weight) {
-            $heaviestWeight = 0;
+            $heaviestWeight = -1;
             if (null === $this->blocks) {
                 $this->setBlocks(new ArrayCollection); // resets to an empty array collection
             }
@@ -224,5 +241,10 @@ abstract class AbstractPage
     public function canEdit($role)
     {
         return \Zend_Registry::get('acl')->isAllowed($role, $this, 'edit');
+    }
+
+    public function canDelete($role)
+    {
+        return \Zend_Registry::get('acl')->isAllowed($role, $this, 'delete');
     }
 }

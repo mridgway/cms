@@ -5,6 +5,7 @@ CMS.Use([], function (CMS) {
         weight: null,
         actions: [],
         location: null,
+        title: null,
 
         domElement: null,
 
@@ -23,13 +24,18 @@ CMS.Use([], function (CMS) {
             }
 
             CMS.Use(pluginPaths, function () {
+                if (!self.domElement.children().size()) {
+                    self.domElement.append($.tmpl('<div class="edit-node-label"><h6>${title}</h6></div>', {
+                        'title' : self.title
+                    }));
+                }
                 var actionsBlock = $('<ul>', {
                     css: {
                         position: 'absolute',
                         right: 0,
                         top: 0
                     },
-                    class: 'block-actions'
+                    'class': 'block-actions'
                 });
                 self.domElement.parent().css('position', 'relative').prepend(actionsBlock);
                 for (i in self.actions) {

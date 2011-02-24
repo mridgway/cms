@@ -32,7 +32,9 @@ class Checkbox extends \Zend_Form_Element_Checkbox
                                 array('placement' => 'prepend',
                                       'tag'       => 'span',
                                       'class'     => 'note'))
-                 ->addDecorator('Label')
+                 ->addDecorator('Label', array(
+                     'placement' => 'append'
+                 ))
                  ->addDecorator('Errors')
                  ->addDecorator('HtmlTag',
                                 array('tag'   => 'div',

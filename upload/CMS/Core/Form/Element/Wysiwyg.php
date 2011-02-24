@@ -24,6 +24,6 @@ class Wysiwyg extends Textarea
     {
         parent::init();
 
-        $this->setAttrib('class', 'wysiwyg ckeditor');
+        $this->setAttrib('class', 'wysiwyg');
     }
 }

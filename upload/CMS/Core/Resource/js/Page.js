@@ -107,6 +107,20 @@ CMS.Use(['Core/CMS.Location'], function (CMS) {
                     CMS.log(this.locations[i].blocks[j].id);
                 }
             }
+        },
+
+        hideMenus: function () {
+            $('.block-actions').children().hide(500, function() {
+                $('.edit-node-label').hide();
+            });
+            $('.addBlockMenu').hide(500);
+        },
+
+        showMenus: function () {
+            $('.edit-node-label').show(0, function() {
+                $('.block-actions').children().show(500);
+            });
+            $('.addBlockMenu').show(500);
         }
     });
 });

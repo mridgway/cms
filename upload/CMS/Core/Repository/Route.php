@@ -63,7 +63,7 @@ class Route extends \Doctrine\ORM\EntityRepository
     {
         $regex = $this->_routeToSqlSearch($routeTemplate);
 
-        $sql = 'SELECT r.id FROM Route AS r where r.template RLIKE \'' . $regex . '\'';
+        $sql = 'SELECT r.id FROM route AS r where r.template RLIKE \'' . $regex . '\'';
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('id', 'duplicate');
 

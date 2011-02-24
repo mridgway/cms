@@ -33,7 +33,17 @@ class IdentityElementFactory
         $passHash = new \Core\Form\Element\Password('password');
         $passHash->setLabel('Password:');
         $passHash->setAllowEmpty(false);
-        $passHash->addValidator(new \Zend_Validate_StringLength(1, 128));
+        $passHash->addValidator(new \Zend_Validate_StringLength(7, 128));
+
+        return $passHash;
+    }
+
+    public static function getPasswordConfirmElement()
+    {
+        $passHash = new \Core\Form\Element\Password('passwordConfirm');
+        $passHash->setLabel('Confirm Password:');
+        $passHash->setAllowEmpty(false);
+        $passHash->addValidator(new \User\Validator\PasswordConfirm('password'));
 
         return $passHash;
     }

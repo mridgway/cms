@@ -74,6 +74,7 @@ class Block extends \Core\Service\AbstractService
     }
 
     /**
+     * @todo this is more of a content action dispatcher and should be renamed/moved as such
      *
      * @param Block $block
      * @param string $action
@@ -96,14 +97,14 @@ class Block extends \Core\Service\AbstractService
         $controllerName = $this->getBlockController($block);
 
         if(null === $controllerName) {
-            throw new Exception(get_class($block) . ' controller is not specified.  Check the module.ini file.');
+            throw new \Exception(get_class($block) . ' controller is not specified.  Check the module.ini file.');
         }
 
         return new $controllerName;
     }
 
     /**
-     * @todo Make this not suck
+     * @todo optimize this
      * @param Block $block
      * @return string
      */
@@ -112,7 +113,7 @@ class Block extends \Core\Service\AbstractService
         $modules = $this->getModuleRegistry()->getDatabaseStorage()->getModules();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
-                if ($type->class == get_class($block->content)) {
+                if ($block->content instanceof $type->class) {
                     if ($type->controller) {
                         if (class_exists($type->controller)) {
                             return $type->controller;
@@ -155,6 +156,12 @@ class Block extends \Core\Service\AbstractService
         if ($block instanceof \Core\Model\Block\DynamicBlock) {
             // Initialize the dynamic block
             $block->setRequest($request);
+            $block->setServiceContainer($this->getServiceContainer());
+            $block->init();
+            $block->run();
+        }
+
+        if ($block instanceof \Core\Model\Block\StaticBlock && \method_exists($block, 'init')) {
             $block->setServiceContainer($this->getServiceContainer());
             $block->init();
         }

@@ -21,6 +21,9 @@ class Login extends \Core\Model\Block\Dynamic\Form
     {
         if (!$this->getForm()) {
             $this->setForm(new \User\Form\Login());
+            if ($this->getRequest()->isPost()) {
+                $this->process();
+            }
         }
     }
 
@@ -43,7 +46,7 @@ class Login extends \Core\Model\Block\Dynamic\Form
 
             $session = new \User\Model\Session($authResult->getIdentity()->getUser(), $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT']);
             $auth->getStorage()->write($session);
-            
+
             return $this->success();
         } else {
             return $this->failure();

@@ -20,8 +20,12 @@ class Text extends \Core\Controller\Content\AbstractController
         $textService = $this->getServiceContainer()->getService('textService');
         $data = $this->getRequest()->getPost();
 
-        //@var $form \Zend_Form
-        $form = $textService->getAddForm();
+        $isShared = $this->getRequest()->getParam('isShared', false);
+        if($isShared) {
+            $form = new \Core\Form\SharedText();
+        } else {
+            $form = $textService->getAddForm();
+        }
 
         $blockView = new \Core\Model\View('Core', 'Block/addStandard');
         $blockView->assign('form', $form);
@@ -31,7 +35,10 @@ class Text extends \Core\Controller\Content\AbstractController
                 // update the article
                 $form->removeElement('id');
                 $text = $this->_sc->getService('textService')->create($data['title'], $data['content']);
-                $frontend->html = $block ? $block->render() : $text;
+                $frontend->html = $block ? $block->render() : $blockView->render();
+                $frontend->data = new \stdClass();
+                $frontend->data->url = '/index/text';
+                $frontend->data->id = $text->getId();
             } else {
                 $frontend->html = $blockView->render();
                 $frontend->fail();

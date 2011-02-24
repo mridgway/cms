@@ -108,7 +108,11 @@ class PageRoute extends Model\AbstractModel
     public function getURL()
     {
         $params = $this->params;
-        return '/' . $this->route->assemble($params) . '/';
+        $relative = $this->route->assemble($params);
+        if (!$relative) {
+            return '/';
+        }
+        return '/' . $relative . '/';
     }
 
     /**

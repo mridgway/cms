@@ -78,7 +78,7 @@ class AbstractPageTest extends \PHPUnit_Framework_TestCase
     {
         $this->block1->setWeight(null);
         $this->page->addBlock($this->block1, $this->left);
-        $this->assertEquals(1, $this->block1->weight);
+        $this->assertEquals(0, $this->block1->weight);
     }
 
     public function testAddBlocks()

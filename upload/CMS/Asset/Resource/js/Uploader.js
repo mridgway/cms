@@ -1,4 +1,4 @@
-CMS.Use(['/resources/vendor/js/swfupload.js', 'Asset/CMS.Asset'], function (CMS) {
+CMS.Use(['Asset/CMS.Asset'], function (CMS) {
 
     CMS.Uploader = Class.extend({
 

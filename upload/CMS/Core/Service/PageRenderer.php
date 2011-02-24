@@ -22,13 +22,33 @@ class PageRenderer extends \Core\Service\AbstractService
      * @param \Core\Model\Template
      * @return \Core\Model\Page
      */
-    public function renderPage(\Core\Model\AbstractPage $page, $request)
+    public function renderPage(\Core\Model\AbstractPage $page, \Zend_Controller_Request_Http $request)
     {
         if(count($page->getBlocks()) > 0)
         {
-            // Initialize blocks
-            foreach ($page->getBlocks() as $block) {
+            $blocksThatCanUseCache = array();
+            $others = array();
+
+            foreach($page->getBlocks() as $block) {
+                if(\method_exists($block, 'getCanUseCache') && $block->getCanUseCache()) {
+                    $blocksThatCanUseCache[] = $block;
+                } else {
+                    $others[] = $block;
+                }
+            }
+
+            // Initialize and run blocks that do not use cache
+            foreach ($others as $block) {
                 $this->getBlockService()->initBlock($block, $request);
+            }
+
+            // Initialize and run blocks that do use cache
+            foreach ($blocksThatCanUseCache as $block) {
+                $this->getBlockService()->initBlock($block, $request);
+            }
+
+            if ($page->getTitle()) {
+                $page->getLayout()->getView()->headTitle()->append($page->getTitle());
             }
 
             // Render blocks into block wrapper
@@ -42,6 +62,9 @@ class PageRenderer extends \Core\Service\AbstractService
                     $view->assign('edit', $edit);
                     $view->setBasePath(APPLICATION_ROOT . '/themes/default/layouts');
                     $block->getLocation()->addContent($view->render('partials/block.phtml'));
+                } else if ($block instanceof \Core\Model\Block\StaticBlock
+                        && $page->getDependentContent()->contains($block->getContent())) {
+                    throw new \Core\Exception\NotFoundException();
                 }
             }
         }

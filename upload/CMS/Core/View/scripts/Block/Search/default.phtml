@@ -1,0 +1,34 @@
+<h1>Search Green Home Guide</h1>
+
+<?php if ($this->messages): ?>
+<ul class="errors">
+    <?php foreach ($this->messages as $message): ?>
+    <li><?php echo $this->escape($message); ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+
+<form class="search" method="post" action="<?php echo $this->url(array('page' => null, 'phrase' => null), 'page-search'); ?>">
+    <fieldset>
+        <input type="text" value="<?php echo $this->phrase; ?>" name="phrase" /><button type="submit">Go</button>
+    </fieldset>
+</form>
+
+<?php if (count($this->paginator) == 0): ?>
+    <p>There are no results that match your search phrase.</p>
+<?php else: ?>
+    <ul class="post-listing">
+    <?php foreach ($this->paginator as $result): ?>
+        <li>
+            <h2><a href="<?php echo $result->uri; ?>"><?php echo $result->title; ?></a></h2>
+            <?php if ($result->description): ?>
+            <p><?php echo $result->description; ?></p>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<?php
+    echo $this->paginationControl($this->paginator, 'Sliding', 'Paginator/default.phtml');
+?>

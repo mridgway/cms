@@ -49,6 +49,8 @@ class Identity extends \Core\Service\AbstractService
 
             $this->getEntityManager()->flush();
             $this->getEntityManager()->commit();
+
+            return $identity;
         } catch (\Exception $e) {
             $this->getEntityManager()->rollback();
             throw $e;

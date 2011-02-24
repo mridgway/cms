@@ -23,7 +23,7 @@ class ManagerController extends \Zend_Controller_Action
     public function indexAction()
     {
         $frontend = new \Asset\Model\Frontend\Manager();
-        
+
         // returns modal dialog frontend object
         $view = new \Core\Model\View('Asset', 'manager/manager');
         $view->urlImageForm = new \Asset\Form\ImageFromUrl();
@@ -46,11 +46,11 @@ class ManagerController extends \Zend_Controller_Action
 
     public function uploadAction()
     {
-        
+
         $adapter = new \Zend_File_Transfer_Adapter_Http(array(
             'magicFile' => getenv('MAGIC')
         ));
-        
+
         // make sure it has a proper mime type
         $mimeTypeString = $adapter->getMimeType();
         $mimeType = $this->_em->getRepository('Asset\Model\MimeType')->find($mimeTypeString);
@@ -83,9 +83,10 @@ class ManagerController extends \Zend_Controller_Action
             $existingAsset = $this->_em->getRepository('Asset\Model\Asset')->getAssetByGroupNameAndHash($groupName, $fileHash);
             $frontend = new \Asset\Model\Frontend\AssetList();
             $frontend->addAsset($existingAsset);
-            die($frontend->success());
+            echo $frontend->success();
+            return;
         } catch (\Doctrine\ORM\NoResultException $e) {}
-        
+
         try {
             $adapter->receive();
         } catch (\Exception $e) {
@@ -122,14 +123,14 @@ class ManagerController extends \Zend_Controller_Action
         if (!file_exists($filePath)) {
             mkdir($filePath, 0777, true);
         }
-        
+
         return $filePath . DIRECTORY_SEPARATOR . $size . '.' . $ext;
     }
 
     public function listAction()
     {
         $frontend = new \Asset\Model\Frontend\AssetList();
-        
+
         $searchTerm = $this->getRequest()->getParam('search', '');
         $typeName = $this->getRequest()->getParam('type', 'all');
         $sort = $this->getRequest()->getParam('sort', 2);
@@ -155,7 +156,7 @@ class ManagerController extends \Zend_Controller_Action
                                         $sortOrder,
                                         $offset,
                                         $perPage);
-            
+
             foreach($assets AS $asset) {
                 $frontend->addAsset($asset);
             }

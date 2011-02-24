@@ -1,32 +1,286 @@
-#adminMenu {
-    display: block;
+#actionbar
+{
+    background: #626262 url( /resources/core/img/actionbar/actionbar-bg.png ) repeat-x bottom;
+    border-top: 1px solid #8b8b8b;
+    border-bottom: 1px solid #252525;
+    font-size: 12px;
+    height: 27px;
+    position: relative;
     width: 100%;
-    background-color: #000;
-    height: 2.5em;
-    line-height: 2.5em;
-    color: #ccc;
+    z-index: 200;
+
 }
 
-    #adminMenu li {
+    #actionbar ul.primary
+    {
         float: left;
-        display: block;
-        margin: 0;
+        list-style: none;
+        margin: 0 0 0 20px;
+        padding: 3px 0 0 0;
+    }
+
+        #actionbar ul.primary ul
+        {
+            display: none;
+        }
+
+        #actionbar ul.primary li
+        {
+            float: left;
+            height: 24px;
+            margin: 0 2px 0 0 !important;
+            padding: 0;
+            position: relative;
+            height: 1%;
+        }
+
+#actionbar ul a,
+#actionbar ul span,
+#actionbar ul li,
+#actionbar .hover {
+    height: 1% !important;
+    zoom: 1;
+}
+
+#actionbar ul * {
+	zoom: 1;
+}
+
+            #actionbar ul.primary li a.top
+            {
+                float: left;
+                outline: none;
+                padding: 0 12px 0 0;
+            }
+
+                #actionbar ul.primary li a.top:hover
+                {
+                    background: url( /resources/core/img/actionbar/actionbar-button_bg.png ) no-repeat right -30px;
+                    text-decoration: none;
+                }
+
+                #actionbar ul.primary li.open a.top
+                {
+                    background: url( /resources/core/img/actionbar/actionbar-button_bg.png ) no-repeat right top;
+                }
+
+                #actionbar ul.primary li a.top span
+                {
+                    color: #fff;
+                    cursor: pointer;
+                    float: left;
+                    line-height: 24px;
+                    padding: 0 0 0 12px;
+                }
+
+                    #actionbar ul.primary li a.top:hover span
+                    {
+                        background: url( /resources/core/img/actionbar/actionbar-button_bg.png ) no-repeat left -30px;
+                    }
+
+                    #actionbar ul.primary li.open a.top span
+                    {
+                        background: url( /resources/core/img/actionbar/actionbar-button_bg.png ) no-repeat left top;
+                    }
+
+            #actionbar ul.primary li ul
+            {
+                left: 0;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                top: 24px;
+                width: 120px;
+            }
+
+                #actionbar ul.primary li ul.first
+                {
+                    border-top: 1px solid #000;
+                }
+
+                #actionbar ul.primary li ul li
+                {
+                    background: url( /resources/core/img/actionbar/actionbar-dropdown_bg.gif ) no-repeat left 50%;
+                    float: none;
+                    height: auto;
+                    line-height: 1.3;
+                    padding: 0 1px;
+                    width: 118px;
+                }
+
+
+#actionbar ul span {
+	height: 1% !important;
+}
+
+#actionbar ul li {
+    list-style: none;
+}
+
+#actionbar ul li a {
+    text-decoration:none;
+}
+
+                    #actionbar ul.primary li ul li span,
+                    #actionbar ul.primary li ul li a,
+                    #actionbar ul.primary li.open ul li span,
+                    #actionbar ul.primary li.open ul li a
+                    {
+                        background: none;
+                        color: #fff;
+                        display: block;
+                        float: none;
+                        line-height: 1.3;
+                        padding: 5px 11px;
+                        text-decoration: none;
+                    }
+
+                        /* Change to reflect what element is actually going to be hovered over */
+                        #actionbar ul.primary li ul li span.hover,
+                        #actionbar ul.primary li ul li a.hover,
+                        #actionbar ul.primary li ul li a:hover
+                        {
+                            background-color: #2b2b2b;
+                            color: #fff;
+                            cursor: pointer;
+                        }
+
+
+                        #actionbar ul.primary li ul li a.disabled
+                        {
+                            background: none;
+                            color: #999;
+                            cursor: default;
+                        }
+
+                        #actionbar ul.primary li ul li span.dropdown,
+                        #actionbar ul.primary li ul li a.dropdown
+                        {
+                            background-image: url( /resources/core/img/actionbar/actionbar-dropdown_arrow.gif );
+                            background-position: 95% 50%;
+                            background-repeat: no-repeat;
+                            height: 1%;
+                        }
+
+                    #actionbar ul.primary li ul li.first
+                    {
+                        padding-top: 5px;
+                    }
+
+                        #actionbar ul.primary ul.first ul li.first
+                        {
+                            background-position: left top;
+                        }
+
+                    #actionbar ul.primary li ul li.last
+                    {
+                        background-position: left bottom;
+                        padding-bottom: 5px;
+                    }
+
+                    #actionbar ul.primary li ul li ul
+                    {
+                        left: 119px;
+                        margin: 0;
+                        padding: 0;
+                        position: absolute;
+                        top: 5px;
+                    }
+
+    #actionbar ul.icons
+    {
+        float: right;
+        list-style: none;
+        margin: 0 20px 0 0;
         padding: 0;
     }
 
-        #adminMenu li a {
-            text-align: center;
-            font-size: 1.1em;
-            color: #ccc;
-            display: block;
-            text-decoration: none;
-            padding: 0 1em;
+        #actionbar ul.icons li
+        {
+            border-left: 1px solid #2f2f2f;
+            border-right: 1px solid #686868;
+            float: left;
+            margin: 0;
+            padding: 0;
         }
 
-        #adminMenu li a:hover {
-            color: #eee;
-            background-color: #333;
-        }
+            #actionbar ul.icons li a
+            {
+                background-image: url( /resources/core/img/actionbar/actionbar-icon_browse.png );
+                background-repeat: no-repeat;
+                border-left: 1px solid #686868;
+                border-right: 1px solid #2f2f2f;
+                display: block;
+                line-height: 27px;
+                outline: none;
+                text-indent: -9999px;
+                width: 30px;
+            }
+
+                #actionbar ul.icons li a:hover
+                {
+                    border-left: 1px solid #5e5e5f;
+                    border-right: 1px solid #343434;
+                }
+
+                #actionbar ul.icons li a:active
+                {
+                    border-left: 1px solid #262628;
+                    border-right: 1px solid #333;
+                }
+
+                #actionbar ul.icons li a.disabled
+                {
+                    border-left: 1px solid #999;
+                    border-right: 1px solid #000;
+                }
+
+            #actionbar ul.icons li.browse a
+            {
+                background-position: left top;
+            }
+
+                #actionbar ul.icons li.browse a:hover
+                {
+                    background-position: left -27px;
+                }
+
+                #actionbar ul.icons li.browse a:active
+                {
+                    background-position: left -54px;
+                }
+
+                #actionbar ul.icons li.browse a.disabled:hover,
+                #actionbar ul.icons li.browse a.disabled:active
+                {
+                    background-position: left top;
+                    border-left: 1px solid #686868;
+                    border-right: 1px solid #2f2f2f;
+                }
+
+            #actionbar ul.icons li.edit a
+            {
+                background-position: left -81px;
+            }
+
+                #actionbar ul.icons li.edit a:hover
+                {
+                    background-position: left -108px;
+                }
+
+                #actionbar ul.icons li.edit a:active
+                {
+                    background-position: left -135px;
+                }
+
+                #actionbar ul.icons li.edit a.disabled:hover,
+                #actionbar ul.icons li.edit a.disabled:active
+                {
+                    background-position: left -81px;
+                    border-left: 1px solid #686868;
+                    border-right: 1px solid #2f2f2f;
+                }
 
 .hidden {
     display: none;
@@ -40,10 +294,10 @@ ul.block-actions {
     ul.block-actions li {
         display: block;
         float: right;
-        height: 15px;
-        width: 15px;
+        height: 20px;
+        width: 20px;
         background-color: #ccc;
-        margin: 0 5px 0 0;
+        margin: 0;
     }
 
 .page-block-new {
@@ -87,3 +341,20 @@ ul.block-actions {
     .asset-list .asset .actions {
         clear: both;
     }
+
+.editMode .block-wrapper {
+    min-height: 25px;
+}
+
+#content .edit-node-label {
+    background-color: #F8F8F8;
+    border: 1px solid #D7D9DA;
+    margin-bottom: 10px;
+    padding: 6px 8px;
+}
+
+#content .edit-node-label h6 {
+    color: #ccc;
+    padding: 0;
+    margin: 0;
+}

@@ -44,7 +44,7 @@ class Placeholder extends \Core\Model\Content
      * @Column(name="description", type="string", length="500", nullable="false")
      */
     protected $description;
-
+    
 
     /**
      *

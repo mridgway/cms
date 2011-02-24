@@ -42,6 +42,7 @@ class AssetElementFactory
     {
         $element = new \Asset\Form\Element\Asset('url');
         $element->setLabel('Url:');
+        $element->setGroup('tmp');
 
         return $element;
     }

@@ -3,6 +3,7 @@ CMS.Use(['Core/CMS.BlockAction.Action'], function (CMS) {
 
         caption: 'Configure',
         name: 'block-configure',
-        color: '#59c866'
+        color: '#59c866',
+        img: '/resources/core/img/block-button-configure.png'
     });
 });

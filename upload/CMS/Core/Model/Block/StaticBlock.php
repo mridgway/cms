@@ -21,7 +21,7 @@ class StaticBlock extends \Core\Model\Block
     /**
      * @var \Core\Model\Content
      * @ManyToOne(targetEntity="Core\Model\Content", cascade={"persist"})
-     * @JoinColumn(name="content_id", referencedColumnName="id", nullable="true")
+     * @JoinColumn(name="content_id", referencedColumnName="id", nullable="true", onDelete="CASCADE")
      */
     protected $content;
 
@@ -53,6 +53,9 @@ class StaticBlock extends \Core\Model\Block
         $nameParts = explode('.', $name);
         $instance = $this->content;
         foreach ($nameParts AS $property) {
+            if (null == $instance || !\property_exists($instance, $property)) {
+                return null;
+            }
             $instance = $instance->$property;
         }
         return $instance;
@@ -71,19 +74,18 @@ class StaticBlock extends \Core\Model\Block
 
     public function canView($role)
     {
-        return parent::canView($role) && $this->content->canView($role);
+        return parent::canView($role) && $this->getContent()->canView($role);
     }
 
     /**
-     * Ew
-     * @todo find a way to make this not suck
+     * @todo optimize this
      */
     public function canEdit($role)
     {
         $modules = \Core\Module\Registry::getInstance()->getDatabaseStorage()->getModules();
         foreach ($modules AS $module) {
             foreach($module->contentTypes AS $type) {
-                if ($type->class == get_class($this->content)) {
+                if ($this->content instanceof $type->class) {
                     if ($type->controller) {
                         if (class_exists($type->controller) && method_exists($type->controller, 'editAction')) {
                             return (parent::canEdit($role) && $this->content->canEdit($role));
@@ -102,7 +104,8 @@ class StaticBlock extends \Core\Model\Block
 
     public function canDelete($role)
     {
-        if ($this->content instanceof \Core\Model\Content\Placeholder) {
+        if ($this->content instanceof \Core\Model\Content\Placeholder
+                || $this->getPage()->getDependentContent()->contains($this->getContent())) {
             return false;
         }
         return parent::canDelete($role);

@@ -20,8 +20,8 @@ class Address extends \Zend_Form
            \Core\Form\Factory\Address::getAddressLine1Element(),
            \Core\Form\Factory\Address::getAddressLine2Element(),
            \Core\Form\Factory\Address::getCityElement(),
-           \Core\Form\Factory\Address::getStateElement(),
-           \Core\Form\Factory\Address::getZipElement()
+           \Core\Form\Factory\Address::getStateElement()->setAllowEmpty(true),
+           \Core\Form\Factory\Address::getZipElement()->setAllowEmpty(true)
         ));
     }
 }

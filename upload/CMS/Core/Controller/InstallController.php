@@ -51,6 +51,8 @@ class InstallController extends AbstractInstallController
         'User\Model\Session',
         'User\Model\Group',
 
+        'User\Model\User\FailedLogin',
+
         'User\Model\Acl\Role',
         'User\Model\Acl\Permission',
         'User\Model\Acl\Privilege',
@@ -61,7 +63,7 @@ class InstallController extends AbstractInstallController
 
         // Core now depends on some models in Taxonomy
         'Taxonomy\Model\Vocabulary',
-        'Taxonomy\Model\Term'
+        'Taxonomy\Model\Term',
     );
 
     public function installAction ()
@@ -84,6 +86,10 @@ class InstallController extends AbstractInstallController
         $this->_createBase();
         echo '<b>Base models created.</b><br/></br>';
 
+        echo 'Creating module routes...<br/>';
+        ob_flush();
+        $this->_createRoutes();
+
         echo '<b>Creating 404 Page...</b><br/>';
         ob_flush();
         $this->_create404();
@@ -94,16 +100,21 @@ class InstallController extends AbstractInstallController
         $this->_create403();
         echo '<b>403 page created.</b><br/></br>';
 
+        echo 'Creating Shared Text Index Page...<br/>';
+        ob_flush();
+        $this->_createSharedTextIndexPage();
+
+        echo 'Creating Edit Shared Text Page...<br/>';
+        ob_flush();
+        $this->_createSharedTextEditPage();
+
         echo '<h3>Core Module Installed</h3>';
         ob_flush();
 
         // Install default modules
         $this->_helper->actionStack('install', 'install', 'blog');
-        ob_flush();
         $this->_helper->actionStack('install', 'install', 'asset');
-        ob_flush();
         $this->_helper->actionStack('install', 'install', 'taxonomy');
-        ob_flush();
         $this->_helper->actionStack('install', 'install', 'user');
     }
 
@@ -124,10 +135,19 @@ class InstallController extends AbstractInstallController
         $coreDirect->isDirect = true;
         $this->_em->persist($coreDirect);
 
+        $sitemap = new \Core\Model\Route('sitemap.xml', 'sitemap', array(
+            'module' => 'default',
+            'controller' => 'page',
+            'action' => 'sitemap'
+        ));
+        $sitemap->isDirect = true;
+        $this->_em->persist($sitemap);
+
         echo 'Creating locations<br/>';
         $left = new \Core\Model\Layout\Location('left');
         $right = new \Core\Model\Layout\Location('right');
         $main = new \Core\Model\Layout\Location('main');
+        $span = new \Core\Model\Layout\Location('span');
 
         echo 'Creating layouts<br/>';
         $layout1 = new \Core\Model\Layout('default');
@@ -150,6 +170,58 @@ class InstallController extends AbstractInstallController
         $layout4->setLocations(array($main));
         $this->_em->persist($layout4);
 
+        $layout = new \Core\Model\Layout('home');
+        $layout->setTitle('Home');
+        $layout->setLocations(array($span, $right, $main));
+        $this->_em->persist($layout);
+
+        $layout5 = new \Core\Model\Layout('findapro');
+        $layout5->setTitle('Find A Pro');
+        $layout5->setLocations(array($span, $left, $main));
+        $this->_em->persist($layout5);
+
+        $this->_em->flush();
+    }
+
+    public function _createHomepage()
+    {
+        $page = new \Core\Model\SystemPage($this->_em->getReference('Core\Model\Layout', 'home'));
+        $homeRoute = $this->_em->getRepository('Core\Model\Route')->getRoute('home');
+        $this->_em->persist($homeRoute->routeTo($page));
+
+        $this->_em->persist($page);
+        $this->_em->flush();
+    }
+
+    public function _createSharedTextIndexPage()
+    {
+        $page = new \Core\Model\SystemPage($this->_em->getReference('Core\Model\Layout', 'default'));
+        $this->_em->persist($page);
+
+        $view = $this->_sc->getService('moduleService')->getBlockView('Core', 'textIndex', 'default');
+        $block = new \Core\Block\TextIndex($view);
+        $page->addBlock($block, 'main');
+
+        $this->_sc->getService('pageRouteService')->createAndRouteTo($page, 'index', array('type' => 'text'));
+
+        $this->_em->flush();
+    }
+
+    public function _createSharedTextEditPage()
+    {
+        $page = new \Core\Model\SystemPage($this->_em->getReference('Core\Model\Layout', 'default'));
+        $this->_em->persist($page);
+
+        $view = $this->_sc->getService('moduleService')->getBlockView('Core', 'textEdit', 'default');
+        $block = new \Core\Block\Form\Text($view);
+        $page->addBlock($block, 'main');
+
+        $route = new \Core\Model\Route('edit/text/*', 'edit-text');
+        $this->_em->persist($route);
+        $this->_em->flush();
+
+        $this->_sc->getService('pageRouteService')->createAndRouteTo($page, 'edit-text');
+
         $this->_em->flush();
     }
 
@@ -157,7 +229,7 @@ class InstallController extends AbstractInstallController
     {
         $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname('default');
         $main = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname('main');
-        $page = new \Core\Model\Page($layout);
+        $page = new \Core\Model\SystemPage($layout);
         $this->_em->persist($page);
 
         $route = new \Core\Model\Route('404', '404');
@@ -184,7 +256,7 @@ EOD;
     {
         $layout = $this->_em->getRepository('Core\Model\Layout')->findOneBySysname('default');
         $main = $this->_em->getRepository('Core\Model\Layout\Location')->findOneBySysname('main');
-        $page = new \Core\Model\Page($layout);
+        $page = new \Core\Model\SystemPage($layout);
         $this->_em->persist($page);
 
         $route = new \Core\Model\Route('403', '403');
@@ -212,5 +284,11 @@ EOD;
         } else if ($memcacheImpl instanceof \Doctrine\Common\Cache\ApcCache) {
             apc_clear_cache('user');
         }
+    }
+
+    public function _createRoutes()
+    {
+        $route = new \Core\Model\Route('index/:type', 'index');
+        $this->_em->persist($route);
     }
 }

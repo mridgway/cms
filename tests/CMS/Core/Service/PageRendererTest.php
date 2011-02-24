@@ -2,7 +2,7 @@
 namespace Core\Service;
 
 require_once 'PHPUnit/Framework.php';
-//require_once '../../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 use \Mockery as m;
 
@@ -25,7 +25,7 @@ class PageRendererTest extends \PHPUnit_Framework_TestCase
     {
         $em = m::mock('Doctrine\ORM\EntityManager');
         
-        $request = m::mock('\Zend_Controller_Request_Http');
+        $request = m::mock('Zend_Controller_Request_Http');
         $request->shouldIgnoreMissing();
         
         $location = m::mock('Core\Model\Layout\Location');

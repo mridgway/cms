@@ -27,13 +27,13 @@ class Role extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
 
     /**
      * @var integer
-     * @Column(name="sysname", type="string", length="500", nullable="FALSE", unique="TRUE")
+     * @Column(name="sysname", type="string", length="50", nullable=false, unique=true)
      */
     protected $sysname;
 
     /**
      * @var string
-     * @Column(name="description", type="string", length="500", nullable="FALSE")
+     * @Column(name="description", type="string", length="500", nullable=false)
      */
     protected $description;
 

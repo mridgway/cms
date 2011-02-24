@@ -74,7 +74,7 @@ class ContentElementFactory
     /**
      * @todo implement this
      */
-    public static function getStatusElement($workflow)
+    public static function getIsActiveElement($workflow)
     {
     }
 }

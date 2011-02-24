@@ -15,7 +15,7 @@ class AbstractContentTest extends \Integration\IntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        
+
         $data = array(
             'group' => 'Admin',
             'email' => 'test@test.com',
@@ -116,24 +116,24 @@ class AbstractContentTest extends \Integration\IntegrationTestCase
         $this->assertEquals(\Doctrine\Common\Util\Debug::export($content, 1), \Doctrine\Common\Util\Debug::export($newContent, 1));
     }
 
-    public function testShouldThrowErrorIfAuthorIsNotSet()
-    {
-        $data = array(
-            'tags' => array(
-                'tag1',
-                'tag2'
-            ),
-            'isFeatured' => true
-        );
-
-        $contentService = new ConcreteContentService();
-        $contentService->setTermService($this->_sc->getService('termService'));
-        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
-        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
-
-        $this->setExpectedException('Core\Exception\ValidationException');
-        $newContent = $contentService->create($data);
-    }
+//    public function testShouldThrowErrorIfAuthorIsNotSet()
+//    {
+//        $data = array(
+//            'tags' => array(
+//                'tag1',
+//                'tag2'
+//            ),
+//            'isFeatured' => true
+//        );
+//
+//        $contentService = new ConcreteContentService();
+//        $contentService->setTermService($this->_sc->getService('termService'));
+//        $contentService->setValidationClassName('Integration\Core\Service\ConcreteContentValidation');
+//        $contentService->setClassName('Integration\Core\Service\ConcreteContent');
+//
+//        $this->setExpectedException('Core\Exception\ValidationException');
+//        $newContent = $contentService->create($data);
+//    }
 
     public function shouldNotThrowErrorIfAuthorIsNotSet()
     {
