@@ -12,7 +12,7 @@ namespace User\Model\Acl;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Role")
+ * @Table(name="role")
  *
  * @property int $id
  */
@@ -30,7 +30,7 @@ class Role extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
      * @Column(name="sysname", type="string", length="500", nullable="FALSE", unique="TRUE")
      */
     protected $sysname;
-    
+
     /**
      * @var string
      * @Column(name="description", type="string", length="500", nullable="FALSE")

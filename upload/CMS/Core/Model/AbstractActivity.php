@@ -10,7 +10,8 @@ namespace Core\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @InheritanceType("JOINED")
+ * @Table(name="activity")
+ * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
  */
 class AbstractActivity extends AbstractModel

@@ -13,6 +13,7 @@ namespace Core\Model\Content;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
+ * @Table(name="placeholder")
  * @property string $contentType
  * @property string $sysname
  * @property string $description
@@ -43,7 +44,7 @@ class Placeholder extends \Core\Model\Content
      * @Column(name="description", type="string", length="500", nullable="false")
      */
     protected $description;
-    
+
 
     /**
      *

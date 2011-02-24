@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Taxonomy\Repository\Term")
- * @Table(name="TaxonomyTerm")
+ * @Table(name="taxonomy_term")
  *
  * @property integer $id
  */

@@ -12,7 +12,7 @@ namespace User\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Session")
+ * @Table(name="user_session")
  *
  * @property int $id
  * @property \User\Model\User $user

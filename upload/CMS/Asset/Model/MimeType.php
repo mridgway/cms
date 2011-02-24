@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Asset_MimeType")
+ * @Table(name="asset_mimetype")
  * @property string $sysname
  * @property Asset\Model\Type $type
  */

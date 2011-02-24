@@ -12,7 +12,7 @@ namespace User\Model\Acl;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Permission")
+ * @Table(name="permission")
  *
  * @property int $id
  * @var User\Model\Acl\Role $role
@@ -119,7 +119,7 @@ class Permission extends \Core\Model\AbstractModel
     public function setPrivilege($privilege = null)
     {
         $privilege = ($privilege instanceof \Core\Model\Module\Privilege) ? $privilege->getSysname() : $privilege;
-        
+
         if ($privilege != null) {
             $validator = new \Zend_Validate_StringLength(0, 50);
             if (!$validator->isValid($privilege)) {

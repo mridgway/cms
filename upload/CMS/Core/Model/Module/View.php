@@ -15,6 +15,7 @@ use \Core\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Core\Repository\Module\View")
+ * @Table(name="module_view")
  * @property int $id
  * @property string $module
  * @property string $type

@@ -15,7 +15,7 @@ use \Core\Model;
  *
  * @Entity(repositoryClass="Core\Repository\Block")
  * @HasLifecycleCallbacks
- * @Table(name="Block")
+ * @Table(name="block")
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({"Core\Model\Block\StaticBlock" = "Core\Model\Block\StaticBlock"})
@@ -101,7 +101,7 @@ abstract class Block
 
     /**
      * The values the properties have.  These are pulled from the database while properties are hard coded.
-     * 
+     *
      * @var array
      * @OneToMany(targetEntity="Core\Model\Block\Config\Value", mappedBy="block", fetch="EAGER", cascade={"update", "persist", "remove"})
      */
@@ -140,7 +140,7 @@ abstract class Block
 
         $this->configure();
     }
-    
+
     /**
      * Renders the contents of the block
      */
@@ -157,7 +157,7 @@ abstract class Block
         }
         return $this->view;
     }
-    
+
     public function getViewInstance()
     {
         if (null == $this->_viewInstance) {
@@ -210,7 +210,7 @@ abstract class Block
     }
 
     /**
-     * Adds multiple config properties. 
+     * Adds multiple config properties.
      *
      * @param array $properties
      * @return Block
@@ -306,7 +306,7 @@ abstract class Block
     {
         if ($this->_collectionKeysSet || $this->configValues->isEmpty())
             return;
-        
+
         foreach ($this->configValues as $key => $value) {
             $this->configValues[$value->name] = $value;
             unset($this->configValues[$key]);
@@ -473,7 +473,7 @@ abstract class Block
     {
         return \Zend_Registry::get('acl')->isAllowed($role, $this, 'view');
     }
-    
+
     /**
      *
      * @return bool

@@ -12,7 +12,7 @@ namespace User\Model\Acl\RoleAssignment;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="RoleAssignment")
+ * @Table(name="role_assignment")
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({"Group" = "User\Model\Acl\RoleAssignment\GroupRoleAssignment", "User" = "User\Model\Acl\RoleAssignment\UserRoleAssignment"})

@@ -14,6 +14,7 @@ use \Core\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Core\Repository\Content\Text")
+ * @Table(name="text")
  * @property int $id
  * @property string $title
  * @property string $content

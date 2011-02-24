@@ -12,7 +12,7 @@ namespace Core\Model\Module;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Core\Repository\Module\BlockType")
- * @Table(name="Module_BlockType")
+ * @Table(name="module_block_type")
  * @property int $id
  */
 class BlockType

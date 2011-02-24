@@ -14,8 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Core\Repository\AbstractPage")
- * @Table(name="AbstractPage")
- * @InheritanceType("JOINED")
+ * @Table(name="page")
+ * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({"Page"="Core\Model\Page", "Template"="Core\Model\Template"})
  *

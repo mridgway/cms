@@ -10,6 +10,7 @@ namespace Core\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
+ * @Table(name="address")
  */
 class Address extends \Core\Model\AbstractModel
 {

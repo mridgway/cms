@@ -13,7 +13,7 @@ namespace Blog\Model;
  *
  * @Entity
  * @HasLifecycleCallbacks
- * @Table(name="Blog_Article")
+ * @Table(name="blog_article")
  */
 class Article extends \Core\Model\Content
 {

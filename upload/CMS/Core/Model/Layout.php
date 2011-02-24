@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
+ * @Table(name="layout")
  * @HasLifecycleCallbacks
  * @property int $id
  * @property string $sysname
@@ -35,7 +36,7 @@ class Layout extends \Zend_Layout
 
     /**
      * @ManyToMany(targetEntity="Core\Model\Layout\Location", fetch="EAGER", cascade={"all", "persist"})
-     * @JoinTable(name="Layout_Locations",
+     * @JoinTable(name="layout_locations",
      *      joinColumns={@JoinColumn(name="layout", referencedColumnName="sysname")},
      *      inverseJoinColumns={@JoinColumn(name="location", referencedColumnName="sysname")}
      *      )

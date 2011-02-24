@@ -12,7 +12,7 @@ namespace Core\Model\Module;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Module_Resource")
+ * @Table(name="module_resource")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({

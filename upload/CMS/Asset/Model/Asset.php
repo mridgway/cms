@@ -12,9 +12,9 @@ namespace Asset\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Asset\Repository\Asset")
- * @Table(name="Asset")
+ * @Table(name="asset")
  * @HasLifecycleCallbacks
- * 
+ *
  * @property int $id
  * @property string $sysname
  * @property string $name

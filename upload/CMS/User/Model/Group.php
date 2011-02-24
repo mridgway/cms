@@ -12,7 +12,7 @@ namespace User\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="User\Repository\Group")
- * @Table(name="User_Group")
+ * @Table(name="user_group")
  *
  * @property int $id
  * @property string $name

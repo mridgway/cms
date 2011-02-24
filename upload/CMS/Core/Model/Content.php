@@ -13,9 +13,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @category    Model
  * @copyright   Copyright (c) 2009-2010 Modo Design Group (http://mododesigngroup.com)
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
- * 
+ *
  * @Entity
- * @Table(name="Content")
+ * @Table(name="content")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
  *
@@ -24,7 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property \Core\Model\Page $dependentPage
  * @property array $activities
  */
-abstract class Content 
+abstract class Content
     extends Model\AbstractModel
     implements \Zend_Acl_Resource_Interface
 {
@@ -63,7 +63,7 @@ abstract class Content
     /**
      * @var array
      * @ManyToMany(targetEntity="Taxonomy\Model\Term")
-     * @JoinTable(name="ContentTags",
+     * @JoinTable(name="content_tags",
      *      joinColumns={@JoinColumn(name="content_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="term_id", referencedColumnName="id")}
      *      )
@@ -89,7 +89,7 @@ abstract class Content
      * The main page that this content shows up on. Example: blog article page. This is not
      * required, since many content types don't get their own page. This page relies on this content
      * and this content relies on this page. Deletions should probably be bidirectionally cascaded.
-     * 
+     *
      * @var Core\Model\AbstractPage
      * @ManyToOne(targetEntity="Core\Model\Page", cascade={"delete"})
      * @JoinColumn(name="page_id", referencedColumnName="id", nullable="true")

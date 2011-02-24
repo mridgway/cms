@@ -12,7 +12,7 @@ namespace Asset\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Asset_Extension")
+ * @Table(name="asset_extension")
  * @property string $sysname
  */
 class Extension extends \Core\Model\AbstractModel

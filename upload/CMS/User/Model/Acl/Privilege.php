@@ -12,7 +12,7 @@ namespace User\Model\Acl;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Privilege")
+ * @Table(name="privilege")
  *
  * @property int $id
  */

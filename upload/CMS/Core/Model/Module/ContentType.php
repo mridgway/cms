@@ -12,7 +12,7 @@ namespace Core\Model\Module;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Module_ContentType")
+ * @Table(name="module_content_type")
  * @property int $id
  */
 class ContentType

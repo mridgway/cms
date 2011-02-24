@@ -12,6 +12,7 @@ namespace Core\Model\Layout;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
+ * @Table(name="layout_location")
  * @property string $sysname
  */
 class Location extends \Core\Model\AbstractModel

@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Asset_Group")
+ * @Table(name="asset_group")
  * @property string $sysname
  * @property string $title
  * @property Asset\Model\Size[] $sizes

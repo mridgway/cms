@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="TaxonomyVocabulary")
+ * @Table(name="taxonomy_vocabulary")
  *
  * @property integer $id
  * @property string $sysname
@@ -32,13 +32,13 @@ class Vocabulary
      * @GeneratedValue(strategy="AUTO")
     */
     protected $id;
-    
+
     /**
      * @var string
      * @Column(type="string", unique="true", nullable="true")
      */
     protected $sysname;
-    
+
     /**
      * @var string
      * @Column(type="string", nullable="false")

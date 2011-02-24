@@ -12,7 +12,7 @@ namespace Core\Model\Block\Config;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Block_Config_Value")
+ * @Table(name="block_config_value")
  * @property int $id
  */
 class Value extends \Core\Model\AbstractModel

@@ -12,7 +12,7 @@ namespace Asset\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="Asset_Size")
+ * @Table(name="asset_size")
  * @property int $id
  * @property Asset\Model\Group $group
  * @property string $sysname

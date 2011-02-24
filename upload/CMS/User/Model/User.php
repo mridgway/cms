@@ -12,7 +12,7 @@ namespace User\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity
- * @Table(name="User")
+ * @Table(name="user")
  *
  * @property int $id
  * @property string $email

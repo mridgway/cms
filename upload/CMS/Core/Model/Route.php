@@ -14,6 +14,7 @@ use \Core\Model;
  * @license     http://github.com/modo/cms/blob/master//LICENSE    New BSD License
  *
  * @Entity(repositoryClass="Core\Repository\Route")
+ * @Table(name="route")
  * @HasLifecycleCallbacks
  *
  * @property int $id
@@ -36,7 +37,7 @@ class Route
      * The string that defines how the route is accessed as a URL. Can contain parameters defined
      * by :<param>. Template's must be unique and not have interfering parameters (blog/:test and
      * blog/:id interfere with each other).
-     * 
+     *
      * @var string
      * @Column(name="template", type="string", length="150", unique="true")
      */
@@ -105,7 +106,7 @@ class Route
 
     /**
      * Calls the parent constructor to parse the template and set the defaults
-     * 
+     *
      * @PostLoad
      */
     public function postLoad ()
@@ -127,7 +128,7 @@ class Route
         $pageRoute = new PageRoute($this, $page);
         $pageRoute->setParams($params);
         $this->pageRoutes[] = $pageRoute;
-        
+
         return $pageRoute;
     }
 
