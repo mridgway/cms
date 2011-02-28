@@ -25,7 +25,7 @@ class Extension extends \Core\Model\AbstractModel
 
     /**
      * @var Asset\Model\MimeType
-     * @ManyToOne(targetEntity="Asset\Model\MimeType")
+     * @ManyToOne(targetEntity="Asset\Model\MimeType", inversedBy="extensions")
      * @JoinColumn(name="mime_type", referencedColumnName="sysname", nullable="false")
      */
     protected $mimeType;

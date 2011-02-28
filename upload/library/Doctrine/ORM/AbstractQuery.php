@@ -459,6 +459,16 @@ abstract class AbstractQuery
     }
 
     /**
+     * Return the key value map of query hints that are currently set.
+     * 
+     * @return array
+     */
+    public function getHints()
+    {
+        return $this->_hints;
+    }
+
+    /**
      * Executes the query and returns an IterableResult that can be used to incrementally
      * iterate over the result.
      *
@@ -482,15 +492,6 @@ abstract class AbstractQuery
      */
     public function execute($params = array(), $hydrationMode = null)
     {
-        // If there are still pending insertions in the UnitOfWork we need to flush
-        // in order to guarantee a correct result.
-        //TODO: Think this over. Its tricky. Not doing this can lead to strange results
-        //      potentially, but doing it could result in endless loops when querying during
-        //      a flush, i.e. inside an event listener.
-        if ($this->_em->getUnitOfWork()->hasPendingInsertions()) {
-            $this->_em->flush();
-        }
-
         if ($hydrationMode !== null) {
             $this->setHydrationMode($hydrationMode);
         }
@@ -505,10 +506,10 @@ abstract class AbstractQuery
 
         // Check result cache
         if ($this->_useResultCache && $cacheDriver = $this->getResultCacheDriver()) {
-            $id = $this->_getResultCacheId();
+            list($id, $hash) = $this->getResultCacheId();
             $cached = $this->_expireResultCache ? false : $cacheDriver->fetch($id);
 
-            if ($cached === false) {
+            if ($cached === false || !isset($cached[$id])) {
                 // Cache miss.
                 $stmt = $this->_doExecute();
 
@@ -521,7 +522,7 @@ abstract class AbstractQuery
                 return $result;
             } else {
                 // Cache hit.
-                return $cached;
+                return $cached[$id];
             }
         }
 
@@ -555,17 +556,33 @@ abstract class AbstractQuery
      * Will return the configured id if it exists otherwise a hash will be
      * automatically generated for you.
      *
-     * @return string $id
+     * @return array ($id, $hash)
      */
-    protected function _getResultCacheId()
+    protected function getResultCacheId()
     {
         if ($this->_resultCacheId) {
-            return $this->_resultCacheId;
+            return array($this->_resultCacheId, $this->_resultCacheId);
         } else {
+            $params = $this->_params;
+            foreach ($params AS $key => $value) {
+                if (is_object($value) && $this->_em->getMetadataFactory()->hasMetadataFor(get_class($value))) {
+                    if ($this->_em->getUnitOfWork()->getEntityState($value) == UnitOfWork::STATE_MANAGED) {
+                        $idValues = $this->_em->getUnitOfWork()->getEntityIdentifier($value);
+                    } else {
+                        $class = $this->_em->getClassMetadata(get_class($value));
+                        $idValues = $class->getIdentifierValues($value);
+                    }
+                    $params[$key] = $idValues;
+                } else {
+                    $params[$key] = $value;
+                }
+            }
+
             $sql = $this->getSql();
             ksort($this->_hints);
-            return md5(implode(";", (array)$sql) . var_export($this->_params, true) .
-                var_export($this->_hints, true)."&hydrationMode=".$this->_hydrationMode);
+            $key = implode(";", (array)$sql) . var_export($params, true) .
+                var_export($this->_hints, true)."&hydrationMode=".$this->_hydrationMode;
+            return array($key, md5($key));
         }
     }
 

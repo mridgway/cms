@@ -28,7 +28,7 @@ class MimeType extends \Core\Model\AbstractModel
 
     /**
      * @var Asset\Model\Type
-     * @ManyToOne(targetEntity="Asset\Model\Type")
+     * @ManyToOne(targetEntity="Asset\Model\Type", inversedBy="mimeTypes")
      * @JoinColumn(name="type", referencedColumnName="sysname", nullable="false")
      */
     protected $type;

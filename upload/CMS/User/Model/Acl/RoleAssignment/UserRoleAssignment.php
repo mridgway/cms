@@ -19,7 +19,7 @@ class UserRoleAssignment extends AbstractRoleAssignment
 {
     /**
      * @var User\Model\User
-     * @ManyToOne(targetEntity="User\Model\User")
+     * @ManyToOne(targetEntity="User\Model\User", inversedBy="roleAssignments")
      * @JoinColumn(name="user", referencedColumnName="id", nullable="false")
      */
     protected $user;

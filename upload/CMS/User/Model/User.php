@@ -63,7 +63,7 @@ class User extends \Core\Model\AbstractModel implements \Zend_Acl_Role_Interface
 
     /**
      * @var ArrayCollection
-     * @OneToMany(targetEntity="User\Model\Identity", mappedBy="User")
+     * @OneToMany(targetEntity="User\Model\Identity", mappedBy="user")
      */
     protected $identities;
 

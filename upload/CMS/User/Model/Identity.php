@@ -42,7 +42,7 @@ class Identity extends \Core\Model\AbstractModel
 
     /**
      * @var \User\Model\User
-     * @ManyToOne(targetEntity="User\Model\User")
+     * @ManyToOne(targetEntity="User\Model\User", inversedBy="identities")
      * @JoinColumn(name="user_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     protected $user;

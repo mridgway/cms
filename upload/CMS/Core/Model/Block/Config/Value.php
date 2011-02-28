@@ -27,7 +27,7 @@ class Value extends \Core\Model\AbstractModel
     /**
      *
      * @var Block
-     * @ManyToOne(targetEntity="Core\Model\Block")
+     * @ManyToOne(targetEntity="Core\Model\Block", inversedBy="configValues")
      * @JoinColumn(name="block_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     protected $block;

@@ -24,6 +24,7 @@
         </service>
         <service id="annotationDriver" class="Doctrine\ORM\Mapping\Driver\AnnotationDriver">
             <argument type="service" id="annotationReader" />
+                <argument>%APPLICATION_ROOT%/CMS</argument>
         </service>
         <service id="annotationReader" class="Doctrine\Common\Annotations\AnnotationReader">
             <call method="setDefaultAnnotationNamespace">

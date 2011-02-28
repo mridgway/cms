@@ -30,7 +30,7 @@ class Size extends \Core\Model\AbstractModel
 
     /**
      * @var Asset\Model\Group
-     * @ManyToOne(targetEntity="Asset\Model\Group")
+     * @ManyToOne(targetEntity="Asset\Model\Group", inversedBy="sizes")
      * @JoinColumn(name="grp", referencedColumnName="sysname")
      */
     protected $group;

@@ -34,7 +34,7 @@ class PageRoute extends Model\AbstractModel
     /**
      *
      * @var Route
-     * @ManyToOne(targetEntity="Core\Model\Route")
+     * @ManyToOne(targetEntity="Core\Model\Route", inversedBy="pageRoutes")
      * @JoinColumn(name="route_id", referencedColumnName="id", nullable="false")
      */
     protected $route;

@@ -23,7 +23,7 @@ class FailedLogin extends \Core\Model\AbstractModel
     protected $id;
 
     /**
-     * @ManyToOne(targetEntity="User\Model\User", inversedBy="failedLogins")
+     * @ManyToOne(targetEntity="User\Model\User")
      * @JoinColumn(referencedColumnName="id", nullable="false")
      */
     protected $user;

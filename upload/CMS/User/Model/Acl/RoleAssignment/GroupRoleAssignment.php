@@ -19,7 +19,7 @@ class GroupRoleAssignment extends AbstractRoleAssignment
 {
     /**
      * @var User\Model\Group
-     * @ManyToOne(targetEntity="User\Model\Group")
+     * @ManyToOne(targetEntity="User\Model\Group", inversedBy="roleAssignments")
      * @JoinColumn(name="grp", referencedColumnName="id", nullable="false")
      */
     protected $group;
