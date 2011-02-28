@@ -37,11 +37,6 @@ abstract class AbstractActivity extends AbstractModel
         $this->dateCreated = new \DateTime();
     }
 
-    public function setLocation(\Geocode\Model\GeoLocation\Local $location = null)
-    {
-        $this->location = $location;
-    }
-
     public function getModuleName()
     {
         $class = \get_class($this);
