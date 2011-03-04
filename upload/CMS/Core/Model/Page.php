@@ -17,10 +17,10 @@ namespace Core\Model;
  * @property Core\Model\Layout $layout
  */
 class Page extends AbstractPage
-{    
+{
     /**
      * @var PageRoute
-     * @OneToOne(targetEntity="PageRoute", inversedBy="page",fetch="LAZY",cascade={"remove","detach"})
+     * @OneToOne(targetEntity="PageRoute", mappedBy="page",fetch="LAZY",cascade={"remove","detach"})
      */
     protected $pageRoute;
 

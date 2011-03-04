@@ -49,7 +49,7 @@ class PageRoute extends Model\AbstractModel
     /**
      *
      * @var Page
-     * @OneToOne(targetEntity="Core\Model\Page",mappedBy="pageRoute")
+     * @OneToOne(targetEntity="Core\Model\Page", inversedBy="pageRoute")
      */
     protected $page;
 
