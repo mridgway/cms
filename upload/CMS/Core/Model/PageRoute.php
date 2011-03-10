@@ -84,6 +84,8 @@ class PageRoute extends Model\AbstractModel
         }
         if (is_numeric($value)) {
             $this->params[$name] = (int) $value;
+        } else if (null === $value) {
+            throw new \Exception('Route parameter cannot be null');
         } else {
             $this->params[$name] = $value;
         }
@@ -108,7 +110,11 @@ class PageRoute extends Model\AbstractModel
     public function getURL()
     {
         $params = $this->params;
-        $relative = $this->route->assemble($params);
+        try {
+            $relative = $this->route->assemble($params);
+        } catch (\Exception $e) {
+            $relative = null;
+        }
         if (!$relative) {
             return '/';
         }

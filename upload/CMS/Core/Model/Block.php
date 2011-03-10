@@ -45,7 +45,7 @@ abstract class Block
      *
      * @var \Core\Model\AbstractPage
      * @ManyToOne(targetEntity="Core\Model\AbstractPage", inversedBy="blocks")
-     * @JoinColumn(name="page_id", referencedColumnName="id", nullable="false")
+     * @JoinColumn(name="page_id", referencedColumnName="id", nullable="false", onDelete="CASCADE")
      */
     protected $page;
 
