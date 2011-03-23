@@ -9,6 +9,7 @@ CMS.Use([], function (CMS) {
         modal: null,
         uploader: null,
         library: null,
+        fromUrl: null,
 
         onInsert: $.noop,
 
@@ -46,6 +47,18 @@ CMS.Use([], function (CMS) {
                                 domElement: $('#new-file-list')
                             }),
                             onInsert: self.onInsert
+                        });
+                        self.fromUrl = new CMS.Asset({
+                            onInsert: self.onInsert,
+                            url_template: '${size}'
+                        });
+                        $('#from-url form', self.domElement).submit(function (e) {
+                            e.preventDefault();
+                            self.fromUrl.type = 'image';
+                            self.fromUrl.size = $('#image_url', $(this)).val();
+                            self.fromUrl.caption = $('#image_caption', $(this)).val();
+                            self.onInsert(self.fromUrl, self.fromUrl.size);
+                            return false;
                         });
                         self.library = new CMS.AssetLibrary({
                             domElement: $('#tabs-3', self.domElement),
@@ -96,6 +109,9 @@ CMS.Use([], function (CMS) {
             }
             if (this.library) {
                 this.library.setInsertFunction(func);
+            }
+            if (this.fromUrl) {
+                this.fromUrl.setInsertFunction(func);
             }
         }
 
