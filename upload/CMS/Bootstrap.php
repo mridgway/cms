@@ -25,8 +25,15 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         require_once $options['autoloaderpath'];
         sfServiceContainerAutoloader::register();
         $sc = new \sfServiceContainerBuilder();
-        $this->serviceContainer = $sc;
 
+        if(isset($options['useCache']) && $options['useCache'] && file_exists($options['cachePath'])){
+            require_once $options['cachePath'];
+            $sc = new \ServiceContainer();
+        } else {
+            $sc = new \sfServiceContainerBuilder();
+        }
+
+        $this->serviceContainer = $sc;
         $sc->setParameter('APPLICATION_ROOT', APPLICATION_ROOT);
 
         // this is the only way to get the service container to Core\Controller\Plugin\Predispatch
@@ -37,9 +44,19 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
     {
         $this->serviceContainer->setService('pdoConnection', $this->getPluginResource('db')->getDbAdapter()->getConnection());
         $this->serviceContainer->setService('cache', $this->_getCache());
-
         $this->bootstrap('FrontController');
+
         $options = $this->getOption('serviceContainer');
+
+        if(isset($options['useCache']) && $options['useCache']){
+            return $this->useCachedServiceContainer($options);
+        }
+
+        return $this->useUncachedServiceContainer($options);
+    }
+
+    protected function useUncachedServiceContainer($options)
+    {
         $files = array($options['path']);
         $containerDirs = \Zend_Controller_Front::getInstance()->getDispatcher()->getControllerDirectory();
         foreach ($containerDirs AS $containerDir) {
@@ -51,7 +68,30 @@ class Bootstrap extends \ZendX\Application53\Application\Bootstrap
         $loader = new \sfServiceContainerLoaderFileXml($this->serviceContainer);
         $loader->load($files);
 
-        $dumper = new \sfServiceContainerDumperXml($this->serviceContainer);
+        return $this->serviceContainer;
+    }
+
+    protected function useCachedServiceContainer($options)
+    {
+        $scPath = $options['cachePath'];
+        if (!file_exists($scPath)) {
+            $files = array($options['path']);
+            $containerDirs = \Zend_Controller_Front::getInstance()->getDispatcher()->getControllerDirectory();
+            foreach ($containerDirs AS $containerDir) {
+                if ($containerPath = realpath($containerDir . '/../container.xml')) {
+                    $files[] = $containerPath;
+                }
+            }
+
+            $loader = new \sfServiceContainerLoaderFileXml($this->serviceContainer);
+            $loader->load($files);
+
+            $dumper = new \sfServiceContainerDumperPhp($this->serviceContainer);
+            $code = $dumper->dump(array('class' => 'ServiceContainer'));
+
+            \file_put_contents($scPath, $code);
+        }
+
 
         return $this->serviceContainer;
     }

@@ -38,7 +38,9 @@ abstract class IntegrationTestCase extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $this->_sc->getService('doctrine')->rollback();
+        if ($this->_sc) {
+            $this->_sc->getService('doctrine')->rollback();
+        }
         \Core\Module\Registry::destroy();
         \Zend_Registry::_unsetInstance();
         \Zend_Controller_Front::getInstance()->resetInstance();
