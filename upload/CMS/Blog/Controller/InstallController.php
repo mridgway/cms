@@ -43,6 +43,10 @@ class InstallController extends \Core\Controller\AbstractInstallController
         ob_flush();
         $this->_createAddPage();
 
+        echo 'Adding blog taxonomy category...<br/>';
+        ob_flush();
+        $this->_addBlogVocabulary();
+
         echo 'Creating blog article route...<br/>';
         ob_flush();
         $this->_createRoute();
@@ -166,5 +170,15 @@ class InstallController extends \Core\Controller\AbstractInstallController
         $this->_em->persist($homeRoute->routeTo($page));
 
         $this->_em->persist($page);
+    }
+
+    public function _addBlogVocabulary()
+    {
+        $blogVocabulary = new \Taxonomy\Model\Vocabulary('Blog Category', 'blog', 'Blog categories.');
+        $testTerm = new \Taxonomy\Model\Term('Test', 'Test');
+        $blogVocabulary->addTerm($testTerm);
+        $this->_em->persist($blogVocabulary);
+        $this->_em->persist($testTerm);
+        $this->_em->flush();
     }
 }

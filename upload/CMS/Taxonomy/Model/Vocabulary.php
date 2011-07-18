@@ -108,6 +108,7 @@ class Vocabulary
     public function addTerm(Term $term)
     {
         $this->terms->add($term);
+        $term->setVocabulary($this);
     }
 
     public function getTerms()
