@@ -11,7 +11,8 @@ require_once __DIR__ . '/../../../bootstrap.php';
 class PageRouteTest extends \Integration\IntegrationTestCase
 {
     protected $_uniqueName;
-    protected $_page;
+    protected $_page1;
+    protected $_page2;
     protected $_route;
 
     public function setUp()
@@ -25,15 +26,19 @@ class PageRouteTest extends \Integration\IntegrationTestCase
         $layout = new \Core\Model\Layout($sysname);
         $em->persist($layout);
 
-        $page = new \Core\Model\Page($layout);
-        $em->persist($page);
-        $this->_page = $page;
+        $page1 = new \Core\Model\Page($layout);
+        $em->persist($page1);
+        $this->_page1 = $page1;
+
+        $page2 = new \Core\Model\Page($layout);
+        $em->persist($page2);
+        $this->_page2 = $page2;
 
         $route = new \Core\Model\Route($sysname . '/:param', $sysname);
         $em->persist($route);
         $this->_route = $route;
 
-        $pageRoute = $route->routeTo($page, array('param' => 1));
+        $pageRoute = $route->routeTo($page1, array('param' => 1));
         $em->persist($pageRoute);
 
         $em->flush();
@@ -45,7 +50,7 @@ class PageRouteTest extends \Integration\IntegrationTestCase
             'route' => array(
                 'sysname' => $this->_uniqueName
             ),
-            'page' => $this->_page->getId(),
+            'page' => $this->_page1->getId(),
             'params' => array(
                 'param' => 1
             )
@@ -61,7 +66,7 @@ class PageRouteTest extends \Integration\IntegrationTestCase
             'route' => array(
                 'sysname' => $this->_uniqueName
             ),
-            'page' => $this->_page->getId(),
+            'page' => $this->_page2->getId(),
             'params' => array(
                 'param' => 2
             )
@@ -69,7 +74,7 @@ class PageRouteTest extends \Integration\IntegrationTestCase
 
         $newPageRoute = $this->_sc->getService('pageRouteService')->create($data);
 
-        $this->assertEquals($this->_page, $newPageRoute->getPage());
+        $this->assertEquals($this->_page2, $newPageRoute->getPage());
         $this->assertEquals($this->_route, $newPageRoute->getRoute());
         $this->assertEquals($data['params'], $newPageRoute->getParams());
     }
